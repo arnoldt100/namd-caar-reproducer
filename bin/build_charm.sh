@@ -1,13 +1,23 @@
 #! /usr/bin/env bash
 
 #-----------------------------------------------------
-# Build script for charm++.                          -
+# A build script for charm++.                        -
 #                                                    -
+# This script does 3 main tasks to build charm++:    -
+# (1) Checks that certain prerequisites are met.     -
+#     For example, ensure that key environmental     -
+#     variables are set.                             -
+#                                                    -
+# (2) Declares all global variables that are used    -
+#     throughout this script.                        -
+#                                                    -
+# (3) Calls the functions that builds charm++        -
+#     for a specific network layer.                  -
 #-----------------------------------------------------
 
 #-----------------------------------------------------
 # Function:                                          -
-#    declare_global_varables                         -
+#    declare_global_variables                        -
 #                                                    -
 # Synopsis:                                          -
 #   Declares gobal variables for use in this script. -
@@ -18,7 +28,7 @@
 # Positional parameters:                             -
 #                                                    -
 #-----------------------------------------------------
-function declare_global_varables {
+function declare_global_variables () {
 
     #-----------------------------------------------------
     # Define this bash script name. This global variable
@@ -68,24 +78,26 @@ function declare_global_varables {
 #   Changes the execution directory of the script.   -
 #   If the directory change fails, then the function -
 #   prints a warning and the exit command is called  -
-#   with and exit status of 2.                       -
+#   with an exit status of 2.                        -
 #                                                    -
 # Positional parameters:                             -
 #   ${1} The directory to change to.                 -
+#                                                    -
 #-----------------------------------------------------
-function change_dir {
-   cd ${1}
-   if [ $? -ne 0 ];then
-       local -r message="Error! The script failed to change to directory ${1}."
-       echo "${message}"
-       exit $EXIT_STATUS[failed_cd]
-   fi
+function change_dir () {
+    cd ${1}
+    if [ $? -ne 0 ];then
+        local -r message='Error! The script failed to change to directory ${1}.'
+        echo "${message}"
+        exit $EXIT_STATUS[failed_cd]
+    fi
+    return
 }
 
 
 #-----------------------------------------------------
 # Function:                                          -
-#    check_prerequisites                             -
+#    check_script_prerequisites                      -
 #                                                    -
 # Synopsis:                                          -
 #   Checks that script prerequisites are met.        -
@@ -93,7 +105,7 @@ function change_dir {
 # Positional parameters:                             -
 #                                                    -
 #-----------------------------------------------------
-function check_prerequisites {
+function check_script_prerequisites () {
     #-----------------------------------------------------
     # Verify that the environmental variable 
     # NCP_TOP_LEVEL is set, otherwise exit.
@@ -101,6 +113,7 @@ function check_prerequisites {
     #-----------------------------------------------------
     ncp_error_message="The environmental variable NCP_TOP_LEVEL is not set."
     ${NCP_TOP_LEVEL:?"${ncp_error_message}"}
+    return
 }
 
 #-----------------------------------------------------
@@ -147,7 +160,7 @@ function build_ofi_linux_x86_64_gcc_smp_gfortran() {
     #-----------------------------------------------------
     # Define  the options to the charm++ build command.
     #-----------------------------------------------------
-    local -r options=" gcc smp gfortran -j8 --with-production --incdir ${include_dir} --libdir ${library_dir}"
+    local -r options=" -g -j8 --with-production --incdir ${include_dir} --libdir ${library_dir}"
 
     #-----------------------------------------------------
     # Change to the charm++ source directory, and then
@@ -159,19 +172,26 @@ function build_ofi_linux_x86_64_gcc_smp_gfortran() {
 
     ./build ${target} ${charmarch} ${options}
     if [ $? -ne 0 ];then
-       local -r message="Error! The script failed to build charm++."
+       local -r message="Error! The script ${SCRIPT_NAME} failed to build charm++."
        echo "${message}"
        exit $EXIT_STATUS[failed_build_command]
     fi
 
     change_dir "${SCRIPT_LAUNCH_DIR}"
+    return
 }
 
 #-----------------------------------------------------
-# Below are the functions calls to execute the       -
-# script.                                            -
+# Below are the primary function calls to execute    -
+# the script.                                        -
 #                                                    -
 #-----------------------------------------------------
-check_prerequisites
-declare_global_varables
+
+# Check some prerequisites are satisfied.
+check_script_prerequisites
+
+# Declaree global variables thar are used in this script.
+declare_global_variables
+
+# Call the function that builds charm++.
 build_ofi_linux_x86_64_gcc_smp_gfortran
