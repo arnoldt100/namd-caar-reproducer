@@ -1,9 +1,9 @@
 #! /usr/bin/env bash
 
 #-----------------------------------------------------
-# A build script for charm++.                        -
+# A build script for tcl.                            -
 #                                                    -
-# This script does 3 main tasks to build charm++:    -
+# This script does 3 main tasks to build tcl.        -
 # (1) Checks that certain prerequisites are met.     -
 #     For example, ensure that key environmental     -
 #     variables are set.                             -
@@ -11,8 +11,7 @@
 # (2) Declares all global variables that are used    -
 #     throughout this script.                        -
 #                                                    -
-# (3) Calls the functions that builds charm++        -
-#     for a specific network layer.                  -
+# (3) Calls the functions that builds tcl.           -
 #-----------------------------------------------------
 
 #-----------------------------------------------------
@@ -23,7 +22,7 @@
 #   Declares gobal variables for use in this script. -
 #   Note the environmental variable NCP_TOP_LEVEL    -
 #   must be properly defined or the path to the      -
-#   charm++ source will be incorrect.                -
+#   tcl source will be incorrect.                    -
 #                                                    -
 # Positional parameters:                             -
 #                                                    -
@@ -35,7 +34,7 @@ function declare_global_variables () {
     # must be defined at this location.
     # 
     #-----------------------------------------------------
-    declare -gr SCRIPT_NAME=${BASH_SOURCE:-"build_charm.sh"}
+    declare -gr SCRIPT_NAME=${BASH_SOURCE:-"build_tcl.sh"}
 
     #-----------------------------------------------------
     # Set the script launch directory.
@@ -49,25 +48,33 @@ function declare_global_variables () {
     #
     #-----------------------------------------------------
     declare -grA EXIT_STATUS=( [failed_cd]=2
-                               [failed_build_command]=3 )
+                               [failed_configure_command]=3
+                               [failed_make_clean]=4
+                               [failed_make_install]=5 )
 
     #-----------------------------------------------------
-    # The charm++ version.
-    # 
+    # TCL version                                        -
+    #                                                    -
     #-----------------------------------------------------
-    declare -gr CHARM_VERSION="6.10.2"
+    declare -gr TCL_VERSION='8.5.9'
 
     #-----------------------------------------------------
-    # Location of charm++ source.
-    #
+    # Path to tcl package.                               -
+    #                                                    -
     #-----------------------------------------------------
-    declare -gr CHARM_SOURCE_DIRECTORY="${NCP_TOP_LEVEL}/sw/sources/charm"
+    declare -gr TCL_SOURCE_PACKAGE="${NCP_TOP_LEVEL}/sw/sources/tcl${TCL_VERSION}"
 
     #-----------------------------------------------------
     # The machine name.
     # 
     #-----------------------------------------------------
     declare -gr MACHINE_NAME="Spock"
+
+    #-----------------------------------------------------
+    # Parent installation directory.                     -
+    #                                                    -
+    #-----------------------------------------------------
+    PREFIX_DIRECTORY="${NCP_TOP_LEVEL}/sw/${MACHINE_NAME}/tcl/${TCL_VERSION}"
 }
 
 #-----------------------------------------------------
@@ -89,13 +96,11 @@ function change_dir () {
     if [ $? -ne 0 ];then
         local -r message="Error! The script failed to change to directory ${1}."
         local -ir my_exit_status=${EXIT_STATUS["failed_cd"]}
-
         echo "${message}"
-        exit ${my_exit_status}
+        exit $my_exit_status
     fi
     return
 }
-
 
 #-----------------------------------------------------
 # Function:                                          -
@@ -120,69 +125,89 @@ function check_script_prerequisites () {
 
 #-----------------------------------------------------
 # Function:                                          -
-#    build_ofi_linux_x86_64_gcc_smp_gfortran         -
+#    make_clean                                      -
 #                                                    -
 # Synopsis:                                          -
-#   Builds charmm++ with the OFI transport layer.    -
-#   Debug symbols are included.                      -
-#   This build is for the GNU programming            -
-#   environment.                                     -
+#   Performs the  command 'make clean' for tcl.      -
+#   If the command fails, then this script will      -
+#   exit with a predefined exit code.                -
 #                                                    -
 # Positional parameters:                             -
 #                                                    -
 #-----------------------------------------------------
-function build_ofi_linux_x86_64_gcc_smp_gfortran() {
-    #-----------------------------------------------------
-    # The target of the build.
-    # 
-    #-----------------------------------------------------
-    local -r target='charm++'
-
-    #-----------------------------------------------------
-    # Define the charm++ arch. This variable selects 
-    # the network transport layer to build. 
-    #-----------------------------------------------------
-    local -r charmarch='ofi-linux-x86_64-gfortran-smp-gcc'
-
-    #-----------------------------------------------------
-    # The libfabric include and library options need 
-    # to be explicitly passed to the charm++ build 
-    # command options.
-    #-----------------------------------------------------
-    local include_dir="$(pkg-config --cflags-only-I libfabric)"
-    # The below bash string manipulation removes the "-I" at the beginning of the string
-    # for we only need the directory path.
-    include_dir=${include_dir##-I} 
-
-    local library_dir="$(pkg-config --libs-only-L libfabric)"
-    # The below bash string manipulation removes the "-L" at the beginning of the string
-    # for we only need the directory path.
-    library_dir=${library_dir##-L} 
-
-    #-----------------------------------------------------
-    # Define  the options to the charm++ build command.
-    #-----------------------------------------------------
-    local -r options=" -g -j8 --with-production --incdir ${include_dir} --libdir ${library_dir}"
-
-    #-----------------------------------------------------
-    # Change to the charm++ source directory, and then
-    # run the charm++ build command. 
-    #-----------------------------------------------------
-    change_dir "${CHARM_SOURCE_DIRECTORY}"
-
-    echo "The charm++ build command: ./build ${target} ${charmarch} ${options}"
-
-    ./build ${target} ${charmarch} ${options}
+function make_clean () {
+    change_dir "${TCL_SOURCE_PACKAGE}/unix"
+    make clean
     if [ $? -ne 0 ];then
-       local -r message="Error! The script ${SCRIPT_NAME} failed to build charm++."
-       local -ir my_exit_status=${EXIT_STATUS["failed_build_command"]}
-       echo "${message}"
-       exit ${my_exit_status}
+        local -r message="Error! The script ${SCRIPT_NAME} failed to successfully do a make clean."
+        local -ir my_exit_status=${EXIT_STATUS["failed_make_clean"]}
+        exit $my_exit_status
+    fi 
+    change_dir "${SCRIPT_LAUNCH_DIR}"
+}
+
+#-----------------------------------------------------
+# Function:                                          -
+#    make_clean                                      -
+#                                                    -
+# Synopsis:                                          -
+#   Performs the  configure for tcl.                 -
+#   If the configure fails, then this script will    -
+#   exit with a predefined exit code.                -
+#                                                    -
+# Positional parameters:                             -
+#                                                    -
+#-----------------------------------------------------
+function configure_tcl () {
+    change_dir "${TCL_SOURCE_PACKAGE}/unix"
+    ./configure --prefix=${PREFIX_DIRECTORY} \
+                --enable-64bit \
+                --enable-threads \
+                --enable-symbols
+    if [ $? -ne 0 ];then
+        local -r message="Error! The script ${SCRIPT_NAME} failed to successfully configure tcl."
+        local -ir my_exit_status=${EXIT_STATUS["failed_configure_command"]}
+        exit $my_exit_status
+    fi 
+    change_dir "${SCRIPT_LAUNCH_DIR}"
+     
+}
+
+
+#-----------------------------------------------------
+# Function:                                          -
+#    make_Fand_install                               -
+#                                                    -
+# Synopsis:                                          -
+#   Performs the make and "make install" command     -
+#   If the commands fails, then this script will    -
+#   exit with a predefined exit code.                -
+#                                                    -
+# Positional parameters:                             -
+#                                                    -
+#-----------------------------------------------------
+function make_and_install () {
+    change_dir "${TCL_SOURCE_PACKAGE}/unix"
+
+    # Run the make command for tcl.
+    make -j 2
+    if [ $? -ne 0 ];then
+        local -r message1="Error! The script ${SCRIPT_NAME} failed to successfully make tcl."
+        local -ir my_exit_status1=${EXIT_STATUS["failed_make_install"]}
+        exit $my_exit_status
+    fi
+
+    # Run the 'make install' command for tcl.
+    make install
+    if [ $? -ne 0 ];then
+        local -r message2="Error! The script ${SCRIPT_NAME} failed to successfully 'make install' tcl."
+        local -ir my_exit_status2=${EXIT_STATUS["failed_make_install"]}
+        exit $my_exit_status
     fi
 
     change_dir "${SCRIPT_LAUNCH_DIR}"
-    return
 }
+
 
 #-----------------------------------------------------
 # Below are the primary function calls to execute    -
@@ -190,11 +215,6 @@ function build_ofi_linux_x86_64_gcc_smp_gfortran() {
 #                                                    -
 #-----------------------------------------------------
 
-# Check some prerequisites are satisfied.
-check_script_prerequisites
-
-# Declaree global variables thar are used in this script.
 declare_global_variables
-
-# Call the function that builds charm++.
-build_ofi_linux_x86_64_gcc_smp_gfortran
+configure_tcl
+make_and_install
