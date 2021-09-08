@@ -2,7 +2,8 @@
 help([[
 This module sets up the runtime environment of 
 for NAMD witn charmm++ arch ofi-linux-x86_64,
-GNU progrmamming environment.
+GNU progrmamming environment. This version runs
+CPUs only.
 ]])
 
 local namd_arch_file="Linux-x86_64-g++"
