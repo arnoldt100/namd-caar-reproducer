@@ -4,7 +4,7 @@ found on **spock.olcf.ornl.gov**.
 
 # Setting Essential Environmental Variables
 
-The first step is to set essential paths environmental variables by
+The first step is to set essential paths and environmental variables by
 doing the following command<br>
 
 **source ./runtime\_configuration/core\_runtime\_environment.sh**<br>
