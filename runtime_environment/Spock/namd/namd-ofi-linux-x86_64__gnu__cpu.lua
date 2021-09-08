@@ -9,7 +9,7 @@ CPUs only.
 local namd_arch_file="Linux-x86_64-g++"
 local charm_arch="ofi-linux-x86_64-gfortran-smp-gcc"
 local machine_name="Spock"
-local ncp_top_level = pathJoin(os.getenv("NCP_TOP_LEVEL"), "namd-uiuc")
+local ncp_top_level = pathJoin(os.getenv("NCP_TOP_LEVEL"),"sw","sources","namd")
 local project_bin_path=pathJoin(ncp_top_level,"bin")
 namd_bin_path=pathJoin(os.getenv("NAMD_INSTALL_DIR"),machine_name,namd_arch_file,charm_arch,"cpu","namd2")
 
