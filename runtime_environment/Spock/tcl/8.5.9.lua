@@ -5,7 +5,10 @@ help(
 This module loads tcl 8.5.9  
 ]])
 
-local machine_name = "Spock"
+-- A list of prerequisite modules.
+load("Spock/Spock_core_runtime_environment")
+
+local machine_name = os.getenv("MACHINE_NAME")
 local software_name = "tcl"
 local tcl_version = "8.5.9"
 local ncp_top_level = os.getenv("NCP_TOP_LEVEL")

@@ -199,20 +199,21 @@ function warn_unsupported_machine () {
 #-----------------------------------------------------
 function build_Spock_namd_ofi_linux_x86_64__gnu__cpu () {
 
-    local -r machine_name="Spock"
-    local -r namd_arch="Linux-x86_64-g++"
-    local -r charm_arch="ofi-linux-x86_64-gfortran-smp-gcc"
-    local -r prefix="${NAMD_INSTALL_DIR}/${machine_name}/${namd_arch}/${charm_arch}/cpu"
+    local -r machine_name="${MACHINE_NAME}"
+    local -r namd_arch="${NAMD_ARCH}"
+    local -r charm_arch="${CHARMARCH}"
+    local -r prefix="${NAMD_PREFIX}"
+    local -r namd_top_level="${NAMD_TOP_LEVEL}"
     local -r bin2="namd2"
     local -r nm_make_threads="8"
-
-    cd ${NAMD_TOP_LEVEL}
+    local -r fftw_dir=${FFTW_DIR}
+    cd ${namd_top_level}
 
     if [ -d ${namd_arch} ];then
         rm -rf ${namd_arch}
     fi
 
-    local -r fftw_prefix=$(dirname ${FFTW_DIR})
+    local -r fftw_prefix=$(dirname ${fftw_dir})
     local config_options=( "${namd_arch}"
                      "--with-fftw3 --fftw-prefix ${fftw_prefix}"
                      "--tcl-prefix ${TCL_DIR}"
@@ -354,6 +355,34 @@ function check_script_prerequisites () {
     #-----------------------------------------------------
     tcl_error_message="The environmental variable TCL_DIR is not set."
     ${TCL_DIR:?"${tcl_error_message}"}
+
+    #-----------------------------------------------------
+    # Verify that the environmental variable             -
+    # MACHINE_NAME, otherwise exit.                      -
+    #-----------------------------------------------------
+    mn_error_message="The environmental variable MACHINE_NAME is not set."
+    ${MACHINE_NAME:?"${mn_error_message}"}
+
+    #-----------------------------------------------------
+    # Verify that the environmental variable             -
+    # CHARMARCH, otherwise exit.                         -
+    #-----------------------------------------------------
+    ca_error_message="The environmental variable CHARMARCH is not set."
+    ${CHARMARCH:?"${ca_error_message}"}
+
+    #-----------------------------------------------------
+    # Verify that the environmental variable             -
+    # NAMD_PREFIX, otherwise exit.                       -
+    #-----------------------------------------------------
+    np_error_message="The environmental variable NAMD_PREFIX is not set."
+    ${NAMD_PREFIX:?"${np_error_message}"}
+
+    #-----------------------------------------------------
+    # Verify that the environmental variable             -
+    # NAMD_ARCH, otherwise exit.                         -
+    #-----------------------------------------------------
+    na_error_message="The environmental variable NAMD_ARCH is not set."
+    ${NAMD_ARCH:?"${na_error_message}"}
 
     return
 }
