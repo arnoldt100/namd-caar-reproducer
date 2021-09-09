@@ -14,10 +14,10 @@ declare -r source_to_download="https://sourceforge.net/projects/tcl/files/Tcl/8.
 
 #-----------------------------------------------------
 # The destination folder of the downloaded TCL       -
-# source.                                            -
+# tarball.                                           -
 #                                                    -
 #-----------------------------------------------------
-declare -r destination="${NCP_TOP_LEVEL}/sw/sources/${tarball}"
+declare -r destination="${NCP_TOP_EVEL}/sw/sources/${tarball}"
 
 # ----------------------------------------------------
 # 
@@ -25,8 +25,13 @@ declare -r destination="${NCP_TOP_LEVEL}/sw/sources/${tarball}"
 # 
 # ----------------------------------------------------
 
+# We change to this package toplevel. 
 cd ${NCP_TOP_LEVEL}
+
+# Download the tarball for sourceforge.
 wget -L ${source_to_download} -O ${destination}
+
+# Change to the directory containing the tarball and unpack the tarball.
 declare -r dir1=$(dirname ${destination})
 cd ${dir1}
 tar xzf ${tarball}
