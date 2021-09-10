@@ -330,14 +330,14 @@ function check_script_prerequisites () {
     # NCP_TOP_LEVEL is set, otherwise exit.
     #
     #-----------------------------------------------------
-    ncp_error_message="The environmental variable NCP_TOP_LEVEL is not set."
+    local -r ncp_error_message="The environmental variable NCP_TOP_LEVEL is not set."
     ${NCP_TOP_LEVEL:?"${ncp_error_message}"}
 
     #-----------------------------------------------------
     # Verify that the environmental variable
     # NAMD_TOP_LEVEL is set, otherwise exit.
     #-----------------------------------------------------
-    ntl_error_message="The environmental variable NAMD_TOP_LEVEL is not set."
+    local -r ntl_error_message="The environmental variable NAMD_TOP_LEVEL is not set."
     ${NAMD_TOP_LEVEL:?"${ntl_error_message}"}
 
     #-----------------------------------------------------
@@ -345,7 +345,7 @@ function check_script_prerequisites () {
     # FFTW_DIR is set, otherwise exit.
     # 
     #-----------------------------------------------------
-    fftw_error_message="The environmental variable FFTW_DIR is not set."
+    local -r fftw_error_message="The environmental variable FFTW_DIR is not set."
     ${FFTW_DIR:?"${fftw_error_message}"}
 
     #-----------------------------------------------------
@@ -353,35 +353,35 @@ function check_script_prerequisites () {
     # TCL_DIR is set, otherwise exit.
     #
     #-----------------------------------------------------
-    tcl_error_message="The environmental variable TCL_DIR is not set."
+    local -r tcl_error_message="The environmental variable TCL_DIR is not set."
     ${TCL_DIR:?"${tcl_error_message}"}
 
     #-----------------------------------------------------
     # Verify that the environmental variable             -
     # MACHINE_NAME, otherwise exit.                      -
     #-----------------------------------------------------
-    mn_error_message="The environmental variable MACHINE_NAME is not set."
+    local -r mn_error_message="The environmental variable MACHINE_NAME is not set."
     ${MACHINE_NAME:?"${mn_error_message}"}
 
     #-----------------------------------------------------
     # Verify that the environmental variable             -
     # CHARMARCH, otherwise exit.                         -
     #-----------------------------------------------------
-    ca_error_message="The environmental variable CHARMARCH is not set."
+    local -r ca_error_message="The environmental variable CHARMARCH is not set."
     ${CHARMARCH:?"${ca_error_message}"}
 
     #-----------------------------------------------------
     # Verify that the environmental variable             -
     # NAMD_PREFIX, otherwise exit.                       -
     #-----------------------------------------------------
-    np_error_message="The environmental variable NAMD_PREFIX is not set."
+    local -r np_error_message="The environmental variable NAMD_PREFIX is not set."
     ${NAMD_PREFIX:?"${np_error_message}"}
 
     #-----------------------------------------------------
     # Verify that the environmental variable             -
     # NAMD_ARCH, otherwise exit.                         -
     #-----------------------------------------------------
-    na_error_message="The environmental variable NAMD_ARCH is not set."
+    local -r na_error_message="The environmental variable NAMD_ARCH is not set."
     ${NAMD_ARCH:?"${na_error_message}"}
 
     return

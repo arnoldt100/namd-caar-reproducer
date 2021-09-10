@@ -41,7 +41,7 @@ setenv("NAMD_TOP_LEVEL",namd_top_level)
 -- 
 -- -------------------------------------------------
 local prefix=pathJoin(os.getenv("NCP_TOP_LEVEL"),machine_name,namd_arch,charm_arch,"cpu") 
-setenv("NAMD_PREFIX", prefix)
+setenv("NAMD_PREFIX",prefix)
 
 -- -------------------------------------------------
 -- Define the NAMD_BUILD_TARGET

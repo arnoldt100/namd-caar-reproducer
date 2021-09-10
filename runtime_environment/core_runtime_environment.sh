@@ -8,6 +8,14 @@
 export NCP_TOP_LEVEL=$(pwd)
 
 #-----------------------------------------------------
+# Define the environmental variable                  -
+# NAMD_TOP_LEVEL which store the path to the         -
+# NAMD source.                                       -
+#                                                    -
+#-----------------------------------------------------
+export NAMD_TOP_LEVEL="${NCP_TOP_LEVEL}/sw/sources/namd"
+
+#-----------------------------------------------------
 # We need to make available the modules needed       -
 # to build and run NAMD.                             -
 #                                                    -
@@ -20,3 +28,5 @@ module --ignore-cache use ${NCP_TOP_LEVEL}/runtime_environment
 #                                                    -
 #-----------------------------------------------------
 export PATH="${NCP_TOP_LEVEL}/bin:${PATH}"
+
+
