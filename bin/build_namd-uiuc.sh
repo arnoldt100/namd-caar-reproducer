@@ -235,6 +235,7 @@ function build_Spock_namd_ofi_linux_x86_64__gnu__cpu () {
 
     local -r fftw_prefix=$(dirname ${fftw_dir})
     local config_options=( "${namd_arch}"
+                     "--with-debug"
                      "--with-fftw3 --fftw-prefix ${fftw_prefix}"
                      "--tcl-prefix ${TCL_DIR}"
                      "--charm-base ${charm_base} --charm-arch ${charm_arch}"  )

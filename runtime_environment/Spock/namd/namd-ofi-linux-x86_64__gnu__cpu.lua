@@ -40,7 +40,7 @@ setenv("NAMD_TOP_LEVEL",namd_top_level)
 --  Define the environment variable NAMD_PREFIX.
 -- 
 -- -------------------------------------------------
-local prefix=pathJoin(os.getenv("NCP_TOP_LEVEL"),"sw",machine_name,namd_arch,charm_arch,"cpu") 
+local prefix=pathJoin(os.getenv("NCP_TOP_LEVEL"),"sw",machine_name,"NAMD",namd_arch,charm_arch,"cpu") 
 setenv("NAMD_PREFIX",prefix)
 
 -- -------------------------------------------------
