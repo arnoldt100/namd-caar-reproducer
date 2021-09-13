@@ -101,7 +101,8 @@ function declare_global_variables () {
     #-----------------------------------------------------
     declare -grA EXIT_STATUS=( [failed_cd]=2
                                [failed_build_command]=3 
-                               [failed_unsupported_target]=4)
+                               [failed_unsupported_target]=4
+                               [failed_notset_variable]=5 )
 }
 
 
@@ -183,6 +184,25 @@ function warn_unsupported_machine () {
     local -ir my_exit_status=${EXIT_STATUS["failed_unsupported_target"]}
     echo "The machine '${my_target_machine}' is not supported."
     usage
+    exit ${my_exit_status}
+}
+
+#-----------------------------------------------------
+# Function:                                          -
+#    warn_unset_or_empty_variable                    -
+#                                                    -
+# Synopsis:                                          -
+#   Warns of an unset or empty variable.             -
+#                                                    -
+# Positional parameters:                             -
+#   ${1} The variable name.                          -
+#                                                    -
+#-----------------------------------------------------
+function warn_unset_or_empty_variable () {
+    local -r variable_name=${1}
+    local -r error_message="The environmental variable ${variable_name} is empty or not set."
+    local -ir my_exit_status=${EXIT_STATUS["failed_notset_variable"]}
+    echo "${error_message}"
     exit ${my_exit_status}
 }
 
@@ -325,64 +345,74 @@ function parse_command_line {
 #                                                    -
 #-----------------------------------------------------
 function check_script_prerequisites () {
+    local -i my_exit_status
+
     #-----------------------------------------------------
     # Verify that the environmental variable 
     # NCP_TOP_LEVEL is set, otherwise exit.
     #
     #-----------------------------------------------------
-    local -r ncp_error_message="The environmental variable NCP_TOP_LEVEL is not set."
-    ${NCP_TOP_LEVEL:?"${ncp_error_message}"}
+    if [ -z "${NCP_TOP_LEVEL}" ] ;then
+        warn_unset_or_empty_variable "NCP_TOP_LEVEL"
+    fi
 
     #-----------------------------------------------------
     # Verify that the environmental variable
     # NAMD_TOP_LEVEL is set, otherwise exit.
     #-----------------------------------------------------
-    local -r ntl_error_message="The environmental variable NAMD_TOP_LEVEL is not set."
-    ${NAMD_TOP_LEVEL:?"${ntl_error_message}"}
+    if [ -z "${NAMD_TOP_LEVEL}" ];then
+        warn_unset_or_empty_variable "NAMD_TOP_LEVEL"
+    fi
 
     #-----------------------------------------------------
     # Verify that the environmental variable
     # FFTW_DIR is set, otherwise exit.
     # 
     #-----------------------------------------------------
-    local -r fftw_error_message="The environmental variable FFTW_DIR is not set."
-    ${FFTW_DIR:?"${fftw_error_message}"}
+    if [ -z "${FFTW_DIR}" ];then
+        warn_unset_or_empty_variable "FFTW_DIR"
+    fi
 
     #-----------------------------------------------------
     # Verify that the environmental variable
     # TCL_DIR is set, otherwise exit.
     #
     #-----------------------------------------------------
-    local -r tcl_error_message="The environmental variable TCL_DIR is not set."
-    ${TCL_DIR:?"${tcl_error_message}"}
+    if [ -z "${TCL_DIR}" ];then
+        warn_unset_or_empty_variable "TCL_DIR"
+    fi
 
     #-----------------------------------------------------
     # Verify that the environmental variable             -
     # MACHINE_NAME, otherwise exit.                      -
     #-----------------------------------------------------
-    local -r mn_error_message="The environmental variable MACHINE_NAME is not set."
-    ${MACHINE_NAME:?"${mn_error_message}"}
+    if [ -z "${MACHINE_NAME}" ];then
+        warn_unset_or_empty_variable "MACHINE_NAME"
+    fi
 
     #-----------------------------------------------------
     # Verify that the environmental variable             -
     # CHARMARCH, otherwise exit.                         -
     #-----------------------------------------------------
-    local -r ca_error_message="The environmental variable CHARMARCH is not set."
-    ${CHARMARCH:?"${ca_error_message}"}
+    if [ -z "${CHARMARCH}" ];then
+        warn_unset_or_empty_variable "CHARMARCH"
+    fi
 
     #-----------------------------------------------------
     # Verify that the environmental variable             -
     # NAMD_PREFIX, otherwise exit.                       -
     #-----------------------------------------------------
-    local -r np_error_message="The environmental variable NAMD_PREFIX is not set."
-    ${NAMD_PREFIX:?"${np_error_message}"}
+    if [ -z "${NAMD_PREFIX}" ];then
+        warn_unset_or_empty_variable "NAMD_PREFIX"
+    fi
 
     #-----------------------------------------------------
     # Verify that the environmental variable             -
     # NAMD_ARCH, otherwise exit.                         -
     #-----------------------------------------------------
-    local -r na_error_message="The environmental variable NAMD_ARCH is not set."
-    ${NAMD_ARCH:?"${na_error_message}"}
+    if [ -z "${NAMD_ARCH}" ];then
+        warn_unset_or_empty_variable "NAMD_ARCH"
+    fi
 
     return
 }
@@ -395,7 +425,7 @@ function check_script_prerequisites () {
 #   The main function of this bash script.           -
 #                                                    -
 # Positional parameters:                             -
-#   $@ This script command line arguments.            -
+#   $@ This script command line arguments.           -
 #                                                    -
 #-----------------------------------------------------
 function main () {
