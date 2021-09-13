@@ -86,6 +86,12 @@ directory
 
 ### Building NAMD
 
+Run the command<br> 
+
+**build\_namd-uiuc.sh --target-machine Spock --target-build namd-ofi-linux-x86\_64\_\_gnu\_\_cpu**<br>
+
+This will install the binary *namd2* in directory *${NCP_TOP_LEVEL}/sw/Spock/NAMD/ofi-linux-x86_64-gfortran-smp-gcc/cpu/*
+
 # List of Critical Environmental Variables
 
 **NCP_TOP_LEVEL** Stores the fully qualified path to the
