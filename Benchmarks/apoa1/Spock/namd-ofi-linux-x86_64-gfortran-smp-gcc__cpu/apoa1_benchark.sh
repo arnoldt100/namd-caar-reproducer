@@ -156,12 +156,15 @@ function parse_slurm_file () {
     local -r pattern4='s:__NAMDRESULTSDIR__:'"${my_results_directory}"':g'
     # The pattern must contain only alphanumeric characters.
     local -r pattern5='s:__TAG__:'"${my_apoa1_btag}"':g'
+    # The path to the parent directory of the input files.
+    local -r pattern6='s:__APOA1_INPUT_FILES_PARENT_DIR__:'"${APOA1_INPUT_FILES_PARENT_DIR}"':g'
 
     sed -e "${pattern1}" \
         -e "${pattern2}" \
         -e "${pattern3}" \
         -e "${pattern4}" \
-        -e "${pattern5}" < ${my_infile} > ${my_outfile}
+        -e "${pattern5}" \
+        -e "${pattern6}" < ${my_infile} > ${my_outfile}
 }
 
 #-------------------------------------------------------
@@ -269,7 +272,7 @@ function parse_command_line {
 #          file.                                     -
 #                                                    -
 #   ${5} : The specific tag that identifies the      -
-#          the benchamrk temaplate file.             -
+#          the benchamrk template file.              -
 #                                                    -
 #-----------------------------------------------------
 function perform_benchmark {
@@ -338,13 +341,19 @@ function main () {
          error_exit "The function parse_command_line failed ... exiting"
     fi
 
-    local -ra my_apoa1_benchmarks_tags=( '1-v3'
-                                         '2-v3'
-                                         '4-v3'
-                                         '8-v3')
+    local -ra my_apoa1_benchmarks_tags=( '1'
+                                         '2'
+                                         '3'
+                                         '4'
+                                         '5'
+                                         '6'
+                                         '7'
+                                         '8'
+                                         '9'
+                                         '10' )
 
     for apoa1_btag in "${my_apoa1_benchmarks_tags[@]}";do
-        local benchmark_file="./etc/apoa1-${apoa1_btag}.slurm.template.sh"
+        local benchmark_file="./etc/apoa1.slurm.template.sh"
         perform_benchmark ${SCRATCH_DIR} ${RESULTS_DIR} ${NAMD_BINARY} ${benchmark_file} ${apoa1_btag}
     done
 }
