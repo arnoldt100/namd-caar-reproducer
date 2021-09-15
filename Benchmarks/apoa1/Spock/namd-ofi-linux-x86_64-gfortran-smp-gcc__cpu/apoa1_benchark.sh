@@ -306,17 +306,6 @@ function perform_benchmark {
     parse_slurm_file "${infile}" "${outfile}" "${my_scratch_directory}" "${my_results_directory}" "${my_apoa1_benchmarks_tag}"
     cp -f ${outfile} ${my_scratch_directory}/
 
-    # Copy all input files to the benchmark scratch directory.
-    local -a apoa1_input_files=( "./input_files/apoa1.namd" 
-                                 "./input_files/apoa1.pdb" 
-                                 "./input_files/apoa1.psf" 
-                                 "./input_files/par_all22_popc.xplor" 
-                                 "./input_files/par_all22_prot_lipid.xplor" )
-
-    for input_file in "${apoa1_input_files[@]}";do
-       cp ${input_file} ${my_scratch_directory}/
-    done
-
     # Launch the batch script from the benchmark scratch directory.
     cd ${my_scratch_directory}
     sbatch ./${outfile}
