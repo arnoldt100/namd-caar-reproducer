@@ -79,7 +79,7 @@ function declare_global_variables {
         error_exit "${message}"
     fi
 
-    if [[ -v APOA1_INPUT_FILES_PARENT_DIR ]];then
+    if [[ ! -v APOA1_INPUT_FILES_PARENT_DIR ]];then
         message="A FATAL ERROR HAS OCCURRED!\n"
         message+="\tThe environmental variable APOA1_INPUT_FILES_PARENT_DIR is not set.\n"
         message+="\tPlease read the README.md for this benchmark to correct."
