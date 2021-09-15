@@ -7,6 +7,13 @@
 export NCP_ACCOUNT_ID="stf016"
 
 # ----------------------------------------------------
+# The path the the parent directory containing
+# the APOA1 input files.
+# 
+# ----------------------------------------------------
+export APOA1_INPUT_FILES_PARENT_DIR="${NCP_TOP_LEVEL}/Benchmarks/apoa1/input_files"
+
+# ----------------------------------------------------
 # The fully qualified path to the directory to run the
 # benchmark. This is your scratch working directory.
 # 
