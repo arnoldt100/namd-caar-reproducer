@@ -20,13 +20,18 @@ declare -r url="https://github.com/UIUC-PPL/charm"
 #-----------------------------------------------------
 declare -r destination="${NCP_TOP_LEVEL}/sw/sources/charm"
 
+#-----------------------------------------------------
+#                                                    -
+#                                                    -
+#-----------------------------------------------------
+declare charm_branch="v7.0.0-rc1"
+
 # ----------------------------------------------------
 # 
 #  No edits needed below this comment section
 # 
 # ----------------------------------------------------
 
-
 git clone "${url}" "${destination}"
 cd ${destination}
-git checkout v6.10.2
+git checkout ${charm_branch}
