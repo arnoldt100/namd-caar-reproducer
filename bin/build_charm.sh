@@ -49,7 +49,8 @@ function declare_global_variables () {
     #
     #-----------------------------------------------------
     declare -grA EXIT_STATUS=( [failed_cd]=2
-                               [failed_build_command]=3 )
+                               [failed_build_command]=3
+                               [failed_make_command]=4 )
 
     #-----------------------------------------------------
     # The charm++ version.
@@ -142,7 +143,7 @@ function build_ofi_linux_x86_64_gcc_smp_gfortran() {
     # Define the charm++ arch. This variable selects 
     # the network transport layer to build. 
     #-----------------------------------------------------
-    local -r charmarch='ofi-linux-x86_64-gfortran-smp-gcc'
+    local -r charmarch='ofi-linux-x86_64'
 
     #-----------------------------------------------------
     # The libfabric include and library options need 
@@ -162,7 +163,7 @@ function build_ofi_linux_x86_64_gcc_smp_gfortran() {
     #-----------------------------------------------------
     # Define  the options to the charm++ build command.
     #-----------------------------------------------------
-    local -r options=" -g -j8 --with-production --incdir ${include_dir} --libdir ${library_dir}"
+    local -r options=" gcc smp -g -j1 --incdir ${include_dir} --libdir ${library_dir}"
 
     #-----------------------------------------------------
     # Change to the charm++ source directory, and then
@@ -172,12 +173,20 @@ function build_ofi_linux_x86_64_gcc_smp_gfortran() {
 
     echo "The charm++ build command: ./build ${target} ${charmarch} ${options}"
 
-    ./build ${target} ${charmarch} ${options}
+    ./buildold ${target} ${charmarch} ${options}
     if [ $? -ne 0 ];then
-       local -r message="Error! The script ${SCRIPT_NAME} failed to build charm++."
-       local -ir my_exit_status=${EXIT_STATUS["failed_build_command"]}
-       echo "${message}"
-       exit ${my_exit_status}
+       local -r build_message="Error! The script ${SCRIPT_NAME} failed to build charm++."
+       local -ir my_build_exit_status=${EXIT_STATUS["failed_build_command"]}
+       echo "${build_message}"
+       exit ${my_buildexit_status}
+    fi
+
+    make -j 4 
+    if [ $? -ne 0 ];then
+       local -r make_message="Error! The script ${SCRIPT_NAME} failed to build charm++."
+       local -ir my_make_exit_status=${EXIT_STATUS["failed_make_command"]}
+       echo "${make_message}"
+       exit ${my_make_exit_status}
     fi
 
     change_dir "${SCRIPT_LAUNCH_DIR}"

@@ -1,8 +1,9 @@
 # Overview of Building and Running the Reproducer
 This package is a reproducer for the NAMD/charm++ intermittent hanging behavior
-found on **spock.olcf.ornl.gov**. One must download the prerequisite software
-packages and NAMD, load some Lmod modulefiles, build all software, and finally
-run the NAMD binary to reproduce the intermittent hanging behavior. 
+found on **spock.olcf.ornl.gov**. In general, one must download the
+prerequisite software packages and NAMD, load some Lmod modulefiles, build all
+software, and finally run the NAMD binary to reproduce the intermittent hanging
+behavior. 
 
 # Setting Essential Environmental Variables
 
@@ -48,7 +49,7 @@ To download charm++ run the command<br>
 **download_charm.sh**<br>
 
 This will clone charm++ to *${NCP_TOP_LEVEL}/sw/sources/charm*, and checkout
-branch *v6.10.2*.<br>
+branch *v7.0.0-rc1*.<br>
 
 ### Downloading NAMD
 To download NAMD source one must visit the URL
