@@ -17,7 +17,7 @@ declare -r source_to_download="https://sourceforge.net/projects/tcl/files/Tcl/8.
 # tarball.                                           -
 #                                                    -
 #-----------------------------------------------------
-declare -r destination="${NCP_TOP_EVEL}/sw/sources/${tarball}"
+declare -r destination="${NCP_TOP_LEVEL}/sw/sources/${tarball}"
 
 # ----------------------------------------------------
 # 
