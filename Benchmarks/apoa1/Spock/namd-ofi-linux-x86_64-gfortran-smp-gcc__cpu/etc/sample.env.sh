@@ -24,7 +24,7 @@ export NCP_APOA1_SCRATCH_DIR="${MEMBERWORK}/stf016/apoa1_benchmark"
 # Set the fully qualified path to the namd binary.
 # 
 # ----------------------------------------------------
-export NCP_APOA1_NAMD_BINARY="${NAMD_PREFIX}/namd2"
+export NCP_APOA1_NAMD_BINARY="${NAMD_PREFIX}/${NAMD_BINARY_NAME}"
 
 # ----------------------------------------------------
 # Set the fully qualified path to the directory where 
