@@ -40,7 +40,8 @@ To download TCL run the command<br>
 **download\_tcl.sh**<br>
 
 This will download the tarball *tcl8.5.9-src.tar.gz* and unpack in directory
-*${NCP_TOP_LEVEL}/sw/sources*.<br>
+*${NCP_TOP_LEVEL}/sw/sources*. One may have to run the script several
+times to successfully download TCL.<br>
 
 ### Downloading charm++
 
@@ -91,7 +92,7 @@ Run the command<br>
 
 **build\_namd-uiuc.sh --target-machine Spock --target-build namd-ofi-linux-x86\_64\_\_gnu\_\_cpu**<br>
 
-This will install the binary *namd2* in directory *${NCP_TOP_LEVEL}/sw/Spock/NAMD/ofi-linux-x86_64-gfortran-smp-gcc/cpu/*
+This will install the binary *namd2* in directory *${NCP_TOP_LEVEL}/sw/Spock/NAMD/ofi-linux-x86_64-smp-gcc/cpu/*
 
 # List of Critical Environmental Variables
 
@@ -104,4 +105,8 @@ of the NAMD source. This variable is set in file *core\_runtime\_environment.sh*
 <br>
 
 **MACHINE_NAME** Stores the name of the machine to build and run NAMD on. This variable
-is set in the Lmod module file *&lt;MACHINE_NAME&gt;\_core\_runtime\_environment.lua*.
+is set in the Lmod module file *&lt;MACHINE_NAME&gt;/&lt;MACHINE_NAME&gt;\_core\_runtime\_environment.lua*.
+
+**NAMD_PREFIX** The directory containing the NAMD binary. This variable
+is set in the Lmod module file *&lt;MACHINE_NAME&gt;/namd/namd-ofi-linux-x86_64.lua*.
+

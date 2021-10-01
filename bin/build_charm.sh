@@ -163,7 +163,7 @@ function build_ofi_linux_x86_64_gcc_smp_gfortran() {
     #-----------------------------------------------------
     # Define  the options to the charm++ build command.
     #-----------------------------------------------------
-    local -r options=" gcc smp -g -j1 --incdir ${include_dir} --libdir ${library_dir}"
+    local -r options=" gcc smp -g -j4 --incdir ${include_dir} --libdir ${library_dir}"
 
     #-----------------------------------------------------
     # Change to the charm++ source directory, and then
@@ -179,14 +179,6 @@ function build_ofi_linux_x86_64_gcc_smp_gfortran() {
        local -ir my_build_exit_status=${EXIT_STATUS["failed_build_command"]}
        echo "${build_message}"
        exit ${my_buildexit_status}
-    fi
-
-    make -j 4 
-    if [ $? -ne 0 ];then
-       local -r make_message="Error! The script ${SCRIPT_NAME} failed to build charm++."
-       local -ir my_make_exit_status=${EXIT_STATUS["failed_make_command"]}
-       echo "${make_message}"
-       exit ${my_make_exit_status}
     fi
 
     change_dir "${SCRIPT_LAUNCH_DIR}"

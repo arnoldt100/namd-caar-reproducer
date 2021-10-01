@@ -9,8 +9,8 @@ load("Spock/Spock_core_runtime_environment")
 
 local machine_name = os.getenv("MACHINE_NAME")
 local software_name = "charm++"
-local charm_version = "6.10.2"
-local charmarch="ofi-linux-x86_64-gfortran-smp-gcc"
+local charm_version = "v7.0.0-rc2"
+local charmarch="ofi-linux-x86_64-smp-gcc"
 local ncp_top_level = os.getenv("NCP_TOP_LEVEL")
 local parent_directory = pathJoin(ncp_top_level,"sw","sources","charm")
 

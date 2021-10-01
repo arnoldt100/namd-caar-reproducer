@@ -24,7 +24,7 @@ declare -r destination="${NCP_TOP_LEVEL}/sw/sources/charm"
 #                                                    -
 #                                                    -
 #-----------------------------------------------------
-declare charm_branch="v7.0.0-rc1"
+declare charm_branch="v7.0.0-rc2"
 
 # ----------------------------------------------------
 # 
