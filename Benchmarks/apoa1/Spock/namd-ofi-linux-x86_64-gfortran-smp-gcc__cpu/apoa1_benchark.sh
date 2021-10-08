@@ -240,12 +240,10 @@ function parse_command_line {
     # The ${TAG} variable can only contain alphanumeric characters. We use the
     # tag to create as part of a directory path in a sed command. Having only
     # alphanumeric characters simplifies these tasks.
-    if [[ ! "${TAG}" =~ ^[[:alnum:]]+$  ]];then
-        error_message="The --tag option value can only contain alphanumeric characters."
+    if [[  !  "${TAG}" =~ ^[[:alnum:]]+$  ]];then
+        error_message="The --tag option value can only contain  letters and digits."
         error_exit "${error_message}"
     fi
-
-
 
     return
 }
@@ -308,7 +306,7 @@ function perform_benchmark {
 
     # Launch the batch script from the benchmark scratch directory.
     cd ${my_scratch_directory}
-    sbatch ./${outfile}
+    # sbatch ./${outfile}
     cd ${SCRIPT_LAUNCH_DIR}
     return
 }
@@ -341,8 +339,9 @@ function main () {
                                          '9'
                                          '10' )
 
+    local -r benchmark_file="./etc/apoa1.slurm.template.sh"
+
     for apoa1_btag in "${my_apoa1_benchmarks_tags[@]}";do
-        local benchmark_file="./etc/apoa1.slurm.template.sh"
         perform_benchmark ${SCRATCH_DIR} ${RESULTS_DIR} ${NAMD_BINARY} ${benchmark_file} ${apoa1_btag}
     done
 }
