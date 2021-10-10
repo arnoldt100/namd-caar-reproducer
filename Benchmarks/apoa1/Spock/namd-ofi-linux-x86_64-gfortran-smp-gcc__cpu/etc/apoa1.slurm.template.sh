@@ -99,8 +99,9 @@ done
 #-----------------------------------------------------
 cd ${SCRATCH_DIR}/
 # srun -n 4 -N 2 ./namd2 ++p 2 ++ppn 2 ${pe_com_map} ./apoa1.namd
-nm_charm_process=4
-charm_process_per_node=2
+local -r nm_charm_process=4
+local -r charm_process_per_node=2
+local -r max_tasks_per_core=2
 echo "charmrun ++n ${nm_charm_process} ++ppn ${charm_process_per_node} ++mpiexec ++remote-shell "srun -n ${nm_charm_process} --ntasks-per-core ${max_tasks_per_core}" ./namd2 +isomalloc_sync ${pe_com_map} ./apoa1.namd 1> stdout.txt 2> stderr.txt "
 charmrun ++n ${nm_charm_process} ++ppn ${charm_process_per_node} ++mpiexec ++remote-shell "srun -n ${ntasks} --ntasks-per-core ${max_tasks_per_core}" ./namd2 +isomalloc_sync ${pe_com_map} ./apoa1.namd 1> stdout.txt 2> stderr.txt 
 

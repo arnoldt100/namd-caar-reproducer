@@ -306,7 +306,7 @@ function perform_benchmark {
 
     # Launch the batch script from the benchmark scratch directory.
     cd ${my_scratch_directory}
-    # sbatch ./${outfile}
+    sbatch ./${outfile}
     cd ${SCRIPT_LAUNCH_DIR}
     return
 }
@@ -328,16 +328,7 @@ function main () {
          error_exit "The function parse_command_line failed ... exiting"
     fi
 
-    local -ra my_apoa1_benchmarks_tags=( '1'
-                                         '2'
-                                         '3'
-                                         '4'
-                                         '5'
-                                         '6'
-                                         '7'
-                                         '8'
-                                         '9'
-                                         '10' )
+    local -ra my_apoa1_benchmarks_tags=( '1' )
 
     local -r benchmark_file="./etc/apoa1.slurm.template.sh"
 
