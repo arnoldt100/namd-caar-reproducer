@@ -103,8 +103,8 @@ declare -r nm_charm_process=2
 declare -r charm_process_per_node=2
 declare -r max_tasks_per_core=2
 declare -r ntasks=4
-echo "charmrun ++ppn 2 +p6 ./namd2 +isomalloc_sync ${pe_com_map} ./apoa1.namd 1> stdout.txt 2> stderr.txt "
-charmrun ++ppn 2 +p6 ./namd2 +isomalloc_sync ${pe_com_map} ./apoa1.namd 1> stdout.txt 2> stderr.txt 
+echo "charmrun ./namd2 ++n 6 ++ppn 2 +isomalloc_sync ${pe_com_map} ./apoa1.namd 1> stdout.txt 2> stderr.txt "
+charmrun ./namd2 ++n 6 ++ppn 2 +isomalloc_sync ${pe_com_map} ./apoa1.namd 1> stdout.txt 2> stderr.txt 
 
 #-----------------------------------------------------
 # Copy all files back to the results directory.      -
