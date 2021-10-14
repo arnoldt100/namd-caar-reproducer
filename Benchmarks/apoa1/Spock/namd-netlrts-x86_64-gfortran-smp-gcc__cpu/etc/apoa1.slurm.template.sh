@@ -103,8 +103,8 @@ declare -r nm_charm_process=2
 declare -r charm_process_per_node=2
 declare -r max_tasks_per_core=2
 declare -r ntasks=4
-echo 'charmrun ++mpiexec ++remote-shell "srun ./namd2 ++n 6 ++ppn 2 +isomalloc_sync ${pe_com_map} ./apoa1.namd" ' 
-charmrun ++mpiexec ++remote-shell "srun ./namd2 ++n 6 ++ppn 2 +isomalloc_sync ${pe_com_map} ./apoa1.namd"  
+echo 'charmrun ++mpiexec ++remote-shell "srun" ./namd2 ++n 6 ++ppn 2 ${pe_com_map} ./apoa1.namd ' 
+charmrun ++mpiexec ++remote-shell "srun" ./namd2 ++n 6 ++ppn 2 ${pe_com_map} ./apoa1.namd  
 
 #-----------------------------------------------------
 # Copy all files back to the results directory.      -
