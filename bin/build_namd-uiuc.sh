@@ -137,6 +137,7 @@ function usage () {
     printf "${help_frmt1}" "Available target machine: " "Spock"
     printf "${help_frmt1}" "Spock available target builds:" "namd-ofi-linux-x86_64__gnu__cpu"
     printf "${help_frmt1}" "" "namd-netlrts-linux-x86_64__gnu__cpu"
+    printf "${help_frmt1}" "" "namd-ofi-linux-x86_64_slurmpmi2__gnu__cpu"
     printf "\n"
     printf "${help_frmt1}" "Available target machine: " "Summit"
     printf "${help_frmt1}" "Summit available target builds:" "None"
@@ -511,6 +512,9 @@ function main () {
             case ${ncp_target_build} in
 
                 "namd-ofi-linux-x86_64__gnu__cpu" )
+                    build_Spock_namd_ofi_linux_x86_64__gnu__cpu;;
+
+                "namd-ofi-linux-x86_64_slurmpmi2__gnu__cpu" )
                     build_Spock_namd_ofi_linux_x86_64__gnu__cpu;;
 
                 "namd-netlrts-linux-x86_64__gnu__cpu" )
