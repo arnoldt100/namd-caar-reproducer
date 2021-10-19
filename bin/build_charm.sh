@@ -87,6 +87,7 @@ function usage {
     printf "${help_frmt1}" "Spock available target builds:" "mpi-linux-x86_64:smp:gnu"
     printf "${help_frmt1}" "" "ofi-linux-x86_64:smp:gnu"
     printf "${help_frmt1}" "" "ofi-linux-x86_64:slurmpmi2:smp:gnu"
+    printf "${help_frmt1}" "" "ofi-linux-x86_64:slurmpmi:smp:gnu"
     printf "${help_frmt1}" "" "netlrts-linux-x86_64:smp:gnu"
     printf "\n"
     printf "${help_frmt1}" "Available target machine: " "Summit"
@@ -389,6 +390,90 @@ function Spock_build_ofi_linux_x86_64_slurmpmi2_gcc_smp_gfortran() {
     return
 }
 
+#-----------------------------------------------------
+# Function:                                          -
+#    Spock_build_ofi_linux_x86_64_slurmpmi_gcc_smp_gfortran  -
+#                                                    -
+# Synopsis:                                          -
+#   Builds charmm++ with the OFI transport layer.    -
+#   Debug symbols are included.                      -
+#   This build is for the GNU programming            -
+#   environment.                                     -
+#                                                    -
+# Positional parameters:                             -
+#                                                    -
+#-----------------------------------------------------
+function Spock_build_ofi_linux_x86_64_slurmpmi_gcc_smp_gfortran() {
+    #-----------------------------------------------------
+    # The target of the build.
+    # 
+    #-----------------------------------------------------
+    local -r target='charm++'
+
+    #-----------------------------------------------------
+    # Define the charm++ arch. This variable selects 
+    # the network transport layer to build. 
+    #-----------------------------------------------------
+    local -r charmarch='ofi-linux-x86_64'
+
+    #-----------------------------------------------------
+    # The pmi2 include and library options need          -
+    # to be explicitly passed to the charm++ build       -
+    # command options.                                   -
+    #-----------------------------------------------------
+    local pmi_include_dir="$(pkg-config --cflags-only-I cray-pmi)"
+    # The below bash string manipulation removes the "-I" at the beginning of the string
+    # for we only need the directory path.
+    pmi_include_dir=${pmi_include_dir##-I} 
+
+    local pmi_library_dir="$(pkg-config --libs-only-L cray-pmi)"
+    # The below bash string manipulation removes the "-L" at the beginning of the string
+    # for we only need the directory path.
+    pmi_library_dir=${pmi_library_dir##-L} 
+
+
+    #-----------------------------------------------------
+    # The libfabric include and library options need 
+    # to be explicitly passed to the charm++ build 
+    # command options.
+    #-----------------------------------------------------
+    local libfabric_include_dir="$(pkg-config --cflags-only-I libfabric)"
+    # The below bash string manipulation removes the "-I" at the beginning of the string
+    # for we only need the directory path.
+    libfabric_include_dir=${libfabric_include_dir##-I} 
+
+    local libfabric_library_dir="$(pkg-config --libs-only-L libfabric)"
+    # The below bash string manipulation removes the "-L" at the beginning of the string
+    # for we only need the directory path.
+    libfabric_library_dir=${libfabric_library_dir##-L} 
+
+
+    #-----------------------------------------------------
+    # Define  the options to the charm++ build command.
+    #-----------------------------------------------------
+    include_dir="--incdir ${pmi_include_dir} --incdir ${libfabric_include_dir}"
+    library_dir="--libdir ${pmi_library_dir} --libdir ${libfabric_library_dir}"
+    local -r options="slurmpmi gcc smp -g -j4 ${include_dir} ${library_dir}"
+
+    #-----------------------------------------------------
+    # Change to the charm++ source directory, and then
+    # run the charm++ build command. 
+    #-----------------------------------------------------
+    change_dir "${CHARM_SOURCE_DIRECTORY}"
+
+    echo "The charm++ build command: ./build ${target} ${charmarch} ${options}"
+
+    ./buildold ${target} ${charmarch} ${options}
+    if [ $? -ne 0 ];then
+       local -r build_message="Error! The script ${SCRIPT_NAME} failed to build charm++."
+       local -ir my_build_exit_status=${EXIT_STATUS["failed_build_command"]}
+       echo "${build_message}"
+       exit ${my_buildexit_status}
+    fi
+
+    change_dir "${SCRIPT_LAUNCH_DIR}"
+    return
+}
 
 #-----------------------------------------------------
 # Function:                                          -
@@ -549,6 +634,9 @@ function main () {
 
                 "ofi-linux-x86_64:slurmpmi2:smp:gnu" )
                     Spock_build_ofi_linux_x86_64_slurmpmi2_gcc_smp_gfortran;;
+
+                "ofi-linux-x86_64:slurmpmi:smp:gnu" )
+                    Spock_build_ofi_linux_x86_64_slurmpmi_gcc_smp_gfortran;;
 
                 "netlrts-linux-x86_64:smp:gnu" )
                     Spock_build_netlrts_linux_x86_64_gcc_smp_gfortran;;
