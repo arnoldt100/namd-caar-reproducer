@@ -1,7 +1,7 @@
 
 help([[
 This module sets up the runtime environment of 
-for NAMD witn charmm++ arch ofi-linux-x86_64,
+for NAMD with charmm++ arch ofi-linux-x86_64,
 GNU progrmamming environment. This version runs
 CPUs only.
 ]])
@@ -22,6 +22,7 @@ local charm_arch=os.getenv("CHARMARCH")
 local namd_arch_file="Linux-x86_64-g++"
 local machine_name=os.getenv("MACHINE_NAME")
 local namd_top_level = os.getenv("NAMD_TOP_LEVEL")
+local namd_target_build = "namd-ofi-linux-x86_64__gnu__cpu"
 
 -- -------------------------------------------------
 -- Define the machine name.

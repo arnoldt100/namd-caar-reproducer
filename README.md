@@ -80,19 +80,22 @@ TCL will be installed in directory *${NCP_TOP_LEVEL}/sw/Spock/tcl/8.5.9/*.<br>
 
 To build charm++, run the command<br> 
 
-**build_charm.sh**<br>
+**build_charm.sh --help**<br>
 
-This will build the ofi charm++ transport layer and install charm++ within
-directory
-*${NCP_TOP_LEVEL}/sw/sources/charm++/ofi-linux-x86_64-gfortran-smp-gcc*.<br>
+This will list the available builds for each machine. Then run the command
+
+**build_charm.sh --target-machine ${MACHINE\_NAME} --target-build ${CHARM\_TARGET\_BUILD} **<br>
+
+This will build the charm++ transport layer and install charm++ within
+directory *${CHARMBASE}/${CHARMARCH}*.<br>
 
 ### Building NAMD
 
 Run the command<br> 
 
-**build\_namd-uiuc.sh --target-machine Spock --target-build namd-ofi-linux-x86\_64\_\_gnu\_\_cpu**<br>
+**build\_namd-uiuc.sh --target-machine ${MACHINE\_NAME} --target-build ${NCP\_TARGET\_BUILD}**<br>
 
-This will install the binary *namd2* in directory *${NCP_TOP_LEVEL}/sw/Spock/NAMD/ofi-linux-x86_64-smp-gcc/cpu/*
+This will install the binary *namd2* in directory *${NAMD\_PREFIX}*
 
 # List of Critical Environmental Variables
 

@@ -98,13 +98,12 @@ done
 #                                                    -
 #-----------------------------------------------------
 cd ${SCRATCH_DIR}/
-# srun -n 4 -N 2 ./namd2 ++p 2 ++ppn 2 ${pe_com_map} ./apoa1.namd
+# srun -n 8 -N 2 ./namd2 ++p 6 ++ppn 2 ${pe_com_map} ./apoa1.namd
 declare -r nm_charm_process=2
 declare -r charm_process_per_node=2
 declare -r max_tasks_per_core=2
 declare -r ntasks=4
-echo 'charmrun ++mpiexec ++remote-shell "srun ./namd2 ++n 6 ++ppn 2 +isomalloc_sync ${pe_com_map} ./apoa1.namd" ' 
-charmrun ++mpiexec ++remote-shell "srun ./namd2 ++n 6 ++ppn 2 +isomalloc_sync ${pe_com_map} ./apoa1.namd"  
+srun --mpi=pmi2 -n 2 -N 2 -c 3 ./namd2 +ofi_runtime_tcp ++ppn 2 ${pe_com_map} ./apoa1.namd
 
 #-----------------------------------------------------
 # Copy all files back to the results directory.      -
