@@ -53,7 +53,7 @@ setenv("NAMD_BINARY_NAME","namd2")
 -- Define the NAMD_BUILD_TARGET
 --
 -- -------------------------------------------------
-setenv("NCP_BUILD_TARGET","namd-ofi-linux-x86_64__gnu__cpu")
+setenv("NCP_TARGET_BUILD","namd-ofi-linux-x86_64_slurmpmi2__gnu__cpu")
 
 -------------------------------------------------
 -- Define the NAMD arch.

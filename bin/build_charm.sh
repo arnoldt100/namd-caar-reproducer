@@ -537,18 +537,18 @@ function parse_command_line {
 #                                                    -
 #-----------------------------------------------------
 
-# Check some prerequisites are satisfied.
-check_script_prerequisites
-
-# Declaree global variables thar are used in this script.
-declare_global_variables
-
 #-----------------------------------------------------
 #                                                    -
 # Start of main function of bash script.             -
 #                                                    -
 #-----------------------------------------------------
 function main () {
+
+    # Declare global variables that are used in this script.
+    declare_global_variables
+
+    # Check some prerequisites are satisfied.
+    check_script_prerequisites
 
     # Validate the command line options and arguments.
     validate_command_line $@
