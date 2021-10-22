@@ -22,5 +22,9 @@ declare -r destination="${NCP_TOP_LEVEL}/sw/sources/namd-amd"
 cd ${NCP_TOP_LEVEL}
 
 # Clone the repository from AMD.
-git clone ${repository} ${destination}
+git  clone ${repository} ${destination}
+
+# Now checkout the AMD developer branch.
+cd ${destination}
+git checkout -b developer-amd-3-0-alpha-6
 
