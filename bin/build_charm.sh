@@ -88,6 +88,7 @@ function usage {
     printf "${help_frmt1}" "" "ofi-linux-x86_64:smp:gnu"
     printf "${help_frmt1}" "" "ofi-linux-x86_64:slurmpmi2:smp:gnu"
     printf "${help_frmt1}" "" "netlrts-linux-x86_64:smp:gnu"
+    printf "${help_frmt1}" "" "multicore-linux-x86_64:gnu"
     printf "\n"
     printf "${help_frmt1}" "Available target machine: " "Summit"
     printf "${help_frmt1}" "Summit available target builds:" "multicore-linux-ppc64le:gnu"
@@ -264,7 +265,6 @@ function Spock_build_ofi_linux_x86_64_gcc_smp_gfortran() {
     # for we only need the directory path.
     pmi_library_dir=${pmi_library_dir##-L} 
 
-
     #-----------------------------------------------------
     # The libfabric include and library options need 
     # to be explicitly passed to the charm++ build 
@@ -279,7 +279,6 @@ function Spock_build_ofi_linux_x86_64_gcc_smp_gfortran() {
     # The below bash string manipulation removes the "-L" at the beginning of the string
     # for we only need the directory path.
     libfabric_library_dir=${libfabric_library_dir##-L} 
-
 
     #-----------------------------------------------------
     # Define  the options to the charm++ build command.
@@ -322,7 +321,6 @@ function Spock_build_ofi_linux_x86_64_gcc_smp_gfortran() {
 #                                                    -
 # Synopsis:                                          -
 #   Builds charmm++ with the OFI transport layer.    -
-#   Debug symbols are included.                      -
 #   This build is for the GNU programming            -
 #   environment.                                     -
 #                                                    -
@@ -462,6 +460,59 @@ function Spock_build_netlrts_linux_x86_64_gcc_smp_gfortran () {
     return
 }
 
+
+
+#-----------------------------------------------------
+# Function:                                          -
+#    Spock_build_multicore_linux_x86_64_gnu          -
+#                                                    -
+# Synopsis:                                          -
+#   Builds charmm++ for single-node usage.           -
+#   This build is for the GNU programming            -
+#   environment.                                     -
+#                                                    -
+# Positional parameters:                             -
+#                                                    -
+#-----------------------------------------------------
+function Spock_build_multicore_linux_x86_64_gnu () {
+    echo "Executing function Spock_build_multicore_linux_x86_64_gnu"
+
+    #-----------------------------------------------------
+    # The target of the build.
+    # 
+    #-----------------------------------------------------
+    local -r target='charm++'
+
+    #-----------------------------------------------------
+    # Define the charm++ arch. This variable selects 
+    # the network transport layer to build. 
+    #-----------------------------------------------------
+    local -r charmarch='multicore-linux-x86_64'
+
+    #-----------------------------------------------------
+    # Define  the options to the charm++ build command.
+    #-----------------------------------------------------
+    local -r options="gcc -j4 --with-production"
+
+    #-----------------------------------------------------
+    # Change to the charm++ source directory, and then
+    # run the charm++ build command. 
+    #-----------------------------------------------------
+    change_dir "${CHARM_SOURCE_DIRECTORY}"
+
+    echo "The charm++ build command: ./build ${target} ${charmarch} ${options}"
+
+    ./buildold ${target} ${charmarch} ${options}
+    if [ $? -ne 0 ];then
+       local -r build_message="Error! The script ${SCRIPT_NAME} failed to build charm++."
+       local -ir my_build_exit_status=${EXIT_STATUS["failed_build_command"]}
+       echo "${build_message}"
+       exit ${my_buildexit_status}
+    fi
+
+    change_dir "${SCRIPT_LAUNCH_DIR}"
+}
+
 #-------------------------------------------------------
 # Function:                                            -
 #   validate_command_line                              -
@@ -571,6 +622,9 @@ function main () {
 
                 "netlrts-linux-x86_64:smp:gnu" )
                     Spock_build_netlrts_linux_x86_64_gcc_smp_gfortran;;
+
+                "multicore-linux-x86_64:gnu" )
+                    Spock_build_multicore_linux_x86_64_gnu;;
 
                 *)
                     warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"

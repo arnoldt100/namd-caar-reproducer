@@ -518,6 +518,8 @@ function main () {
                 "namd-netlrts-linux-x86_64__gnu__cpu" )
                     build_namd_netlrts_linux_x86_64__gnu__cpu;;
 
+                "namd-multicore-linux-x86_64__gnu__cpu" )
+                    build_namd_multicore_linux_x86_64__gnu__cpu;;
                 *)
                     warn_unsupported_target "${ncp_target_build}" "${ncp_target_machine}"
                     exit 1;;
