@@ -138,6 +138,7 @@ function usage () {
     printf "${help_frmt1}" "Spock available target builds:" "namd-ofi-linux-x86_64__gnu__cpu"
     printf "${help_frmt1}" "" "namd-netlrts-linux-x86_64__gnu__cpu"
     printf "${help_frmt1}" "" "namd-ofi-linux-x86_64_slurmpmi2__gnu__cpu"
+    printf "${help_frmt1}" "" "namd-multicore-linux-x86_64__gnu__cpu"
     printf "\n"
     printf "${help_frmt1}" "Available target machine: " "Summit"
     printf "${help_frmt1}" "Summit available target builds:" "None"
@@ -273,7 +274,7 @@ function build_Spock_namd_ofi_linux_x86_64__gnu__cpu () {
 #    build_namd_netlrts_linux_x86_64__gnu__cpu       -
 #                                                    -
 # Synopsis:                                          -
-#   Prints the usage of this bash function.          -
+#   Configures and builds NAMD for CPU only.         -
 #                                                    -
 # Positional parameters:                             -
 #                                                    -
@@ -324,6 +325,65 @@ function build_namd_netlrts_linux_x86_64__gnu__cpu {
     cd ${starting_directory}
     return
 }
+
+#-----------------------------------------------------
+# Function:                                          -
+#   build_namd_multicore_linux_x86_64__gnu__cpu      -
+#                                                    -
+# Synopsis:                                          -
+#   Configures and builds NAMD for CPU only.         -
+#                                                    -
+# Positional parameters:                             -
+#                                                    -
+#-----------------------------------------------------
+function build_namd_multicore_linux_x86_64__gnu__cpu {
+    local -r machine_name="${MACHINE_NAME}"
+    local -r namd_arch="${NAMD_ARCH}"
+    local -r charm_arch="${CHARMARCH}"
+    local -r prefix="${NAMD_PREFIX}"
+    local -r namd_top_level="${NAMD_TOP_LEVEL}"
+    local -r bin2="namd2"
+    local -r nm_make_threads="8"
+    local -r fftw_dir=${FFTW_DIR}
+    cd ${namd_top_level}
+
+    if [ -d ${namd_arch} ];then
+        rm -rf ${namd_arch}
+    fi
+
+    local -r fftw_prefix=$(dirname ${fftw_dir})
+    local config_options=( "${namd_arch}"
+                     "--with-fftw3 --fftw-prefix ${fftw_prefix}"
+                     "--tcl-prefix ${TCL_DIR}"
+                     "--charm-base ${charm_base} --charm-arch ${charm_arch}"  )
+
+    local config_command="./config"
+    for opt in ${config_options[@]}; do
+        config_command="${config_command} ${opt}"
+    done
+
+    ${config_command}
+    if [[ $? != 0 ]];then
+        local -r config_error_message="The configure command of build_namd_multicore_linux_x86_64__gnu__cpu failed."
+        error_exit "${config_error_message}"
+    fi
+
+    cd ${namd_arch}
+
+    make -j ${nm_make_threads}
+    if [[ $? != 0 ]];then
+        local -r make_error_message="The make command of build_namd_netlrts_linux_x86_64__gnu__cpu failed."
+    fi
+
+    if [ ! -d ${prefix} ];then
+        mkdir -p ${prefix}
+    fi
+    cp -rf ./${bin2} ${prefix}
+    cd ${starting_directory}
+    return
+}
+
+
 
 #-------------------------------------------------------
 # Function:                                            -
@@ -520,6 +580,7 @@ function main () {
 
                 "namd-multicore-linux-x86_64__gnu__cpu" )
                     build_namd_multicore_linux_x86_64__gnu__cpu;;
+
                 *)
                     warn_unsupported_target "${ncp_target_build}" "${ncp_target_machine}"
                     exit 1;;
