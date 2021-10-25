@@ -9,11 +9,26 @@ export NCP_TOP_LEVEL=$(pwd)
 
 #-----------------------------------------------------
 # Define the environmental variable                  -
-# NAMD_TOP_LEVEL which store the path to the         -
+# NAMD_UIUC_TOP_LEVEL which stores the path to the   -
 # NAMD source.                                       -
 #                                                    -
 #-----------------------------------------------------
-export NAMD_TOP_LEVEL="${NCP_TOP_LEVEL}/sw/sources/namd"
+export NAMD_UIUC_TOP_LEVEL="${NCP_TOP_LEVEL}/sw/sources/namd"
+
+#-----------------------------------------------------
+# Define the environmental variable                  -
+# NAMD_AMD_TOP_LEVEL which stores the path to the    -
+# NAMD source from AMD developers.                   -
+#                                                    -
+#-----------------------------------------------------
+export NAMD_AMD_TOP_LEVEL="${NCP_TOP_LEVEL}/sw/sources/namd-amd"
+
+#-----------------------------------------------------
+# Modify your PATH variable to access certain        -
+# executables needed to build various things.        -
+#                                                    -
+#-----------------------------------------------------
+export PATH="${NCP_TOP_LEVEL}/bin:${PATH}"
 
 #-----------------------------------------------------
 # We need to make available the modules needed       -
@@ -22,11 +37,5 @@ export NAMD_TOP_LEVEL="${NCP_TOP_LEVEL}/sw/sources/namd"
 #-----------------------------------------------------
 module --ignore-cache use ${NCP_TOP_LEVEL}/runtime_environment
 
-#-----------------------------------------------------
-# Modify your PATH variable to access certain        -
-# executables needed to build various things.        -
-#                                                    -
-#-----------------------------------------------------
-export PATH="${NCP_TOP_LEVEL}/bin:${PATH}"
 
 

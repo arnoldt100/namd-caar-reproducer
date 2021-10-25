@@ -1,7 +1,7 @@
 
 help([[
 This module sets up the runtime environment of 
-for NAMD with charmm++ arch ofi-linux-x86_64,
+for NAMD witn charmm++ arch multicore-linux-x86_64,
 GNU progrmamming environment. This version runs
 CPUs only.
 ]])
@@ -13,7 +13,7 @@ CPUs only.
 
 -- Set the name of the modulefile that laods the correct charm++
 -- runtime environment
-charm_module = "Spock/charm++/" .. "ofi-linux-x86_64-gfortran-smp-gcc"
+charm_module = "Spock/charm++/" .. "multicore-linux-x86_64-gfortran-gcc"
 load(charm_module)
 
 load("Spock/tcl/8.5.9")
@@ -21,14 +21,13 @@ load("Spock/tcl/8.5.9")
 local charm_arch=os.getenv("CHARMARCH")
 local namd_arch_file="Linux-x86_64-g++"
 local machine_name=os.getenv("MACHINE_NAME")
-local namd_top_level = os.getenv("NAMD_UIUC_TOP_LEVEL")
-local namd_target_build = "namd-ofi-linux-x86_64__gnu__cpu"
+local namd_top_level = os.getenv("NAMD_AMD_TOP_LEVEL")
 
 -- -------------------------------------------------
 -- Define the machine name.
 --
 -- -------------------------------------------------
-setenv("NCP_MACHINE_NAME",machine_name)
+-- setenv("NCP_MACHINE_NAME",machine_name)
 
 -- -----------------------------------------------------
 --  Set the NAMD top level environmental variable.
@@ -51,10 +50,10 @@ setenv("NAMD_PREFIX",prefix)
 setenv("NAMD_BINARY_NAME","namd2")
 
 -- -------------------------------------------------
--- Define the NAMD_BUILD_TARGET
+-- Define the NCP_TARGET_BUILD
 --
 -- -------------------------------------------------
-setenv("NCP_TARGET_BUILD","namd-ofi-linux-x86_64__gnu__cpu")
+setenv("NCP_TARGET_BUILD","namd-amd-multicore-linux-x86_64__gnu__cpu")
 
 -------------------------------------------------
 -- Define the NAMD arch.

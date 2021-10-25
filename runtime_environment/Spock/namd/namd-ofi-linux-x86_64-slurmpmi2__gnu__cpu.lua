@@ -21,7 +21,7 @@ load("Spock/tcl/8.5.9")
 local charm_arch=os.getenv("CHARMARCH")
 local namd_arch_file="Linux-x86_64-g++"
 local machine_name=os.getenv("MACHINE_NAME")
-local namd_top_level = os.getenv("NAMD_TOP_LEVEL")
+local namd_top_level = os.getenv("NAMD_UIUC_TOP_LEVEL")
 
 -- -------------------------------------------------
 -- Define the machine name.
