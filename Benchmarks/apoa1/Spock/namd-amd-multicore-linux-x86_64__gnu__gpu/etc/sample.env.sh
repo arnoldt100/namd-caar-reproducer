@@ -31,5 +31,5 @@ export NCP_APOA1_NAMD_BINARY="${NAMD_PREFIX}/${NAMD_BINARY_NAME}"
 # the final results will be copied.
 # 
 # ----------------------------------------------------
-export NCP_APOA1_RESULTS_DIR="${NCP_TOP_LEVEL}/Benchmarks/apoa1/Spock/namd-netlrts-x86_64-gfortran-smp-gcc__cpu/apoa1_results"
+export NCP_APOA1_RESULTS_DIR="${NCP_TOP_LEVEL}/Benchmarks/apoa1/Spock/namd-amd-multicore-linux-86_64__gnu__gpu/apoa1_results"
 
