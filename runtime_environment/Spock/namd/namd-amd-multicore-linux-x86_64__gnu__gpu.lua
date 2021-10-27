@@ -54,7 +54,9 @@ setenv("NAMD_PREFIX",prefix)
 --  Set the name of the NAMD binary.
 --
 -- ------------------------------------------------
-setenv("NAMD_BINARY_NAME","namd2")
+setenv("NAMD_BINARY_NAME","namd3")
+setenv("NAMD2_BINARY_NAME","namd2")
+setenv("NAMD3_BINARY_NAME","namd3")
 
 -- -------------------------------------------------
 -- Define the NCP_TARGET_BUILD
