@@ -60,7 +60,7 @@ setenv("NAMD_BINARY_NAME","namd2")
 -- Define the NCP_TARGET_BUILD
 --
 -- -------------------------------------------------
-setenv("NCP_TARGET_BUILD","namd-amd-multicore-linux-x86_64__gnu__cpu")
+setenv("NCP_TARGET_BUILD","namd-amd-multicore-linux-x86_64__gnu__gpu")
 
 -------------------------------------------------
 -- Define the NAMD arch.

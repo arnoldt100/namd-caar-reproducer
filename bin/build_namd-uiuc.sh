@@ -139,7 +139,7 @@ function usage () {
     printf "${help_frmt1}" "" "namd-netlrts-linux-x86_64__gnu__cpu"
     printf "${help_frmt1}" "" "namd-ofi-linux-x86_64_slurmpmi2__gnu__cpu"
     printf "${help_frmt1}" "" "namd-multicore-linux-x86_64__gnu__cpu"
-    printf "${help_frmt1}" "" "namd-amd-multicore-linux-x86_64__gnu__cpu"
+    printf "${help_frmt1}" "" "namd-amd-multicore-linux-x86_64__gnu__gpu"
     printf "\n"
     printf "${help_frmt1}" "Available target machine: " "Summit"
     printf "${help_frmt1}" "Summit available target builds:" "None"
@@ -386,7 +386,7 @@ function build_namd_multicore_linux_x86_64__gnu__cpu {
 
 #-----------------------------------------------------
 # Function:                                          -
-#    build_namd_amd_multicore_linux_x86_64__gnu__cpu -
+#    build_namd_amd_multicore_linux_x86_64__gnu__gpu -
 #                                                    -
 # Synopsis:                                          -
 #   Prints the usage of this bash function.          -
@@ -394,7 +394,7 @@ function build_namd_multicore_linux_x86_64__gnu__cpu {
 # Positional parameters:                             -
 #                                                    -
 #-----------------------------------------------------
-function build_namd_amd_multicore_linux_x86_64__gnu__cpu {
+function build_namd_amd_multicore_linux_x86_64__gnu__gpu {
     local -r machine_name="${MACHINE_NAME}"
     local -r namd_arch="${NAMD_ARCH}"
     local -r charm_arch="${CHARMARCH}"
@@ -423,7 +423,7 @@ function build_namd_amd_multicore_linux_x86_64__gnu__cpu {
 
     ${config_command}
     if [[ $? != 0 ]];then
-        local -r config_error_message="The configure command of build_namd_amd_multicore_linux_x86_64__gnu__cpu failed."
+        local -r config_error_message="The configure command of build_namd_amd_multicore_linux_x86_64__gnu__gpu failed."
         error_exit "${config_error_message}"
     fi
 
@@ -647,8 +647,8 @@ function main () {
                 "namd-multicore-linux-x86_64__gnu__cpu" )
                     build_namd_multicore_linux_x86_64__gnu__cpu;;
 
-                "namd-amd-multicore-linux-x86_64__gnu__cpu" )
-                    build_namd_amd_multicore_linux_x86_64__gnu__cpu;;
+                "namd-amd-multicore-linux-x86_64__gnu__gpu" )
+                    build_namd_amd_multicore_linux_x86_64__gnu__gpu;;
 
                 *)
                     warn_unsupported_target "${ncp_target_build}" "${ncp_target_machine}"
