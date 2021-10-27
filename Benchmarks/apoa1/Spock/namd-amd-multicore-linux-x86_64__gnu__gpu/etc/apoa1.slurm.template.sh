@@ -90,8 +90,8 @@ declare -r nm_charm_process=2
 declare -r charm_process_per_node=2
 declare -r max_tasks_per_core=2
 declare -r ntasks=4
-echo 'charmrun ./namd2 +p2 ./apoa1.namd ' 
-charmrun ./namd3 +p2 ./apoa1.namd  
+echo 'charmrun ./namd2 +p2 ./apoa1.namd 1> __STDOUT__ 2> __STDERR__' 
+charmrun ./namd3 +p2 ./apoa1.namd  1> __STDOUT__ 2> __STDERR__
 
 #-----------------------------------------------------
 # Copy all files back to the results directory.      -

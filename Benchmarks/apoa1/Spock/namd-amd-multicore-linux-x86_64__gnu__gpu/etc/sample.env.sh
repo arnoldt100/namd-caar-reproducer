@@ -34,3 +34,14 @@ export NCP_APOA1_NAMD3_BINARY="${NAMD_PREFIX}/${NAMD3_BINARY_NAME}"
 # ----------------------------------------------------
 export NCP_APOA1_RESULTS_DIR="${NCP_TOP_LEVEL}/Benchmarks/apoa1/Spock/namd-amd-multicore-linux-x86_64__gnu__gpu/apoa1_results"
 
+# ----------------------------------------------------
+# Set the name of the stdout for the NAMD  binary.
+# 
+# ----------------------------------------------------
+export NCP_STDOUT='apoa1.stdout.txt'
+
+# ----------------------------------------------------
+# Set the name of the stderr for the NAMD  binary.
+# 
+# ----------------------------------------------------
+export NCP_STDERR='apoa1.stderr.txt'

@@ -114,6 +114,20 @@ function declare_global_variables {
         error_exit "${message}"
     fi
 
+    if [[ ! -v NCP_STDOUT ]];then
+        message="A FATAL ERROR HAS OCCURRED!\n"
+        message+="\tThe environmental variable NCP_STDOUT is not set.\n"
+        message+="\tPlease read the README.md for this benchmark to correct."
+        error_exit "${message}"
+    fi
+
+    if [[ ! -v NCP_STDERR ]];then
+        message="A FATAL ERROR HAS OCCURRED!\n"
+        message+="\tThe environmental variable NCP_STDERR is not set.\n"
+        message+="\tPlease read the README.md for this benchmark to correct."
+        error_exit "${message}"
+    fi
+
     # ----------------------------------------------------
     # Set the critical variables/parameters needed to run
     # the benchmarks.
@@ -167,6 +181,11 @@ function parse_slurm_file () {
     local -r pattern5='s:__TAG__:'"${my_apoa1_btag}"':g'
     # The path to the parent directory of the input files.
     local -r pattern6='s:__APOA1_INPUT_FILES_PARENT_DIR__:'"${APOA1_INPUT_FILES_PARENT_DIR}"':g'
+    # The name of the stdout and stderr files to write the output from the
+    # NAMD binary.
+    local -r pattern7='s:__STDOUT__:'"${NCP_STDOUT}"':g'
+    local -r pattern8='s:__STDERR__:'"${NCP_STDERR}"':g'
+
 
     sed -e "${pattern1}" \
         -e "${pattern2}" \
@@ -174,7 +193,10 @@ function parse_slurm_file () {
         -e "${pattern32}" \
         -e "${pattern4}" \
         -e "${pattern5}" \
-        -e "${pattern6}" < ${my_infile} > ${my_outfile}
+        -e "${pattern6}" \
+        -e "${pattern7}" \
+        -e "${pattern8}" \
+        < ${my_infile} > ${my_outfile}
 }
 
 #-------------------------------------------------------
@@ -337,7 +359,7 @@ function main () {
          error_exit "The function parse_command_line failed ... exiting"
     fi
 
-    local -ra my_apoa1_benchmarks_tags=( '1' )
+    local -ra my_apoa1_benchmarks_tags=( "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" )
 
     local -r benchmark_file="./etc/apoa1.slurm.template.sh"
 

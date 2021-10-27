@@ -401,7 +401,8 @@ function build_namd_amd_multicore_linux_x86_64__gnu__gpu {
     local -r prefix="${NAMD_PREFIX}"
     local -r namd_top_level="${NAMD_TOP_LEVEL}"
     local -r bin2="namd2"
-    local -r nm_make_threads="1"
+    local -r bin3="namd3"
+    local -r nm_make_threads="4"
     local -r fftw_dir=${FFTW_DIR}
     cd ${namd_top_level}
 
@@ -438,6 +439,7 @@ function build_namd_amd_multicore_linux_x86_64__gnu__gpu {
         mkdir -p ${prefix}
     fi
     cp -rf ./${bin2} ${prefix}
+    cp -rf ./${bin3} ${prefix}
     cd ${starting_directory}
     return
 }
