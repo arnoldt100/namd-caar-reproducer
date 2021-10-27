@@ -17,17 +17,24 @@ charm_module = "Spock/charm++/" .. "multicore-linux-x86_64-gfortran-gcc"
 load(charm_module)
 
 load("Spock/tcl/8.5.9")
-
+load("rocm/4.3.0")
+local rocm_prefix = os.getenv("ROCM_PATH")
 local charm_arch=os.getenv("CHARMARCH")
-local namd_arch_file="Linux-x86_64-g++"
+local namd_arch_file="Linux-x86_64-g++.hip"
 local machine_name=os.getenv("MACHINE_NAME")
 local namd_top_level = os.getenv("NAMD_AMD_TOP_LEVEL")
+
+-- -------------------------------------------------
+-- Define the ROCm prefix environmental variable.
+--
+-- -------------------------------------------------
+setenv("ROCM_PREFIX",rocm_prefix)
 
 -- -------------------------------------------------
 -- Define the machine name.
 --
 -- -------------------------------------------------
--- setenv("NCP_MACHINE_NAME",machine_name)
+setenv("NCP_MACHINE_NAME",machine_name)
 
 -- -----------------------------------------------------
 --  Set the NAMD top level environmental variable.
@@ -59,4 +66,4 @@ setenv("NCP_TARGET_BUILD","namd-amd-multicore-linux-x86_64__gnu__cpu")
 -- Define the NAMD arch.
 --
 -- -------------------------------------------------
-setenv("NAMD_ARCH","Linux-x86_64-g++")
+setenv("NAMD_ARCH","Linux-x86_64-g++.hip")

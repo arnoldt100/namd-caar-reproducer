@@ -107,6 +107,10 @@ top level of this package. This variable is set in file *core\_runtime\_environm
 of the NAMD source. This variable is set in file *core\_runtime\_environment.sh*.
 <br>
 
+**NAMD_AMD_TOP_LEVEL** Stores the fully qualified path to the top level
+of the NAMD source form AMD. This variable is set in file *core\_runtime\_environment.sh*.
+<br>
+
 **MACHINE_NAME** Stores the name of the machine to build and run NAMD on. This variable
 is set in the Lmod module file *&lt;MACHINE_NAME&gt;/&lt;MACHINE_NAME&gt;\_core\_runtime\_environment.lua*.
 
