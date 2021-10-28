@@ -1,7 +1,7 @@
 
 help([[
 This module sets up the runtime environment of 
-for NAMD witn charmm++ arch ofi-linux-x86_64,
+for NAMD with charmm++ arch multicore-linux-x86_64-gfortran-gcc"
 GNU progrmamming environment. This version runs
 CPUs only.
 ]])
