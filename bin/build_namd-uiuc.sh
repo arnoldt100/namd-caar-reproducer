@@ -464,7 +464,7 @@ function build_namd_amd_multicore_linux_x86_64__gnu__cpu {
     local -r namd_top_level="${NAMD_TOP_LEVEL}"
     local -r bin2="namd2"
     local -r bin3="namd3"
-    local -r nm_make_threads="4"
+    local -r nm_make_threads="1"
     local -r fftw_dir=${FFTW_DIR}
     cd ${namd_top_level}
 
@@ -483,6 +483,7 @@ function build_namd_amd_multicore_linux_x86_64__gnu__cpu {
         config_command="${config_command} ${opt}"
     done
 
+    echo "The config command: ${config_command}"
     ${config_command}
     if [[ $? != 0 ]];then
         local -r config_error_message="The configure command of build_namd_amd_multicore_linux_x86_64__gnu__cpu failed."
