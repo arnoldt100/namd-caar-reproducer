@@ -50,7 +50,6 @@ switchdist           10
 cutoff               12
 pairlistdist         13.5
 margin               0
-stepspercycle        20
 exclude              scaled1-4
 1-4scaling           1.0
 
@@ -75,6 +74,9 @@ PMEGridSizeZ         80
 nonbondedFreq 1
 fullElectFrequency   4
 
+#############################################################
+#  Non-bonded interaction distance-testinga                 #
+#############################################################
 stepspercycle 20
 pairlistsPerCycle 2
 
