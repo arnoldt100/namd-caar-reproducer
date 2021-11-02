@@ -70,8 +70,7 @@ cp ${NAMD3_BINARY} ${SCRATCH_DIR}/
 # Copy all input files to the scratch directory.     -
 #                                                    -
 # ----------------------------------------------------
-input_files=( "apoa1.namd" 
-              "apoa1.pdb"
+input_files=( "apoa1.pdb"
               "apoa1.psf"
               "par_all22_popc.xplor"
               "par_all22_prot_lipid.xplor" ) 

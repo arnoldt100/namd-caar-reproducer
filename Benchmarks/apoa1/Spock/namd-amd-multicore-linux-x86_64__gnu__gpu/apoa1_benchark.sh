@@ -232,6 +232,37 @@ function validate_command_line {
     fi
 }
 
+
+#-----------------------------------------------------
+# Function:                                          -
+#   parse_config_file                                -
+#                                                    -
+# Synopsis:                                          -
+#   Parses the NAMD config input file for            -
+#   NVE ensemble simulations.                        -
+#                                                    -
+# Positional parameters:                             -
+#   ${1} The file to be parsed.                      -
+#   ${2} The file to write the parsed file to.       -
+#                                                    -
+#-----------------------------------------------------
+function parse_config_file {
+    local -r my_infile=${1}
+    local -r my_outfile=${2}
+    local -r  outputTimings='100'
+    local -r  outputEnergies='100'
+    local -r  numsteps='10000'
+
+    local -r pattern1='s/__outputTimings__/'"${outputTimings}"'/g'
+    local -r pattern2='s/__outputEnergies__/'"${outputEnergies}"'/g'
+    local -r pattern3='s/__numsteps__/'"${numsteps}"'/g'
+    sed -e "${pattern1}" \
+        -e "${pattern2}" \
+        -e "${pattern3}" \
+        < ${my_infile} > ${my_outfile}
+}
+
+
 #-----------------------------------------------------
 # Function:                                          -
 #   parse_command_line                               -
@@ -334,6 +365,12 @@ function perform_benchmark {
     local -r outfile="apoa1-${TAG}-${my_apoa1_benchmarks_tag}.slurm.sh"
     parse_slurm_file "${infile}" "${outfile}" "${my_scratch_directory}" "${my_results_directory}" "${my_apoa1_benchmarks_tag}"
     cp -f ${outfile} ${my_scratch_directory}/
+
+    # Parse the namd config file and copy to the benchmark scratch directory.
+    local -r config_infile="${APOA1_INPUT_FILES_PARENT_DIR}/apoa1.namd.nve.template"
+    local -r config_outfile="apoa1.namd.nve"
+    parse_config_file "${config_infile}" "${config_outfile}"
+    cp -f ${config_outfile} "${my_scratch_directory}/apoa1.namd"
 
     # Launch the batch script from the benchmark scratch directory.
     cd ${my_scratch_directory}
