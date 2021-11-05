@@ -25,10 +25,10 @@ def create_logger_description():
     log_option_desc += "-"*header1_len  + "\n"
     log_option_desc += frmt_items.format("NOTSET", "All messages will be processed", "0" )  
     log_option_desc += frmt_items.format("", "processed", " \n" )  
-    log_option_desc += frmt_items.format("INFO", "Confirmation that things", "10" )  
-    log_option_desc += frmt_items.format("", "are working as expected.", " \n" )  
-    log_option_desc += frmt_items.format("DEBUG", "Detailed information, typically of ", "20" )  
+    log_option_desc += frmt_items.format("DEBUG", "Detailed information, typically of ", "10" )  
     log_option_desc += frmt_items.format("", "interest only when diagnosing problems.", "\n" )  
+    log_option_desc += frmt_items.format("INFO", "Confirmation that things", "20" )  
+    log_option_desc += frmt_items.format("", "are working as expected.", " \n" )  
     log_option_desc += frmt_items.format("WARNING ", "An indication that something unexpected , ", "30" )  
     log_option_desc += frmt_items.format("", "happened or indicative of some problem", "" )  
     log_option_desc += frmt_items.format("", "in the near future.", "\n" )  
