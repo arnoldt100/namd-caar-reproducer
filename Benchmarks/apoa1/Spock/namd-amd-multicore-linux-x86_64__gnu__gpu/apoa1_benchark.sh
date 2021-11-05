@@ -249,9 +249,9 @@ function validate_command_line {
 function parse_config_file {
     local -r my_infile=${1}
     local -r my_outfile=${2}
-    local -r  outputTimings='100'
-    local -r  outputEnergies='100'
-    local -r  numsteps='10000'
+    local -r  outputTimings='250'
+    local -r  outputEnergies='500'
+    local -r  numsteps='70000'
 
     local -r pattern1='s/__outputTimings__/'"${outputTimings}"'/g'
     local -r pattern2='s/__outputEnergies__/'"${outputEnergies}"'/g'

@@ -8,6 +8,7 @@ This module sets critical environmental and path variables needed for building a
 -- A list of prerequisite modules.
 load("PrgEnv-gnu/8.0.0")
 load("cray-fftw/3.3.8.10")
+load("gnuplot/5.4-stable")
 
 -- Define the machine name.
 local machine_name = "Spock"
