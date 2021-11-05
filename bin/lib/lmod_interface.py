@@ -121,10 +121,18 @@ class lmod():
         command="module list"
         my_command = subprocess.run(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 
-        print("Module list stdout")
-        print(my_command.stdout)
+        # Now parse the stderr of command 'module list'.
+        self._parse_lmod_stderr(my_command.stderr)
+    
+    ## @brief Parses the stderr of command 'module list' 
+    ##
+    ## @details Detailed description
+    ##
+    ## @param stderr The stderr of command "module list".
+    def _parse_lmod_stderr(self,stderr):
         print("Module list stderr")
-        print(my_command.stderr)
+        print(stderr)
+        return
 
 ## @fn main ()
 ## @brief The main function.
