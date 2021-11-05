@@ -107,8 +107,24 @@ class lmod():
     def __init__(self,filename):
         self._outputfile_name = filename 
 
-    def write_to_file(self,filename):
-        print("Stud message: Writing loaded modules to file.")
+
+    ## @brief Writes the loaded Lua modules to a file,
+    ##
+    ## @Details 
+    def write_modules_loaded_to_file(self):
+        import subprocess
+        import shlex
+
+        # The command 'module' is an alias, so we mus use the shell
+        # to call it. We capture the stdout and stderr. Stderr has the 
+        # information on the loaded modules.
+        command="module list"
+        my_command = subprocess.run(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+
+        print("Module list stdout")
+        print(my_command.stdout)
+        print("Module list stderr")
+        print(my_command.stderr)
 
 ## @fn main ()
 ## @brief The main function.
