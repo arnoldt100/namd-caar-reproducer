@@ -99,8 +99,35 @@ def parse_arguments():
     return my_args 
 
 
+## @fn _capture_stderr_stdout_module_list ( )
+## @brief Returns a dictionary of standard error and out of lmod command "module list"
+##
+## return A dictionary of strings, d, where :
+##        d["standard_out"] is the stdout of command "module list"
+##        d["standard_err"] is the stderr of command "module list"
+## 
+## @details Returns the standard error and out of lmod command "module list". 
+def _capture_stderr_stdout_module_list():
+    import subprocess
 
-## @brief Abstracts the Lua module file functionality.
+    # For LUA modules the command 'module' is an alias, so we must use the
+    # shell to call it. We capture the stdout and stderr. Stderr has the
+    # information on the loaded modules.
+    command="module list"
+    my_command = subprocess.run(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    return {"standard_out" : my_command.stdout, "standard_err" : my_command.stderr}
+
+
+## @fn _write_loaded_modules_in_xml_format ( )
+##
+## @brief Writes the list of loaded modules to a file in XML format.
+##
+## @param[in] filename The name of the file to write to.
+## @param[in] loaded_modules A string list of the load modules.
+def _write_loaded_modules_in_xml_format(filename,loaded_modules):
+    pass
+
+## @brief Abstracts the Lua modules functionality.
 ##
 ## @details Abstracts the Lua module file functionality.
 class lmod():
@@ -108,31 +135,73 @@ class lmod():
         self._outputfile_name = filename 
 
 
-    ## @brief Writes the loaded Lua modules to a file,
+    ## @brief Writes the loaded Lua modules to a file.
     ##
-    ## @Details 
+    ## @details The loaded modules are written to file
+    ##          self._outputfile_name. 
     def write_modules_loaded_to_file(self):
-        import subprocess
-        import shlex
 
-        # The command 'module' is an alias, so we mus use the shell
-        # to call it. We capture the stdout and stderr. Stderr has the 
-        # information on the loaded modules.
-        command="module list"
-        my_command = subprocess.run(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        # Get the output  of command "module list".
+        module_list_output = _capture_stderr_stdout_module_list()
 
-        # Now parse the stderr of command 'module list'.
-        self._parse_lmod_stderr(my_command.stderr)
+        # Now parse the stderr of command 'module list'. 
+        loaded_modules = self._parse_lmod_stderr(module_list_output["standard_err"])
+
+        # Now write the list of loaded modules to file.
+        _write_loaded_modules_in_xml_format(self._outputfile_name,loaded_modules)
     
-    ## @brief Parses the stderr of command 'module list' 
+    ## @brief Returns a list of strings of the loaded modules.
     ##
-    ## @details Detailed description
+    ## @details Returns a list of strings whose elements are the list
+    ##          of loaded modules. 
     ##
-    ## @param stderr The stderr of command "module list".
+    ## @param stderr The standard error of command "module list". sterr is of type byte string.
+    ##
+    ## @return A list of strings. The elements are the loaded modules.
     def _parse_lmod_stderr(self,stderr):
-        print("Module list stderr")
+        import re
+
+        # Step 0 - Convert stderr to  UTF-8.
+        print("Module list stderr before byte to UTF conversion.")
         print(stderr)
-        return
+        print("\n")
+        stderr0 = stderr.decode('UTF-8')
+        print("Module list stderr after byte to UTF conversion.")
+        print(stderr0)
+        print("\n")
+
+        # Step 1 - Remove all newlines form stderr0.
+        print("Module list stderr before newline substitution.")
+        print(stderr0)
+        print("\n")
+        stderr1 = stderr0.replace("\n","")
+        print("Module list stderr after newline substitution.")
+        print(stderr1)
+        print("\n")
+
+        # Step 2 - Remove the substring "Currently Loaded Modules:"
+        print("Module list stderr before text CLM substitution.")
+        print(stderr1)
+        print("\n")
+        repl2 = "Currently Loaded Modules:"
+        stderr2 = stderr1.replace(repl2,"")
+        print("Module list stderr after text CLM substitution.")
+        print(stderr2)
+        print("\n")
+
+        # Step 3 - Parse string and write loaded module to a list.
+        # pattern = "\s+\d+\) .+\s+"
+        pattern = "\s+\d+\)\s+\S+"
+        regexpr = re.compile(pattern)
+        print("Module list stderr before parsing stderr to list.")
+        print(stderr2)
+        print("\n")
+        loaded_modules = regexpr.findall(stderr2)
+        print("Module list stderr after parsing stderr to list.")
+        print(loaded_modules)
+        print("\n")
+
+        return loaded_modules
 
 ## @fn main ()
 ## @brief The main function.
