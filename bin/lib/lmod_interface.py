@@ -131,9 +131,11 @@ def _write_loaded_modules_in_xml_format(filename,loaded_modules):
 ##
 ## @details Abstracts the Lua module file functionality.
 class lmod():
-    def __init__(self,filename):
+    def __init__(self,filename,
+                 logging_level=logging.NOTSET,
+                 logging_id="lmod"):
         self._outputfile_name = filename 
-
+        self._logger = _create_logger(logging_id,logging_level)
 
     ## @brief Writes the loaded Lua modules to a file.
     ##
@@ -141,7 +143,7 @@ class lmod():
     ##          self._outputfile_name. 
     def write_modules_loaded_to_file(self):
 
-        # Get the output  of command "module list".
+        # Capture the output of command "module list".
         module_list_output = _capture_stderr_stdout_module_list()
 
         # Now parse the stderr of command 'module list'. 
@@ -162,44 +164,27 @@ class lmod():
         import re
 
         # Step 0 - Convert stderr to  UTF-8.
-        print("Module list stderr before byte to UTF conversion.")
-        print(stderr)
-        print("\n")
         stderr0 = stderr.decode('UTF-8')
-        print("Module list stderr after byte to UTF conversion.")
-        print(stderr0)
-        print("\n")
 
         # Step 1 - Remove all newlines form stderr0.
-        print("Module list stderr before newline substitution.")
-        print(stderr0)
-        print("\n")
         stderr1 = stderr0.replace("\n","")
-        print("Module list stderr after newline substitution.")
-        print(stderr1)
-        print("\n")
 
         # Step 2 - Remove the substring "Currently Loaded Modules:"
-        print("Module list stderr before text CLM substitution.")
-        print(stderr1)
-        print("\n")
         repl2 = "Currently Loaded Modules:"
         stderr2 = stderr1.replace(repl2,"")
-        print("Module list stderr after text CLM substitution.")
-        print(stderr2)
-        print("\n")
 
         # Step 3 - Parse string and write loaded module to a list.
-        # pattern = "\s+\d+\) .+\s+"
-        pattern = "\s+\d+\)\s+\S+"
+        # The string variabe stderr2 has each loaded module in the form below:
+        # ...  6) craype-network-ofi   17) rocm/4.3.0  ...
+        pattern = "\s+\d+\)\s+(?P<ml>\S+)"
         regexpr = re.compile(pattern)
-        print("Module list stderr before parsing stderr to list.")
-        print(stderr2)
-        print("\n")
         loaded_modules = regexpr.findall(stderr2)
-        print("Module list stderr after parsing stderr to list.")
-        print(loaded_modules)
-        print("\n")
+
+        # Text for debigging.
+        debug_message = "Module list stderr after parsing stderr to list:\n"
+        for tmp_str in loaded_modules:
+            debug_message += tmp_str + "\n"
+        self._logger.debug(debug_message)
 
         return loaded_modules
 
