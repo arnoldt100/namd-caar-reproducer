@@ -141,6 +141,8 @@ function usage () {
     printf "${help_frmt1}" "" "namd-multicore-linux-x86_64__gnu__cpu"
     printf "${help_frmt1}" "" "namd-amd-multicore-linux-x86_64__gnu__cpu"
     printf "${help_frmt1}" "" "namd-amd-multicore-linux-x86_64__gnu__gpu"
+    printf "${help_frmt1}" "" "namd-amd-ofi-linux-x86_64_slurmpmi2__gnu__cpu"
+    printf "${help_frmt1}" "" "namd-amd-ofi-linux-x86_64_slurmpmi2__gnu__gpu"
     printf "\n"
     printf "${help_frmt1}" "Available target machine: " "Summit"
     printf "${help_frmt1}" "Summit available target builds:" "None"

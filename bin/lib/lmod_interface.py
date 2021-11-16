@@ -7,7 +7,7 @@
 # System imports
 import string
 import argparse # Needed for parsing command line arguments.
-import logging  # Needed for logging events.
+import logging # Needed for logging events.
 
 # Local imports
 
@@ -122,10 +122,24 @@ def _capture_stderr_stdout_module_list():
 ##
 ## @brief Writes the list of loaded modules to a file in XML format.
 ##
-## @param[in] filename The name of the file to write to.
+## @param[in] filename The xml file name of the file to write to.
 ## @param[in] loaded_modules A string list of the load modules.
-def _write_loaded_modules_in_xml_format(filename,loaded_modules):
-    pass
+def _write_loaded_modules_in_xml_format(xml_file_name,loaded_modules):
+
+    import xml.etree.ElementTree as ET # Needed for writing results as XML.
+
+    my_xml_root = ET.Element("Modules Loaded")
+    my_xml_root.text = loaded_modules[0]
+
+    # Imstantiate an ElementTree 
+    my_xml_doc = ET.ElementTree(my_xml_root)
+
+    # Write as xml doc to file xml_file_name
+    my_xml_doc.write(xml_file_name)
+    with open (xml_file_name, "wb") as files :
+        my_xml_doc.write(files)
+
+    return
 
 ## @brief Abstracts the Lua modules functionality.
 ##
@@ -140,7 +154,8 @@ class lmod():
     ## @brief Writes the loaded Lua modules to a file.
     ##
     ## @details The loaded modules are written to file
-    ##          self._outputfile_name. 
+    ##
+    ## @params xml_file_name The name of the xml file to write the results to.
     def write_modules_loaded_to_file(self):
 
         # Capture the output of command "module list".

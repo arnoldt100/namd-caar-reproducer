@@ -107,11 +107,13 @@ def _parse_arguments():
 
 
 ## @fn capture_output_ml_command ( )
+##
 ## @brief Writes the loaded module to a file.
 ##
-def capture_output_ml_command():
+## @params xml_file_name The name of the xml file to write the results to.
+def capture_output_ml_command(xml_file_name):
     # Instatiate a Lua module interface.
-    aLmod = lmod_interface.lmod("my_modules.txt",logging_level=logging.DEBUG)
+    aLmod = lmod_interface.lmod(xml_file_name,logging_level=logging.DEBUG)
 
     # Write loaded modules to file.
     aLmod.write_modules_loaded_to_file()
@@ -126,7 +128,7 @@ def main():
 
     logger.info("Start of main program")
     
-    capture_output_ml_command()
+    capture_output_ml_command(args.outfile)
 
     logger.info("End of main program")
 

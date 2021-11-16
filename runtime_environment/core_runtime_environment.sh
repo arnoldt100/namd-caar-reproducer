@@ -31,6 +31,12 @@ export NAMD_AMD_TOP_LEVEL="${NCP_TOP_LEVEL}/sw/sources/namd-amd"
 export PATH="${NCP_TOP_LEVEL}/bin:${PATH}"
 
 #-----------------------------------------------------
+# Modify the environmental variable PYTHONPATH       -
+#                                                    -
+#-----------------------------------------------------
+export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
+
+#-----------------------------------------------------
 # We need to make available the modules needed       -
 # to build and run NAMD.                             -
 #                                                    -
