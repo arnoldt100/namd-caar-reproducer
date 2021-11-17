@@ -4,7 +4,7 @@
 #SBATCH --nodes=2
 #SBATCH --ntasks=2
 #SBATCH -A __ACCOUNTID__
-#SBATCH --time=00:30:00
+#SBATCH --time=01:10:00
 
 # ----------------------------------------------------
 # Set the scratch dir.
@@ -16,7 +16,7 @@ declare -r SCRATCH_DIR=__SCRATCHSPACE__
 # Set the fully qualified path to the NAMD binary.
 #
 # ----------------------------------------------------
-declare -r NAMD_BINARY=__NAMDBINARY__
+declare -r NAMD_BINARY=__NAMD3BINARY__
 
 #-----------------------------------------------------
 # Set the fully qualified path to the results        -
@@ -84,8 +84,7 @@ cp ${NAMD_BINARY} ${SCRATCH_DIR}/
 # Copy all input files to the scratch directory.     -
 #                                                    -
 # ----------------------------------------------------
-input_files=( "apoa1.namd" 
-              "apoa1.pdb"
+input_files=( "apoa1.pdb"
               "apoa1.psf"
               "par_all22_popc.xplor"
               "par_all22_prot_lipid.xplor" ) 
@@ -99,7 +98,7 @@ done
 #                                                    -
 #-----------------------------------------------------
 cd ${SCRATCH_DIR}/
-my_srun_command="srun -N 2 --ntasks 2 --cpus-per-task 3 namd3 +ofi_runtime_tcp ++ppn 2 ${pe_com_map} ./apoa1.namd 1> __STDOUT__ 2> __STDERR__"
+my_srun_command="srun -N 2 --ntasks 2 --cpus-per-task 3 __NAMD3BINARYNAME__ +ofi_runtime_tcp ++ppn 2 ${pe_com_map} ./apoa1.namd 1> __STDOUT__ 2> __STDERR__"
 echo "srun command: ${my_srun_command}"
 eval ${my_srun_command}
 

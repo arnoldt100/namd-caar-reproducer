@@ -93,6 +93,13 @@ function declare_global_variables {
         error_exit "${message}"
     fi
 
+    if [[ ! -v NAMD3_BINARY_NAME ]];then
+        message="A FATAL ERROR HAS OCCURRED!\n"
+        message+="\tThe environmental variable NAMD3_BINARY_NAME is not set.\n"
+        message+="\tPlease read the README.md for this benchmark to correct."
+        error_exit "${message}"
+    fi
+
     if [[ ! -v NCP_APOA1_RESULTS_DIR ]];then
         message="A FATAL ERROR HAS OCCURRED!\n"
         message+="\tThe environmental variable NCP_APOA1_RESULTS_DIR is not set.\n"
@@ -150,8 +157,8 @@ function parse_slurm_file () {
     local -r pattern2='s:__SCRATCHSPACE__:'"${my_scratch}/"':g'
     # The path to the NAMD binary may contain a '/' character so we use ':' as
     # the sed delimiter.
-    local -r pattern31='s:__NAMD2BINARY__:'"${NAMD2_BINARY}"':g'
-    local -r pattern32='s:__NAMD3BINARY__:'"${NAMD3_BINARY}"':g'
+    local -r pattern32='s:__NAMD3BINARY__:'"${NCP_APOA1_NAMD3_BINARY}"':g'
+    local -r pattern33='s:__NAMD3BINARYNAME__:'"${NAMD3_BINARY_NAME}"':g'
     # The directory path may contain a '/' character so we use ':' as
     # the sed delimiter.
     local -r pattern4='s:__NAMDRESULTSDIR__:'"${my_results_directory}"':g'
@@ -166,8 +173,8 @@ function parse_slurm_file () {
 
     sed -e "${pattern1}" \
         -e "${pattern2}" \
-        -e "${pattern31}" \
         -e "${pattern32}" \
+        -e "${pattern33}" \
         -e "${pattern4}" \
         -e "${pattern5}" \
         -e "${pattern6}" \
@@ -228,7 +235,7 @@ function parse_config_file {
     local -r my_outfile=${2}
     local -r  outputTimings='250'
     local -r  outputEnergies='500'
-    local -r  numsteps='70000'
+    local -r  numsteps='28000'
 
     local -r pattern1='s/__outputTimings__/'"${outputTimings}"'/g'
     local -r pattern2='s/__outputEnergies__/'"${outputEnergies}"'/g'
@@ -320,6 +327,7 @@ function perform_benchmark {
     local -r my_apoa1_benchmarks_tag=${5}
     local -r my_scratch_directory=${1}/${TAG}/${my_apoa1_benchmarks_tag}
     local -r my_results_directory=${2}/${TAG}/${my_apoa1_benchmarks_tag}
+    local -r config_infile=${6}
 
     # If the benchmark scratch directory exists then exit program with failure.
     if [ -d ${my_scratch_directory} ];then
@@ -336,6 +344,10 @@ function perform_benchmark {
     # Create the benchmark scratch and results directory.
     mkdir -p ${my_scratch_directory}
     mkdir -p ${my_results_directory}
+
+    # Parse the namd config file and copy to the benchmark scratch directory.
+    local -r config_outfile="${my_scratch_directory}/apoa1.namd"
+    parse_config_file "${config_infile}" "${config_outfile}"
 
     # Parse the slurm template file and copy to
     # the benchmark scratch directory.
@@ -368,12 +380,14 @@ function main () {
          error_exit "The function parse_command_line failed ... exiting"
     fi
 
-    local -ra my_apoa1_benchmarks_tags=( '1' )
+    local -ra my_apoa1_benchmarks_tags=( '0' '1' '2' '3' '4' '5' '6' '7' '8' '9' )
 
-    local -r benchmark_file="./etc/apoa1.slurm.template.sh"
+    local -r batch_slurm_template_file="./etc/apoa1.slurm.template.sh"
+
+    local -r config_template_infile="${APOA1_INPUT_FILES_PARENT_DIR}/apoa1.namd.nve.template"
 
     for apoa1_btag in "${my_apoa1_benchmarks_tags[@]}";do
-        perform_benchmark ${SCRATCH_DIR} ${RESULTS_DIR} ${NAMD_BINARY} ${benchmark_file} ${apoa1_btag}
+        perform_benchmark ${SCRATCH_DIR} ${RESULTS_DIR} ${NAMD_BINARY} ${batch_slurm_template_file} ${apoa1_btag} ${config_template_infile}
     done
 }
 
