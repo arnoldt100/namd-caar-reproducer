@@ -24,7 +24,8 @@ export NCP_APOA1_SCRATCH_DIR="${MEMBERWORK}/stf016/apoa1_benchmark"
 # Set the fully qualified path to the namd binary.
 # 
 # ----------------------------------------------------
-export NCP_APOA1_NAMD_BINARY="${NAMD_PREFIX}/${NAMD_BINARY_NAME}"
+export NCP_APOA1_NAMD2_BINARY="${NAMD_PREFIX}/${NAMD2_BINARY_NAME}"
+export NCP_APOA1_NAMD3_BINARY="${NAMD_PREFIX}/${NAMD3_BINARY_NAME}"
 
 # ----------------------------------------------------
 # Set the fully qualified path to the directory where 
@@ -33,3 +34,14 @@ export NCP_APOA1_NAMD_BINARY="${NAMD_PREFIX}/${NAMD_BINARY_NAME}"
 # ----------------------------------------------------
 export NCP_APOA1_RESULTS_DIR="${NCP_TOP_LEVEL}/Benchmarks/apoa1/Spock/AMD/namd-ofi-linux-x86_64-gfortran-smp-slurmpmi2-gcc__cpu/apoa1_results"
 
+# ----------------------------------------------------
+# Set the name of the stdout for the NAMD  binary.
+# 
+# ----------------------------------------------------
+export NCP_STDOUT='apoa1.stdout.txt'
+
+# ----------------------------------------------------
+# Set the name of the stderr for the NAMD  binary.
+# 
+# ----------------------------------------------------
+export NCP_STDERR='apoa1.stderr.txt'

@@ -13,7 +13,9 @@ CPUs only.
 -- Set the name of the modulefile that loads the correct charm++
 -- runtime environment
 charm_module = "Spock/charm++/" .. "ofi-linux-x86_64-slurmpmi2-smp-gcc"
+load(charm_module)
 
+load("Spock/tcl/8.5.9")
 
 local charm_arch=os.getenv("CHARMARCH")
 local namd_arch_file="Linux-x86_64-g++"
@@ -21,8 +23,6 @@ local machine_name=os.getenv("MACHINE_NAME")
 local namd_top_level = os.getenv("NAMD_AMD_TOP_LEVEL")
 local rocm_version = "rocm/4.3.0"
 
-load(charm_module)
-load("Spock/tcl/8.5.9")
 load(rocm_version)
 
 -- -------------------------------------------------
@@ -64,4 +64,3 @@ setenv("NCP_TARGET_BUILD","namd-amd-ofi-linux-x86_64_slurmpmi2__gnu__gpu")
 --
 -- -------------------------------------------------
 setenv("NAMD_ARCH","Linux-x86_64-g++")
-

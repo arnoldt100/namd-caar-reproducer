@@ -10,7 +10,7 @@ CPUs only.
 --
 -- -----------------------------------------------------
 
--- Set the name of the modulefile that laods the correct charm++
+-- Set the name of the modulefile that loads the correct charm++
 -- runtime environment
 charm_module = "Spock/charm++/" .. "ofi-linux-x86_64-slurmpmi2-smp-gcc"
 load(charm_module)
@@ -47,6 +47,8 @@ setenv("NAMD_PREFIX",prefix)
 --
 -- ------------------------------------------------
 setenv("NAMD_BINARY_NAME","namd2")
+setenv("NAMD2_BINARY_NAME","namd2")
+setenv("NAMD3_BINARY_NAME","namd3")
 
 -- -------------------------------------------------
 -- Define the NAMD_BUILD_TARGET

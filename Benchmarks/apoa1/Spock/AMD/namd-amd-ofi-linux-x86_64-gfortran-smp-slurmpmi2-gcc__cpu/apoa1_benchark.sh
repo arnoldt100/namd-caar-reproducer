@@ -241,7 +241,7 @@ function parse_command_line {
     # tag to create as part of a directory path in a sed command. Having only
     # alphanumeric characters simplifies these tasks.
     if [[  !  "${TAG}" =~ ^[[:alnum:]]+$  ]];then
-        error_message="The --tag option value can only contain  letters and digits."
+        error_message="The --tag option value can only contain  letters, digits, hyphens and underscores."
         error_exit "${error_message}"
     fi
 

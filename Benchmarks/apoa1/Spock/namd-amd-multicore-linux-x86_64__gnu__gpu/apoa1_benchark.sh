@@ -186,7 +186,6 @@ function parse_slurm_file () {
     local -r pattern7='s:__STDOUT__:'"${NCP_STDOUT}"':g'
     local -r pattern8='s:__STDERR__:'"${NCP_STDERR}"':g'
 
-
     sed -e "${pattern1}" \
         -e "${pattern2}" \
         -e "${pattern31}" \
