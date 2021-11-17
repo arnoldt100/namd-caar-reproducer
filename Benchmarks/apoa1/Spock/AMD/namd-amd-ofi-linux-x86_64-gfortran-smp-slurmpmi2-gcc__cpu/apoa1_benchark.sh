@@ -150,7 +150,8 @@ function parse_slurm_file () {
     local -r pattern2='s:__SCRATCHSPACE__:'"${my_scratch}/"':g'
     # The path to the NAMD binary may contain a '/' character so we use ':' as
     # the sed delimiter.
-    local -r pattern3='s:__NAMDBINARY__:'"${NAMD_BINARY}"':g'
+    local -r pattern31='s:__NAMD2BINARY__:'"${NAMD2_BINARY}"':g'
+    local -r pattern32='s:__NAMD3BINARY__:'"${NAMD3_BINARY}"':g'
     # The directory path may contain a '/' character so we use ':' as
     # the sed delimiter.
     local -r pattern4='s:__NAMDRESULTSDIR__:'"${my_results_directory}"':g'
@@ -158,13 +159,21 @@ function parse_slurm_file () {
     local -r pattern5='s:__TAG__:'"${my_apoa1_btag}"':g'
     # The path to the parent directory of the input files.
     local -r pattern6='s:__APOA1_INPUT_FILES_PARENT_DIR__:'"${APOA1_INPUT_FILES_PARENT_DIR}"':g'
+    # The name of the stdout and stderr files to write the output from the
+    # NAMD binary.
+    local -r pattern7='s:__STDOUT__:'"${NCP_STDOUT}"':g'
+    local -r pattern8='s:__STDERR__:'"${NCP_STDERR}"':g'
 
     sed -e "${pattern1}" \
         -e "${pattern2}" \
-        -e "${pattern3}" \
+        -e "${pattern31}" \
+        -e "${pattern32}" \
         -e "${pattern4}" \
         -e "${pattern5}" \
-        -e "${pattern6}" < ${my_infile} > ${my_outfile}
+        -e "${pattern6}" \
+        -e "${pattern7}" \
+        -e "${pattern8}" \
+        < ${my_infile} > ${my_outfile}
 }
 
 #-------------------------------------------------------
@@ -199,6 +208,37 @@ function validate_command_line {
          error_exit "The function get_opt failed ... exiting"
     fi
 }
+
+
+#-----------------------------------------------------
+# Function:                                          -
+#   parse_config_file                                -
+#                                                    -
+# Synopsis:                                          -
+#   Parses the NAMD config input file for            -
+#   NVE ensemble simulations.                        -
+#                                                    -
+# Positional parameters:                             -
+#   ${1} The file to be parsed.                      -
+#   ${2} The file to write the parsed file to.       -
+#                                                    -
+#-----------------------------------------------------
+function parse_config_file {
+    local -r my_infile=${1}
+    local -r my_outfile=${2}
+    local -r  outputTimings='250'
+    local -r  outputEnergies='500'
+    local -r  numsteps='70000'
+
+    local -r pattern1='s/__outputTimings__/'"${outputTimings}"'/g'
+    local -r pattern2='s/__outputEnergies__/'"${outputEnergies}"'/g'
+    local -r pattern3='s/__numsteps__/'"${numsteps}"'/g'
+    sed -e "${pattern1}" \
+        -e "${pattern2}" \
+        -e "${pattern3}" \
+        < ${my_infile} > ${my_outfile}
+}
+
 
 #-----------------------------------------------------
 # Function:                                          -
