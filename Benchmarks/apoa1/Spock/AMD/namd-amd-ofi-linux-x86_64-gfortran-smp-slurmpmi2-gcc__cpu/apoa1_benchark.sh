@@ -86,9 +86,9 @@ function declare_global_variables {
         error_exit "${message}"
     fi
 
-    if [[ ! -v NCP_APOA1_NAMD_BINARY ]];then
+    if [[ ! -v NCP_APOA1_NAMD3_BINARY ]];then
         message="A FATAL ERROR HAS OCCURRED!\n"
-        message+="\tThe environmental variable NCP_APOA1_NAMD_BINARY is not set.\n"
+        message+="\tThe environmental variable NCP_APOA1_NAMD3_BINARY is not set.\n"
         message+="\tPlease read the README.md for this benchmark to correct."
         error_exit "${message}"
     fi
@@ -114,7 +114,7 @@ function declare_global_variables {
     # ----------------------------------------------------
     declare -g SCRATCH_DIR="${NCP_APOA1_SCRATCH_DIR}"
     declare -g RESULTS_DIR="${NCP_APOA1_RESULTS_DIR}"
-    declare -gr NAMD_BINARY="${NCP_APOA1_NAMD_BINARY}"
+    declare -gr NAMD_BINARY="${NCP_APOA1_NAMD3_BINARY}"
     declare -gr ACCOUNTID="${NCP_ACCOUNT_ID}"
     declare -gr SCRIPT_LAUNCH_DIR=$(pwd)
 }
