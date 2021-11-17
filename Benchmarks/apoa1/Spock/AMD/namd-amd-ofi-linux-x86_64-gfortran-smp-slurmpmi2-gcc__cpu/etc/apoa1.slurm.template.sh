@@ -99,12 +99,9 @@ done
 #                                                    -
 #-----------------------------------------------------
 cd ${SCRATCH_DIR}/
-# srun -n 8 -N 2 ./namd2 ++p 6 ++ppn 2 ${pe_com_map} ./apoa1.namd
-declare -r nm_charm_process=2
-declare -r charm_process_per_node=2
-declare -r max_tasks_per_core=2
-declare -r ntasks=4
-srun -N 2 --ntasks 2 --cpus-per-task 3 namd2 +ofi_runtime_tcp ++ppn 2 ${pe_com_map} ./apoa1.namd
+my_srun_command="srun -N 2 --ntasks 2 --cpus-per-task 3 namd3 +ofi_runtime_tcp ++ppn 2 ${pe_com_map} ./apoa1.namd 1> __STDOUT__ 2> __STDERR__"
+echo "srun command: ${my_srun_command}"
+eval ${my_srun_command}
 
 #-----------------------------------------------------
 # Copy all files back to the results directory.      -

@@ -32,16 +32,18 @@ export NCP_APOA1_NAMD3_BINARY="${NAMD_PREFIX}/${NAMD3_BINARY_NAME}"
 # the final results will be copied.
 # 
 # ----------------------------------------------------
-export NCP_APOA1_RESULTS_DIR="${NCP_TOP_LEVEL}/Benchmarks/apoa1/Spock/AMD/namd-ofi-linux-x86_64-gfortran-smp-slurmpmi2-gcc__cpu/apoa1_results"
+export NCP_APOA1_RESULTS_DIR="${NCP_TOP_LEVEL}/Benchmarks/apoa1/Spock/AMD/namd-amd-ofi-linux-x86_64-gfortran-smp-slurmpmi2-gcc__cpu/apoa1_results"
 
 # ----------------------------------------------------
-# Set the name of the stdout for the NAMD  binary.
+# Set the name of the file that captures the stdout 
+# of the NAMD  binary.
 # 
 # ----------------------------------------------------
 export NCP_STDOUT='apoa1.stdout.txt'
 
 # ----------------------------------------------------
-# Set the name of the stderr for the NAMD  binary.
+# Set the name of the file that captures the stderr 
+# of the NAMD  binary.
 # 
 # ----------------------------------------------------
 export NCP_STDERR='apoa1.stderr.txt'
