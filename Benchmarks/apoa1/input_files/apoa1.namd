@@ -26,11 +26,11 @@ parameters           par_all22_popc.xplor
 exclude              scaled1-4
 1-4scaling           1.0
 
-timestep             1.0
-fullElectFrequency   4
+timestep             2.0
+fullElectFrequency   2
 
-numsteps             500
-outputtiming         20
+numsteps             50000
+outputtiming         5000
 
 outputname           apoa1-out
 

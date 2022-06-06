@@ -102,7 +102,8 @@ function declare_global_variables () {
     declare -grA EXIT_STATUS=( [failed_cd]=2
                                [failed_build_command]=3 
                                [failed_unsupported_target]=4
-                               [failed_notset_variable]=5 )
+                               [failed_notset_variable]=5 
+                               [failed_parsing_command_line]=6 )
 }
 
 
@@ -610,6 +611,7 @@ function validate_command_line {
 #-----------------------------------------------------
 function parse_command_line {
     eval set -- $@
+    local fn_status=0
     while true;do
         case ${1} in
             -h | --help ) 
@@ -631,10 +633,12 @@ function parse_command_line {
             * ) 
                 echo "Internal parsing error!"
                 usage
-                exit 1;;
+                fn_status=${EXIT_STATUS[failed_parsing_command_line]};
+                break;;
         esac
         shift
     done
+    return ${fn_status}
 }
 
 #-----------------------------------------------------
