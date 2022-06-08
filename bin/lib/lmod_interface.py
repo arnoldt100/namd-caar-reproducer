@@ -128,11 +128,20 @@ def _write_loaded_modules_in_xml_format(xml_file_name,loaded_modules):
 
     import xml.etree.ElementTree as ET # Needed for writing results as XML.
 
-    my_xml_root = ET.Element("Modules Loaded")
-    my_xml_root.text = loaded_modules[0]
+    # Here we create the root element.
+    my_xml = ET.Element("Modules Loaded")
+
+    # Now we create a sub element.
+    ml = ET.SubElement(my_xml,"modules" )
+
+    module_number = 0
+    for item in loaded_modules:
+        module_number+=1
+        usr = ET.SubElement(my_xml,str(module_number) )
+        usr.text = item
 
     # Imstantiate an ElementTree 
-    my_xml_doc = ET.ElementTree(my_xml_root)
+    my_xml_doc = ET.ElementTree(my_xml)
 
     # Write as xml doc to file xml_file_name
     my_xml_doc.write(xml_file_name)
