@@ -10,7 +10,7 @@ software, and finally run the NAMD binary.
 The first step is to set essential paths and environmental variables by
 doing the following command<br>
 
-**source ./runtime\_configuration/core\_runtime\_environment.sh**<br>
+**source ./runtime\_environment/core\_runtime\_environment.sh**<br>
 
 Note this command must be executed in the top level of this package. This will
 set the environmental variable **NCP_TOP_LEVEL**, modify your **PATH**
@@ -62,7 +62,7 @@ directory from *NAMD\_Git-2021-09-13\_Source* to *namd*.
 ## Building Prerequisite Software and NAMD
 
 ### Load Lmod modulefiles
-To build the multinode(SMP version of NAMD) we load the Lmod module file  
+To build the multinode(SMP version of NAMD) we load the Lmod module file 
 *Spock/namd/namd-ofi-linux-x86\_64\_\_gnu\_\_cpu.lua*<br>
 
 **module load Spock/namd/namd-ofi-linux-x86_64\_\_gnu\_\_cpu**<br>
