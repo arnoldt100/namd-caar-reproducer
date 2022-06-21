@@ -610,45 +610,45 @@ function main () {
          error_exit 'The function parse_command_line failed ... exiting'
     fi
     
-    case ${ncp_target_machine} in
-        "Spock" )
-            case ${ncp_target_build} in
+    # case ${ncp_target_machine} in
+    #     "Spock" )
+    #         case ${ncp_target_build} in
 
-                "ofi-linux-x86_64:smp:gnu" )
-                    Spock_build_ofi_linux_x86_64_gcc_smp_gfortran;;
+    #             "ofi-linux-x86_64:smp:gnu" )
+    #                 Spock_build_ofi_linux_x86_64_gcc_smp_gfortran;;
 
-                "ofi-linux-x86_64:slurmpmi2:smp:gnu" )
-                    Spock_build_ofi_linux_x86_64_slurmpmi2_gcc_smp_gfortran;;
+    #             "ofi-linux-x86_64:slurmpmi2:smp:gnu" )
+    #                 Spock_build_ofi_linux_x86_64_slurmpmi2_gcc_smp_gfortran;;
 
-                "netlrts-linux-x86_64:smp:gnu" )
-                    Spock_build_netlrts_linux_x86_64_gcc_smp_gfortran;;
+    #             "netlrts-linux-x86_64:smp:gnu" )
+    #                 Spock_build_netlrts_linux_x86_64_gcc_smp_gfortran;;
 
-                "multicore-linux-x86_64:gnu" )
-                    Spock_build_multicore_linux_x86_64_gnu;;
+    #             "multicore-linux-x86_64:gnu" )
+    #                 Spock_build_multicore_linux_x86_64_gnu;;
 
-                *)
-                    warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
-                    exit 1;;
+    #             *)
+    #                 warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
+    #                 exit 1;;
 
-            esac;;
+    #         esac;;
 
-        "Summit" )
-            case ${ncp_target_build} in
+    #     "Summit" )
+    #         case ${ncp_target_build} in
 
-                "multicore-linux-ppc64le:gnu" )
-                    echo "Stud build for multicore-linux-ppc64le:gnu";;
+    #             "multicore-linux-ppc64le:gnu" )
+    #                 echo "Stud build for multicore-linux-ppc64le:gnu";;
 
-                *)
-                    warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
-                    exit 1;;
+    #             *)
+    #                 warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
+    #                 exit 1;;
 
-            esac;;
+    #         esac;;
 
-         * ) 
-                echo "The machine '${NCP_MACHINE_NAME}' is not supported."
-                usage
-                exit 1;;
-    esac
+    #      * ) 
+    #             echo "The machine '${NCP_MACHINE_NAME}' is not supported."
+    #             usage
+    #             exit 1;;
+    # esac
 
 }
 

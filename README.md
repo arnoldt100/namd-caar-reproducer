@@ -1,9 +1,8 @@
 # Overview of Building and Running the Reproducer
-This package is a reproducer for the NAMD/charm++ intermittent hanging behavior
-found on **spock.olcf.ornl.gov**. In general, one must download the
+This package is a testing framework for the NAMD/charm++ on OLCF machines. 
+In general, one must download the
 prerequisite software packages and NAMD, load some Lmod modulefiles, build all
-software, and finally run the NAMD binary to reproduce the intermittent hanging
-behavior. 
+software, and finally run the NAMD binary.
 
 # Setting Essential Environmental Variables
 
