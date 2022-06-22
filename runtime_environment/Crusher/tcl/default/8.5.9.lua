@@ -2,19 +2,16 @@
 
 help(
 [[
-This module loads tcl 8.5.9  
+This module loads tcl 8.5.9. Installation paths are defined.  
 ]])
-
--- A list of prerequisite modules.
-load("Crusher/Crusher_core_runtime_environment")
 
 local machine_name = os.getenv("MACHINE_NAME")
 local software_name = "tcl"
 local tcl_version = "8.5.9"
 local ncp_top_level = os.getenv("NCP_TOP_LEVEL")
-local parent_directory = pathJoin(ncp_top_level,"sw",machine_name,software_name,tcl_version)
+local parent_directory = os.getenv("NCP_PREFIX")
 
-local tcl_installation_directory = parent_directory
+local tcl_installation_directory = pathJoin(parent_directory,machine_name,software_name,tcl_version) 
 local tcl_lib_dir = pathJoin(tcl_installation_directory,"/lib")
 local tcl_bin_dir = pathJoin(tcl_installation_directory,"/bin")
 local tcl_include_dir = pathJoin(tcl_installation_directory,"/include")

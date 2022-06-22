@@ -1,9 +1,8 @@
 -- -*- lua -*-
 
-help(
-[[
-This module sets critical environmental and path variables needed for building and running NAMD
-on Crusher.
+help([[
+This module sets critical environmental and path variables needed for building
+and running NAMD on Crusher.
 ]])
 
 -- -------------------------------------------------
@@ -15,7 +14,8 @@ on Crusher.
 --  "default"                Load the default modules.
 -- 
 -- -------------------------------------------------
-local key="default"
+local key = "default"
+setenv('NCP_PE_KEY',key)
 
 -- -------------------------------------------------
 -- Set the machine name.
@@ -43,6 +43,13 @@ cray_fftw_module["default"] = "cray-fftw/3.3.8.13"
 -- -------------------------------------------------
 local cray_python_module = {}
 cray_python_module["default"] = "cray-python/3.9.12.1"
+
+-- -------------------------------------------------
+-- Set the TCL version
+--
+-- -------------------------------------------------
+local tcl_module={}
+tcl_module["default"] = "Crusher/tcl/" .. key .. "/8.5.9.lua"
 
 -- -------------------------------------------------
 -- Set the ROCM module name.
@@ -74,24 +81,38 @@ setenv('MACHINE_NAME',machine_name)
 -- -------------------------------------------------
 -- Load the Programming environment.
 --
--- -------------------------------------------------
+-------------------------------------------------
 load (amd_pe_module[key])
+setenv('NCP_PROGRAMMING_ENV',amd_pe_module[key])
 
 -- -------------------------------------------------
 -- Load modules to target the accelerators and compile with HIP.
 --
 -- -------------------------------------------------
 load (rocm_module[key])
+setenv('NCP_ROCM_MODULE',rocm_module[key])
+
 load (accel_module[key])
+setenv('NCP_ACCL_MODULE',accel_module[key])
 
 -- -------------------------------------------------
 -- Load module for the cray fftw emvironment
 --
 -- -------------------------------------------------
 load (cray_fftw_module[key])
+setenv('NCP_FFTW_MODULE',cray_fftw_module[key])
 
 -- -------------------------------------------------
 -- Load the python module.
 --
 -- -------------------------------------------------
 load (cray_python_module[key])
+setenv('NCP_PYTHON_MODULE',cray_python_module[key])
+
+-- -------------------------------------------------
+-- Load the tcl module.
+--
+-- -------------------------------------------------
+try_load (tcl_module[key])
+setenv('NCP_TCL_MODULE',tcl_module[key])
+
