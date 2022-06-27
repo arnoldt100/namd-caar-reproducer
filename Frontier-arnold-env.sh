@@ -4,14 +4,14 @@
 # scratch directory.
 # 
 # ----------------------------------------------------
-NCP_SCRATCH=${HOME}/scratch/namd
+export NCP_SCRATCH=${HOME}/scratch/namd
 
 # ----------------------------------------------------
 # The path to the namd-caar-reproducer package
 # top-level directory.
 # 
 # ----------------------------------------------------
-NCP_TOP_LEVEL=${HOME}/namd-caar-reproducer
+export NCP_TOP_LEVEL=${HOME}/namd-caar-reproducer
 
 # ----------------------------------------------------
 # The path to the top-level directory where all 
@@ -20,11 +20,11 @@ NCP_TOP_LEVEL=${HOME}/namd-caar-reproducer
 # path.
 # 
 # ----------------------------------------------------
-NCP_PREFIX=${SCRATCH}/namd/Software
+export NCP_PREFIX=${SCRATCH}/namd/Software
 
 # ----------------------------------------------------
 # The path to the top-level directory where all
 # namd benchmark results are located.
 # 
 # ----------------------------------------------------
-NCP_RESULTS=${NCP_SCRATCH}/namd/Results
+export NCP_RESULTS=${NCP_SCRATCH}/namd/Results
