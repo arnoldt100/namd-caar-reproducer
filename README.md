@@ -8,21 +8,27 @@ software, and finally run the NAMD binary.
 
 ## Setting Scratch, Installation and Results Directories
 
-The scratch area is where the NAMD jobs are run. The environmental variable
-**NCP\_SCRATCH** sets this location.
+The following environmental variables must be set to run this package:
 
-The installation directory is the root directory where all binaries like tcl, namd, etc. are installed under. The environmental variable **NCP\_PREFIX** sets this location.
+- **NCP\_TOP\_LEVEL**
+Sets the directory path to top level of this package.
 
-The directory where the results are stored under is set by the environmental variable
-**NCP\_RESULTS**.
+- **NCP\_SCRATCH** 
+Sets location is where the NAMD jobs are run.
 
-These environmental variables must be set for this package to work.
+- **NCP\_PREFIX**
+Sets the top-level installation directory directory where all binaries like tcl, namd, etc. are installed under.
+
+- **NCP\_RESULTS**.
+Sets the top-level directory where the benchmark results are stored under.
+
+There are sample convenience scripts that can be modified to suit your runtime environment.
 
 ## Setting Core Package Environmental Variables.
 The first step is to set essential paths and environmental variables by
 doing the following command<br>
 
-**source ./runtime\_environmentq/core\_runtime\_environment.sh**<br>
+**source ./runtime\_environment/core\_runtime\_environment.sh**<br>
 
 Note this command must be executed in the top level of this package. This will
 set the environmental variable **NCP_TOP_LEVEL**, modify your **PATH**
