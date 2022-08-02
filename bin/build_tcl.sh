@@ -68,13 +68,13 @@ function declare_global_variables () {
     # The machine name.
     # 
     #-----------------------------------------------------
-    declare -gr MACHINE_NAME="Spock"
+    declare -gr MACHINE_NAME="${NCP_MACHINE_NAME}"
 
     #-----------------------------------------------------
     # Parent installation directory.                     -
     #                                                    -
     #-----------------------------------------------------
-    PREFIX_DIRECTORY="${NCP_TOP_LEVEL}/sw/${MACHINE_NAME}/tcl/${TCL_VERSION}"
+    declare -gr PREFIX_DIRECTORY="${TCL_DIR}"
 }
 
 #-----------------------------------------------------
@@ -176,11 +176,11 @@ function configure_tcl () {
 
 #-----------------------------------------------------
 # Function:                                          -
-#    make_Fand_install                               -
+#    make_and_install                                -
 #                                                    -
 # Synopsis:                                          -
 #   Performs the make and "make install" command     -
-#   If the commands fails, then this script will    -
+#   If the commands fails, then this script will     -
 #   exit with a predefined exit code.                -
 #                                                    -
 # Positional parameters:                             -
