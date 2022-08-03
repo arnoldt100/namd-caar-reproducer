@@ -111,3 +111,9 @@ setenv('NCP_PYTHON_MODULE',cray_python_module[key])
 try_load (tcl_module[key])
 setenv('NCP_TCL_MODULE',tcl_module[key])
 
+-- -------------------------------------------------
+-- Load the charm++ module.
+--
+-- -------------------------------------------------
+try_load (charm_module[key])
+setenv('NCP_CHARM_MODULE',charm_module[key])
