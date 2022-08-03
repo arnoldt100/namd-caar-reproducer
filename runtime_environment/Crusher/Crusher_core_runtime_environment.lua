@@ -7,15 +7,10 @@ and running NAMD on Crusher.
 
 -- -------------------------------------------------
 -- Set the set of modules to load by defining the variable
--- key to one of the following values:
+-- key.
 --
---  key value                Description
---  ---------                -----------
---  "default"                Load the default modules.
--- 
 -- -------------------------------------------------
-local key = "default"
-setenv('NCP_PE_KEY',key)
+local key = os.getenv("NCP_PE_KEY")
 
 -- -------------------------------------------------
 -- Set the machine name.

@@ -1,4 +1,27 @@
 #! /usr/bin/env bash
+
+# This is a sample script that can be used to set your
+# runtime environment. Please copy and modify accordingly.
+
+# ----------------------------------------------------
+# The path to the namd-caar-reproducer 
+# scratch directory.
+# 
+# ----------------------------------------------------
+export NCP_MACHINE_NAME=Crusher
+
+# ----------------------------------------------------
+#
+# Set the set of modules to load by defining the variable
+# key to one of the following values:
+#
+#  key value                Description
+#  ---------                -----------
+#  "default"                Load the default modules.
+#
+# ----------------------------------------------------
+export NCP_PE_KEY=default
+
 # ----------------------------------------------------
 # The path to the namd-caar-reproducer 
 # scratch directory.

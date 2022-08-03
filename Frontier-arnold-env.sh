@@ -20,11 +20,11 @@ export NCP_TOP_LEVEL=${HOME}/namd-caar-reproducer
 # path.
 # 
 # ----------------------------------------------------
-export NCP_PREFIX=${SCRATCH}/namd/Software
+export NCP_PREFIX=${NCP_SCRATCH}/Software
 
 # ----------------------------------------------------
 # The path to the top-level directory where all
 # namd benchmark results are located.
 # 
 # ----------------------------------------------------
-export NCP_RESULTS=${NCP_SCRATCH}/namd/Results
+export NCP_RESULTS=${NCP_SCRATCH}/Results

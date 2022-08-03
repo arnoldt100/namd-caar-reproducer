@@ -5,7 +5,12 @@ help(
 This module loads tcl 8.5.9. Installation paths are defined.  
 ]])
 
-local machine_name = os.getenv("MACHINE_NAME")
+local machine_name = os.getenv("NCP_MACHINE_NAME")
+
+-- A list of prerequisite modules that need to be loaded.
+local machine_core_module = machine_name .. "/" .. machine_name .. "_core_runtime_environment"
+prereq(machine_core_module)
+
 local software_name = "tcl"
 local tcl_version = "8.5.9"
 local ncp_top_level = os.getenv("NCP_TOP_LEVEL")
@@ -18,7 +23,7 @@ local tcl_include_dir = pathJoin(tcl_installation_directory,"/include")
 local tcl_manpath_dir = pathJoin(tcl_installation_directory,"/man")
 
 -- -- No modifcations needed below this line
-setenv("TCL_DIR",parent_directory)
+setenv("TCL_DIR",tcl_installation_directory)
 prepend_path('MANPATH',tcl_manpath_dir)
 prepend_path('PATH',tcl_bin_dir)
 prepend_path('C_INCLUDE_PATH', tcl_include_dir)

@@ -2,13 +2,6 @@
 
 #-----------------------------------------------------
 # Define the environmental variable                  -
-# NCP_TOP_LEVEL which stores the path to the         -
-# top level of this reproducer package.              -
-#-----------------------------------------------------
-export NCP_TOP_LEVEL=$(pwd)
-
-#-----------------------------------------------------
-# Define the environmental variable                  -
 # NAMD_UIUC_TOP_LEVEL which stores the path to the   -
 # NAMD source.                                       -
 #                                                    -

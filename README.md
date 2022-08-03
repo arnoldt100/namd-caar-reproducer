@@ -10,30 +10,31 @@ software, and finally run the NAMD binary.
 
 The following environmental variables must be set to run this package:
 
-- **NCP\_TOP\_LEVEL**
-Sets the directory path to top level of this package.
+- **NCP\_TOP\_LEVEL** Sets the directory path to top level of this package.
 
-- **NCP\_SCRATCH** 
-Sets location is where the NAMD jobs are run.
+- **NCP\_SCRATCH** Sets location is where the NAMD jobs are run.
 
-- **NCP\_PREFIX**
-Sets the top-level installation directory directory where all binaries like tcl, namd, etc. are installed under.
+- **NCP\_PREFIX** Sets the top-level installation directory directory where all
+  binaries like tcl, namd, etc. are installed under.
 
-- **NCP\_RESULTS**.
-Sets the top-level directory where the benchmark results are stored under.
+- **NCP\_RESULTS**.  Sets the top-level directory where the benchmark results
+  are stored under.
 
-There are sample convenience scripts that can be modified to suit your runtime environment.
+There are sample convenience scripts that can be modified to set your runtime
+environment. The scripts are located in the directory ${NCP\_TOP\_LEVEL}. Copy
+and modify a sample convenience script, then source it.
+
 
 ## Setting Core Package Environmental Variables.
-The first step is to set essential paths and environmental variables by
+The next step is to set core path environmental variables by
 doing the following command<br>
 
 **source ./runtime\_environment/core\_runtime\_environment.sh**<br>
 
 Note this command must be executed in the top level of this package. This will
-set the environmental variable **NCP_TOP_LEVEL**, modify your **PATH**
-environmental variable, and make available Lmod modules to build/run the
-appropriate NAMD binaries.<br>
+modify your **PATH**, **PYTHONPATH**
+environmental variables, and make available Lmod modules to build and run the
+appropriate NAMD benchmarks.<br>
 
 ## Setting Machine Package Environmental Variables.
 

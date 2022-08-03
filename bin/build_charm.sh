@@ -84,14 +84,13 @@ function usage {
     printf "\n"
     printf "\n"
     printf "${help_frmt1}" "Available target machine: " "Spock"
-    printf "${help_frmt1}" "Spock available target builds:" "mpi-linux-x86_64:smp:gnu"
-    printf "${help_frmt1}" "" "ofi-linux-x86_64:smp:gnu"
-    printf "${help_frmt1}" "" "ofi-linux-x86_64:slurmpmi2:smp:gnu"
-    printf "${help_frmt1}" "" "netlrts-linux-x86_64:smp:gnu"
-    printf "${help_frmt1}" "" "multicore-linux-x86_64:gnu"
+    printf "${help_frmt1}" "Spock available target builds:" "None"
     printf "\n"
-    printf "${help_frmt1}" "Available target machine: " "Summit"
-    printf "${help_frmt1}" "Summit available target builds:" "multicore-linux-ppc64le:gnu"
+    printf "${help_frmt1}" "Available target machine: " "Frontier"
+    printf "${help_frmt1}" "Frontier available target builds:" "None"
+    printf "\n"
+    printf "${help_frmt1}" "Available target machine: " "Crusher"
+    printf "${help_frmt1}" "Frontier available target builds:" "multicore-linux-x86_64:gnu"
     printf "\n"
 }
 
@@ -153,23 +152,12 @@ function declare_global_variables () {
                                [failed_build_command]=3
                                [failed_make_command]=4 )
 
-    #-----------------------------------------------------
-    # The charm++ version.
-    # 
-    #-----------------------------------------------------
-    declare -gr CHARM_VERSION="6.10.2"
+    # #-----------------------------------------------------
+    # # The charm++ version.
+    # # 
+    # #-----------------------------------------------------
+    # declare -gr CHARM_VERSION="6.10.2"
 
-    #-----------------------------------------------------
-    # Location of charm++ source.
-    #
-    #-----------------------------------------------------
-    declare -gr CHARM_SOURCE_DIRECTORY="${NCP_TOP_LEVEL}/sw/sources/charm"
-
-    #-----------------------------------------------------
-    # The machine name.
-    # 
-    #-----------------------------------------------------
-    declare -gr MACHINE_NAME="Spock"
 }
 
 #-----------------------------------------------------
@@ -198,6 +186,25 @@ function change_dir () {
     return
 }
 
+#-----------------------------------------------------
+# Function:                                          -
+#    copy_charm_source                               -
+#                                                    -
+# Synopsis:                                          -
+#   Copies the charm source to a new location.       -
+#                                                    -
+# Positional parameters:                             -
+#   None                                             -
+#                                                    -
+#-----------------------------------------------------
+function copy_charm_source () {
+    if [[ -d ${CHARMBASE} ]];then
+        rm -rf ${CHARMBASE}
+    fi 
+    mkdir -p ${CHARMBASE}
+    cp -rf ${ORIGINALCHARMBASE}/* ${CHARMBASE}
+    return
+}
 
 #-----------------------------------------------------
 # Function:                                          -
@@ -210,308 +217,40 @@ function change_dir () {
 #                                                    -
 #-----------------------------------------------------
 function check_script_prerequisites () {
+    
     #-----------------------------------------------------
     # Verify that the environmental variable 
     # NCP_TOP_LEVEL is set, otherwise exit.
     #
     #-----------------------------------------------------
-    ncp_error_message="The environmental variable NCP_TOP_LEVEL is not set."
-    ${NCP_TOP_LEVEL:?"${ncp_error_message}"}
+    if [[ -v ${NCP_TOP_LEVEL} ]];then
+        ncp_error_message="The environmental variable NCP_TOP_LEVEL is not set."
+        error_exit "${ncp_error_message}"        
+    fi
     
-    charmarch_error_message="The environmental variable CHARMARCH is not set."
-    ${CHARMARCH:?"${charmarch_error_message}"}
+    if [[ -v ${ORIGINALCHARMBASE} ]];then
+        charmbase_error_message="The environmental variable ORIGINALCHARMBASE is not set."
+        error_exit "${charmbase_error_message}"
+    fi
 
+    if [[ -v ${CHARMBASE} ]];then
+        charmbase_error_message="The environmental variable CHARMBASE is not set."
+        error_exit "${charmbase_error_message}"
+    fi
+    if [[ -v ${CHARMARCH} ]];then
+        charmarch_error_message="The environmental variable CHARMARCH is not set."
+        error_exit "${charmarch_error_message}"
+    fi
     return
 }
 
-#-----------------------------------------------------
-# Function:                                          -
-#    Spock_build_ofi_linux_x86_64_gcc_smp_gfortran   -
-#                                                    -
-# Synopsis:                                          -
-#   Builds charmm++ with the OFI transport layer.    -
-#   Debug symbols are included.                      -
-#   This build is for the GNU programming            -
-#   environment.                                     -
-#                                                    -
-# Positional parameters:                             -
-#                                                    -
-#-----------------------------------------------------
-function Spock_build_ofi_linux_x86_64_gcc_smp_gfortran() {
-    #-----------------------------------------------------
-    # The target of the build.
-    # 
-    #-----------------------------------------------------
-    local -r target='charm++'
+# Import file Frontier_build_multicore_linux_x86_64_gnu to access
+# the function build charm++.
+# source ${NCP_TOP_LEVEL}/bin/charm++/Frontier_build_multicore_linux_x86_64_gnu.sh
 
-    #-----------------------------------------------------
-    # Define the charm++ arch. This variable selects 
-    # the network transport layer to build. 
-    #-----------------------------------------------------
-    local -r charmarch='ofi-linux-x86_64'
-
-    #-----------------------------------------------------
-    # The pmi2 include and library options need          -
-    # to be explicitly passed to the charm++ build       -
-    # command options.                                   -
-    #-----------------------------------------------------
-    local pmi_include_dir="$(pkg-config --cflags-only-I cray-pmi)"
-    # The below bash string manipulation removes the "-I" at the beginning of the string
-    # for we only need the directory path.
-    pmi_include_dir=${pmi_include_dir##-I} 
-
-    local pmi_library_dir="$(pkg-config --libs-only-L cray-pmi)"
-    # The below bash string manipulation removes the "-L" at the beginning of the string
-    # for we only need the directory path.
-    pmi_library_dir=${pmi_library_dir##-L} 
-
-    #-----------------------------------------------------
-    # The libfabric include and library options need 
-    # to be explicitly passed to the charm++ build 
-    # command options.
-    #-----------------------------------------------------
-    local libfabric_include_dir="$(pkg-config --cflags-only-I libfabric)"
-    # The below bash string manipulation removes the "-I" at the beginning of the string
-    # for we only need the directory path.
-    libfabric_include_dir=${libfabric_include_dir##-I} 
-
-    local libfabric_library_dir="$(pkg-config --libs-only-L libfabric)"
-    # The below bash string manipulation removes the "-L" at the beginning of the string
-    # for we only need the directory path.
-    libfabric_library_dir=${libfabric_library_dir##-L} 
-
-    #-----------------------------------------------------
-    # Define  the options to the charm++ build command.
-    #-----------------------------------------------------
-    include_dir="--incdir ${pmi_include_dir} --incdir ${libfabric_include_dir}"
-    library_dir="--libdir ${pmi_library_dir} --libdir ${libfabric_library_dir}"
-    local -r options="gcc smp -j4 ${include_dir} ${library_dir}"
-
-    #-----------------------------------------------------
-    # Change to the charm++ source directory, and then
-    # run the charm++ build command. 
-    #-----------------------------------------------------
-    change_dir "${CHARM_SOURCE_DIRECTORY}"
-
-    #-----------------------------------------------------
-    # Remove any prior builds of charm++                 -
-    #                                                    -
-    #-----------------------------------------------------
-    if [ -d "${CHARMARCH}" ];then
-        rm -rf "${CHARMARCH}"
-    fi 
-
-    echo "The charm++ build command: ./build ${target} ${charmarch} ${options}"
-
-    ./buildold ${target} ${charmarch} ${options}
-    if [ $? -ne 0 ];then
-       local -r build_message="Error! The script ${SCRIPT_NAME} failed to build charm++."
-       local -ir my_build_exit_status=${EXIT_STATUS["failed_build_command"]}
-       echo "${build_message}"
-       exit ${my_buildexit_status}
-    fi
-
-    change_dir "${SCRIPT_LAUNCH_DIR}"
-    return
-}
-
-#-----------------------------------------------------
-# Function:                                          -
-#    Spock_build_ofi_linux_x86_64_slurmpmi2_gcc_smp_gfortran  -
-#                                                    -
-# Synopsis:                                          -
-#   Builds charmm++ with the OFI transport layer.    -
-#   This build is for the GNU programming            -
-#   environment.                                     -
-#                                                    -
-# Positional parameters:                             -
-#                                                    -
-#-----------------------------------------------------
-function Spock_build_ofi_linux_x86_64_slurmpmi2_gcc_smp_gfortran() {
-    #-----------------------------------------------------
-    # The target of the build.
-    # 
-    #-----------------------------------------------------
-    local -r target='charm++'
-
-    #-----------------------------------------------------
-    # Define the charm++ arch. This variable selects 
-    # the network transport layer to build. 
-    #-----------------------------------------------------
-    local -r charmarch='ofi-linux-x86_64'
-
-    #-----------------------------------------------------
-    # The pmi2 include and library options need          -
-    # to be explicitly passed to the charm++ build       -
-    # command options.                                   -
-    #-----------------------------------------------------
-    local pmi_include_dir="$(pkg-config --cflags-only-I cray-pmi)"
-    # The below bash string manipulation removes the "-I" at the beginning of the string
-    # for we only need the directory path.
-    pmi_include_dir=${pmi_include_dir##-I} 
-
-    local pmi_library_dir="$(pkg-config --libs-only-L cray-pmi)"
-    # The below bash string manipulation removes the "-L" at the beginning of the string
-    # for we only need the directory path.
-    pmi_library_dir=${pmi_library_dir##-L} 
-
-    #-----------------------------------------------------
-    # The libfabric include and library options need 
-    # to be explicitly passed to the charm++ build 
-    # command options.
-    #-----------------------------------------------------
-    local libfabric_include_dir="$(pkg-config --cflags-only-I libfabric)"
-    # The below bash string manipulation removes the "-I" at the beginning of the string
-    # for we only need the directory path.
-    libfabric_include_dir=${libfabric_include_dir##-I} 
-
-    local libfabric_library_dir="$(pkg-config --libs-only-L libfabric)"
-    # The below bash string manipulation removes the "-L" at the beginning of the string
-    # for we only need the directory path.
-    libfabric_library_dir=${libfabric_library_dir##-L} 
-
-
-    #-----------------------------------------------------
-    # Define  the options to the charm++ build command.
-    #-----------------------------------------------------
-    include_dir="--incdir ${pmi_include_dir} --incdir ${libfabric_include_dir}"
-    library_dir="--libdir ${pmi_library_dir} --libdir ${libfabric_library_dir}"
-    local -r options="slurmpmi2 gcc smp -j4 ${include_dir} ${library_dir}"
-
-    #-----------------------------------------------------
-    # Change to the charm++ source directory, and then
-    # run the charm++ build command. 
-    #-----------------------------------------------------
-    change_dir "${CHARM_SOURCE_DIRECTORY}"
-
-    #-----------------------------------------------------
-    # Remove any prior builds of charm++                 -
-    #                                                    -
-    #-----------------------------------------------------
-    if [ -d "${CHARMARCH}" ];then
-        rm -rf "${CHARMARCH}"
-    fi 
-
-    echo "The charm++ build command: ./build ${target} ${charmarch} ${options}"
-
-    ./buildold ${target} ${charmarch} ${options}
-    if [ $? -ne 0 ];then
-       local -r build_message="Error! The script ${SCRIPT_NAME} failed to build charm++."
-       local -ir my_build_exit_status=${EXIT_STATUS["failed_build_command"]}
-       echo "${build_message}"
-       exit ${my_buildexit_status}
-    fi
-
-    change_dir "${SCRIPT_LAUNCH_DIR}"
-    return
-}
-
-
-#-----------------------------------------------------
-# Function:                                          -
-#    Spock_build_netlrts_linux_x86_64_gcc_smp_gfortran -
-#                                                    -
-# Synopsis:                                          -
-#   Builds charmm++ with the netlrts transport       -
-#   layer.Debug symbols are included.                -
-#   This build is for the GNU programming            -
-#   environment.                                     -
-#                                                    -
-#                                                    -
-# Positional parameters:                             -
-#                                                    -
-#-----------------------------------------------------
-function Spock_build_netlrts_linux_x86_64_gcc_smp_gfortran () {
-    echo "Executing function Spock_build_netlrts_linux_x86_64_gcc_smp_gfortran"
-    #-----------------------------------------------------
-    # The target of the build.
-    # 
-    #-----------------------------------------------------
-    local -r target='charm++'
-
-    #-----------------------------------------------------
-    # Define the charm++ arch. This variable selects 
-    # the network transport layer to build. 
-    #-----------------------------------------------------
-    local -r charmarch='netlrts-linux-x86_64'
-
-    #-----------------------------------------------------
-    # Define  the options to the charm++ build command.
-    #-----------------------------------------------------
-    local -r options=" gcc smp -g -j4"
-
-    #-----------------------------------------------------
-    # Change to the charm++ source directory, and then
-    # run the charm++ build command. 
-    #-----------------------------------------------------
-    change_dir "${CHARM_SOURCE_DIRECTORY}"
-
-    echo "The charm++ build command: ./build ${target} ${charmarch} ${options}"
-
-    ./buildold ${target} ${charmarch} ${options}
-    if [ $? -ne 0 ];then
-       local -r build_message="Error! The script ${SCRIPT_NAME} failed to build charm++."
-       local -ir my_build_exit_status=${EXIT_STATUS["failed_build_command"]}
-       echo "${build_message}"
-       exit ${my_buildexit_status}
-    fi
-
-    change_dir "${SCRIPT_LAUNCH_DIR}"
-    return
-}
-
-
-
-#-----------------------------------------------------
-# Function:                                          -
-#    Spock_build_multicore_linux_x86_64_gnu          -
-#                                                    -
-# Synopsis:                                          -
-#   Builds charmm++ for single-node usage.           -
-#   This build is for the GNU programming            -
-#   environment.                                     -
-#                                                    -
-# Positional parameters:                             -
-#                                                    -
-#-----------------------------------------------------
-function Spock_build_multicore_linux_x86_64_gnu () {
-    echo "Executing function Spock_build_multicore_linux_x86_64_gnu"
-
-    #-----------------------------------------------------
-    # The target of the build.
-    # 
-    #-----------------------------------------------------
-    local -r target='charm++'
-
-    #-----------------------------------------------------
-    # Define the charm++ arch. This variable selects 
-    # the network transport layer to build. 
-    #-----------------------------------------------------
-    local -r charmarch='multicore-linux-x86_64'
-
-    #-----------------------------------------------------
-    # Define  the options to the charm++ build command.
-    #-----------------------------------------------------
-    local -r options="gcc -j4 --with-production"
-
-    #-----------------------------------------------------
-    # Change to the charm++ source directory, and then
-    # run the charm++ build command. 
-    #-----------------------------------------------------
-    change_dir "${CHARM_SOURCE_DIRECTORY}"
-
-    echo "The charm++ build command: ./build ${target} ${charmarch} ${options}"
-
-    ./buildold ${target} ${charmarch} ${options}
-    if [ $? -ne 0 ];then
-       local -r build_message="Error! The script ${SCRIPT_NAME} failed to build charm++."
-       local -ir my_build_exit_status=${EXIT_STATUS["failed_build_command"]}
-       echo "${build_message}"
-       exit ${my_buildexit_status}
-    fi
-
-    change_dir "${SCRIPT_LAUNCH_DIR}"
-}
+# Import file Crusher_build_multicore_linux_x86_64_gnu to access
+# the function build charm++.
+source ${NCP_TOP_LEVEL}/bin/charm++/Crusher_build_multicore_linux_x86_64_gnu.sh
 
 #-------------------------------------------------------
 # Function:                                            -
@@ -610,45 +349,59 @@ function main () {
          error_exit 'The function parse_command_line failed ... exiting'
     fi
     
-    # case ${ncp_target_machine} in
-    #     "Spock" )
-    #         case ${ncp_target_build} in
+    # We neeed to build charm in a location other than
+    # the original source location. 
+    copy_charm_source 
 
-    #             "ofi-linux-x86_64:smp:gnu" )
-    #                 Spock_build_ofi_linux_x86_64_gcc_smp_gfortran;;
+    case ${ncp_target_machine} in
+        # "Spock" )
+        #     case ${ncp_target_build} in
 
-    #             "ofi-linux-x86_64:slurmpmi2:smp:gnu" )
-    #                 Spock_build_ofi_linux_x86_64_slurmpmi2_gcc_smp_gfortran;;
+        #         *)
+        #             warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
+        #             exit 1;;
 
-    #             "netlrts-linux-x86_64:smp:gnu" )
-    #                 Spock_build_netlrts_linux_x86_64_gcc_smp_gfortran;;
+        #     esac;;
 
-    #             "multicore-linux-x86_64:gnu" )
-    #                 Spock_build_multicore_linux_x86_64_gnu;;
+        # "Summit" )
+        #     case ${ncp_target_build} in
 
-    #             *)
-    #                 warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
-    #                 exit 1;;
+        #         *)
+        #             warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
+        #             exit 1;;
 
-    #         esac;;
+        #     esac;;
 
-    #     "Summit" )
-    #         case ${ncp_target_build} in
+        # "Frontier" )
+        #     case ${ncp_target_build} in
 
-    #             "multicore-linux-ppc64le:gnu" )
-    #                 echo "Stud build for multicore-linux-ppc64le:gnu";;
+        #         'multicore-linux-x86_64:gnu' )
+        #             Frontier_build_multicore_linux_x86_64_gnu 
+        #             exit 1;;
 
-    #             *)
-    #                 warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
-    #                 exit 1;;
+        #         *)
+        #             warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
+        #             exit 1;;
 
-    #         esac;;
+        #     esac;;
 
-    #      * ) 
-    #             echo "The machine '${NCP_MACHINE_NAME}' is not supported."
-    #             usage
-    #             exit 1;;
-    # esac
+        "Crusher" )
+            case ${ncp_target_build} in
+
+                'multicore-linux-x86_64:gnu' )
+                    Crusher_build_multicore_linux_x86_64_gnu "charm++" "${CHARMARCH}" "${CHARMBASE}"
+                    exit 1;;
+
+                *)
+                    warn_unsupported_target "${ncp_target_build}" "${NCP_MACHINE_NAME}"
+                    exit 1;;
+            esac;;
+
+          * ) 
+            echo "The machine '${NCP_MACHINE_NAME}' is not supported."
+                usage
+                exit 1;;
+    esac
 
 }
 
