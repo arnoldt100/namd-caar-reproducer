@@ -1,44 +1,28 @@
 #! /usr/bin/env python3
 
-## @package ncp_paths_tcl
-#  Generates installation paths for the TCL sofware package.
-#
+"""Prints to stdout installation paths for the TCL sofware package.
+
+This module is intended to be executed as script. Typical usage is 
+
+    ncp_paths_tcl.py --software-name XXX --software-version YYY --NCP_PREFIX NCP_PE_KEY --path AAA
+
+where
+
+* XXX is the software name
+* YYY is the sotware version
+* NCP_PE_KEY is the programming environment key.
+* AAA is the key corresponding to the path to printed to stdout.
+
+For a list of the available paths run the help option
+
+    ncp_paths_tcl.py --help
+"""
 
 # System imports
 import string
 import argparse # Needed for parsing command line arguments.
-import logging  # Needed for logging events.
 
 # Local imports
-
-## @fn _create_logger_description( )
-## @brief Returns a string whose contents are the log level option help description.
-## 
-## @return A string
-def _create_logger_description():
-    frmt_header = "{0:10s} {1:40.40s} {2:5s}\n"
-    frmt_items = frmt_header
-    header1 =  frmt_header.format("Level", "Description", "Option Value" )  
-    header1_len = len(header1)
-    log_option_desc = "The logging level. The standard levels are the following:\n\n"
-    log_option_desc += header1
-    log_option_desc += "-"*header1_len  + "\n"
-    log_option_desc += frmt_items.format("NOTSET", "No messages will be processed", "0" )  
-    log_option_desc += frmt_items.format("", "processed", " \n" )  
-    log_option_desc += frmt_items.format("DEBUG", "Detailed information, typically of ", "10" )  
-    log_option_desc += frmt_items.format("", "interest only when diagnosing problems.", "\n" )  
-    log_option_desc += frmt_items.format("INFO", "Confirmation that things", "20" )  
-    log_option_desc += frmt_items.format("", "are working as expected.", " \n" )  
-    log_option_desc += frmt_items.format("WARNING ", "An indication that something unexpected , ", "30" )  
-    log_option_desc += frmt_items.format("", "happened or indicative of some problem", "" )  
-    log_option_desc += frmt_items.format("", "in the near future.", "\n" )  
-    log_option_desc += frmt_items.format("ERROR ", "Due to a more serious problem ", "40" )  
-    log_option_desc += frmt_items.format("", "the software has not been able ", "" )  
-    log_option_desc += frmt_items.format("", "to perform some function. ", "\n" )  
-    log_option_desc += frmt_items.format("CRITICAL ", "A serious error, indicating ", "50" )  
-    log_option_desc += frmt_items.format("", "that the program itself may be unable", "" )  
-    log_option_desc += frmt_items.format("", "to continue running.", "\n" )  
-    return log_option_desc
 
 ## @fn _create_path_description( )
 ## @brief Returns a string whose contents are the --path option description.
@@ -52,36 +36,8 @@ def _create_path_description():
     log_option_desc = "The installation path to be returned. The options values are the following:\n\n"
     log_option_desc += header1
     log_option_desc += "-"*header1_len  + "\n"
-    log_option_desc += frmt_items.format("prefix", "The top-level installation directory.\n")  
+    log_option_desc += frmt_items.format("prefix", "The top-level installation directory for TCL.\n")  
     return log_option_desc
-
-## @brief Creates and returns a logger object.
-##
-## @details Creates a logger object with name log_id and returns it.
-## log level log_level.
-##
-## @param log_id A string
-## @param log_level A logging level (e.g. logging.DEBUG, logging.INFO, etc.)
-## @retval logger A logger object - see logging python documentation
-def _create_logger(log_id, log_level):
-    logger = logging.getLogger(log_id)
-    logger.setLevel(log_level)
-
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(log_level)
-
-    # create formatter
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-    # add formatter to ch
-    ch.setFormatter(formatter)
-
-    # add ch to logger
-    logger.addHandler(ch)
-
-    return logger
 
 ## @fn parse_arguments( )
 ## @brief Parses the command line arguments.
@@ -107,7 +63,7 @@ def parse_arguments():
     my_parser.add_argument("--log-level",
                            type=int,
                            default=logging.WARNING,
-                           help=_create_logger_description() )
+                           help=create_logger_description() )
 
     # Adding mandatory argument group.
     mandatory_args_group = my_parser.add_argument_group(title="Mandatory Arguments")
@@ -124,8 +80,14 @@ def parse_arguments():
         type=str,
         metavar='YYY')
 
+    mandatory_args_group.add_argument("--NCP_PREFIX",
+                           help="The top-level directory where all NAMD dependent software is installed under.",
+                           required=True,
+                           type=str,
+                           metavar='NCP_PE_KEY')
+
     mandatory_args_group.add_argument("--NCP_PE_KEY",
-                           help="The description for setting the programming environment.",
+                           help="The key for setting the programming environment.",
                            required=True,
                            type=str,
                            metavar='NCP_PE_KEY')
@@ -134,23 +96,49 @@ def parse_arguments():
                                       help=_create_path_description(),
                                       required=True,
                                       type=str,
-                                      choices=['prefix'],
+                                      choices=[ _PATH_OPTIONS['prefix'][0] ],
                                       metavar="AAA")
     my_args = my_parser.parse_args()
 
     return my_args 
 
+## @fn _print_prefix_path ()
+## @brief Prints the installation path to stdout.
+##
+## @param[in] path_option_value The option value for --path
+## @param[in] ncp_pe_key The programming environmnet key
+## @param[in] software_name The name of the software
+## @param[in] software_version The software version
+## @param[in] ncp_prefix The top-level installation directory under which the package will installed
+
+def _print_path(path_option_value):
+    import sys
+    fp = _PATH_OPTIONS[path_option_value]
+    tmp_path = fp[1]()
+    sys.stdout.write(tmp_path)
+
+def __prefix_path():
+    return "Dummy prefix path"
+    
+## @var dict _PATH_OPTIONS
+## @brief Stores the option  and a function reference
+##
+## @details Each installation path is associated with key, and for a given "key" : 
+## ""key" : The key associated for the desired installation path.
+## _PATH_OPTIONS["key"][0] : A --path option value. 
+## _PATH_OPTIONS["key"][1] : A reference to a function that will print the corresponding  path installation.
+_PATH_OPTIONS = {"prefix" : [ "prefix", __prefix_path] }
+
 ## @fn main ()
 ## @brief The main function.
 def main():
     args = parse_arguments()
-
-    print(args)
-
     logger = _create_logger(log_id='Default',
                            log_level=args.log_level)
 
     logger.info("Start of main program")
+
+    _print_path(args.path)
 
     logger.info("End of main program")
 
