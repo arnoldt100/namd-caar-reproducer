@@ -23,6 +23,8 @@ import string
 import argparse # Needed for parsing command line arguments.
 
 # Local imports
+from loggerutils.logger import create_logger_description
+from loggerutils.logger import create_logger
 
 ## @fn _create_path_description( )
 ## @brief Returns a string whose contents are the --path option description.
@@ -48,6 +50,8 @@ def _create_path_description():
 ## @return A namespace. The namespace contains attributes
 ##         that are the command line arguments.
 def parse_arguments():
+
+    import logging
 
     # Create a string of the description of the 
     # program
@@ -84,7 +88,7 @@ def parse_arguments():
                            help="The top-level directory where all NAMD dependent software is installed under.",
                            required=True,
                            type=str,
-                           metavar='NCP_PE_KEY')
+                           metavar='NCP_PREFIX')
 
     mandatory_args_group.add_argument("--NCP_PE_KEY",
                            help="The key for setting the programming environment.",
@@ -133,7 +137,7 @@ _PATH_OPTIONS = {"prefix" : [ "prefix", __prefix_path] }
 ## @brief The main function.
 def main():
     args = parse_arguments()
-    logger = _create_logger(log_id='Default',
+    logger = create_logger(log_id='Default',
                            log_level=args.log_level)
 
     logger.info("Start of main program")

@@ -38,7 +38,7 @@ def create_logger_description():
 ## @param log_id A string
 ## @param log_level A logging level (e.g. logging.DEBUG, logging.INFO, etc.)
 ## @retval logger A logger object - see logging python documentation
-def _create_logger(log_id, log_level):
+def create_logger(log_id, log_level):
     logger = logging.getLogger(log_id)
     logger.setLevel(log_level)
 
