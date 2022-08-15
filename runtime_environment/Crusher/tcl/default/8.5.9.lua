@@ -13,7 +13,6 @@ prereq(machine_core_module)
 
 local software_name = "tcl"
 local tcl_version = "8.5.9"
-local ncp_top_level = os.getenv("NCP_TOP_LEVEL")
 local parent_directory = os.getenv("NCP_PREFIX")
 
 local tcl_installation_directory = pathJoin(parent_directory,machine_name,software_name,tcl_version) 
