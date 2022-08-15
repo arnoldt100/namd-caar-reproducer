@@ -4,10 +4,11 @@
 
 This module is intended to be executed as script. Typical usage is 
 
-    ncp_paths_tcl.py --software-name *softwarename* --software-version *softwareversion* --ncp-prefix *ncpprefix* --ncp-pe-key *ncppekey* --path *pathkey*
+    ncp_paths_tcl.py --machine-name *machinename* --software-name *softwarename* --software-version *softwareversion* --ncp-prefix *ncpprefix* --ncp-pe-key *ncppekey* --path *pathkey*
 
 where
 
+* *machinename* is the name of the machine on which to install the software.
 * *softwarename* is the software name
 * *softwareversion* is the sotware version
 * *ncpprefix* is the top-level directory where all NAMD software dependencies are installed under
@@ -32,7 +33,7 @@ def __create_path_description():
     frmt_items = frmt_header
     header1 =  frmt_header.format("Option Values", "Path Returned" )  
     header1_len = len(header1)
-    log_option_desc = "The installation path to be returned. The permitted options values are the following:\n\n"
+    log_option_desc = "The permitted options values and returned paths are the following:\n\n"
     log_option_desc += header1
     log_option_desc += "-"*header1_len  + "\n"
     log_option_desc += frmt_items.format("prefix", "The top-level installation directory for TCL.\n")  
@@ -71,32 +72,32 @@ def __parse_arguments():
         help="The name of the software package.",
         required=True,
         type=str,
-        metavar='XXX')
+        metavar='<software name>')
     
     mandatory_args_group.add_argument("--software-version",
         help="The version of the sofware package.",
         required=True,
         type=str,
-        metavar='YYY')
+        metavar='<software version>')
 
     mandatory_args_group.add_argument("--ncp-prefix",
                            help="The top-level directory where all NAMD dependent software is installed under.",
                            required=True,
                            type=str,
-                           metavar='NCP_PREFIX')
+                           metavar='<ncp prefix>')
 
     mandatory_args_group.add_argument("--ncp-pe-key",
                            help="The key for setting the programming environment.",
                            required=True,
                            type=str,
-                           metavar='NCP_PE_KEY')
+                           metavar='<ncp pe key>')
                            
     mandatory_args_group.add_argument("--path",
                                       help=__create_path_description(),
                                       required=True,
                                       type=str,
                                       choices=[ _PATH_OPTIONS['prefix'][0] ],
-                                      metavar="AAA")
+                                      metavar="<path key>")
     my_args = my_parser.parse_args()
 
     return my_args 
