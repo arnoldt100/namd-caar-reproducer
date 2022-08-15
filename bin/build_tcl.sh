@@ -65,12 +65,6 @@ function declare_global_variables () {
     declare -gr TCL_SOURCE_PACKAGE="${NCP_TOP_LEVEL}/sw/sources/tcl${TCL_VERSION}"
 
     #-----------------------------------------------------
-    # The machine name.
-    # 
-    #-----------------------------------------------------
-    declare -gr MACHINE_NAME="${NCP_MACHINE_NAME}"
-
-    #-----------------------------------------------------
     # Parent installation directory.                     -
     #                                                    -
     #-----------------------------------------------------

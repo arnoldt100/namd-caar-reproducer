@@ -5,6 +5,9 @@ This module sets critical environmental and path variables needed for building
 and running NAMD on Crusher.
 ]])
 
+local dummy_path = subprocess("ncp_paths.sh")
+LmodMessage(dummy_path)
+
 -- -------------------------------------------------
 -- Set the set of modules to load by defining the variable
 -- key.
@@ -44,7 +47,21 @@ cray_python_module["default"] = "cray-python/3.9.12.1"
 --
 -- -------------------------------------------------
 local tcl_module={}
-tcl_module["default"] = "Crusher/tcl/" .. key .. "/8.5.9.lua"
+tcl_module["default"] = "Crusher/tcl/" .. key .. "/8.5.9"
+
+-- -------------------------------------------------
+-- Set the CHARM version
+--
+-- -------------------------------------------------
+local charm_module={}
+charm_module["default"] = "Crusher/charm++/" .. key .. "/multicore-linux-x86_64-gfortran-gcc"
+
+-- -------------------------------------------------
+-- Set the NAMD  version
+--
+-- -------------------------------------------------
+local namd_module={}
+namd_module["default"] = "Crusher/namd/" .. key .. "/multicore-linux-x86_64-gfortran-gcc"
 
 -- -------------------------------------------------
 -- Set the ROCM module name.
@@ -108,12 +125,17 @@ setenv('NCP_PYTHON_MODULE',cray_python_module[key])
 -- Load the tcl module.
 --
 -- -------------------------------------------------
-try_load (tcl_module[key])
 setenv('NCP_TCL_MODULE',tcl_module[key])
 
 -- -------------------------------------------------
 -- Load the charm++ module.
 --
 -- -------------------------------------------------
-try_load (charm_module[key])
 setenv('NCP_CHARM_MODULE',charm_module[key])
+
+-- -------------------------------------------------
+-- Load the namd module
+--
+-- -------------------------------------------------
+setenv('NCP_NAMD_MODULE',namd_module[key])
+
