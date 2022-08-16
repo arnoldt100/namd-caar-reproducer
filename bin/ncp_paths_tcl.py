@@ -45,7 +45,7 @@ def __parse_arguments():
 
     # Create a string of the description of the 
     # program
-    program_description = "Generates installation paths for TCL software."
+    program_description = "Returns installation paths for TCL software."
 
     # Create an argument parser.
     my_parser = argparse.ArgumentParser(

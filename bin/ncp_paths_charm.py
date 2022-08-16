@@ -4,7 +4,7 @@
 
 This module is intended to be executed as script. Typical usage is 
 
-    ncp_paths_charm.py --machine-name *machinename* --software-name *softwarename* --software-version *softwareversion*  --charm-arch *charmarch* --ncp-prefix *ncpprefix* --ncp-pe-key *ncppekey* --path *pathkey*
+    ncp_paths_charm.py --machine-name *machinename* --software-name *softwarename* --software-version *softwareversion* --charm-arch *charmarch* --ncp-prefix *ncpprefix* --ncp-pe-key *ncppekey* --path *pathkey*
 
 where
 
@@ -46,7 +46,7 @@ def __parse_arguments():
 
     # Create a string of the description of the 
     # program
-    program_description = "Generates installation paths for TCL software."
+    program_description = "Returns installation paths for charm++ software."
 
     # Create an argument parser.
     my_parser = argparse.ArgumentParser(
@@ -81,6 +81,12 @@ def __parse_arguments():
         type=str,
         metavar='<software version>')
 
+    mandatory_args_group.add_argument("--charmarch",
+        help="The target architecture of the charm++ build.",
+        required=True,
+        type=str,
+        metavar='<charm arch>')
+
     mandatory_args_group.add_argument("--ncp-prefix",
                            help="The top-level directory where all NAMD dependent software is installed under.",
                            required=True,
@@ -108,15 +114,16 @@ def __print_path(path_option_value,
                  machine_name,
                  software_name,
                  software_version,
-                 ncp_pe_key):
+                 ncp_pe_key,
+                 charmarch):
     import sys
     fp = _PATH_OPTIONS[path_option_value]
-    tmp_path = fp[1](ncp_prefix,machine_name,software_name,software_version,ncp_pe_key)
+    tmp_path = fp[1](ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch)
     sys.stdout.write(tmp_path)
 
-def __prefix_path(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key):
+def __prefix_path(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
     import os
-    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key)
+    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch)
     return tmp_path
     
 ## @var dict _PATH_OPTIONS
@@ -136,6 +143,14 @@ def main():
                            log_level=args.log_level)
 
     logger.info("Start of main program")
+
+    __print_path(args.path,
+                 args.ncp_prefix,
+                 args.machine_name,
+                 args.software_name,
+                 args.software_version,
+                 args.ncp_pe_key,
+                 args.charmarch)
 
     logger.info("End of main program")
 
