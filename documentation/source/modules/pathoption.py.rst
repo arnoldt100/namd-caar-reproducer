@@ -1,0 +1,5 @@
+pathoption
+==========
+
+.. automodule::  pathoption
+    :members:
