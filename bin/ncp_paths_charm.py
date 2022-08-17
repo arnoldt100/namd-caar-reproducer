@@ -28,6 +28,7 @@ import argparse # Needed for parsing command line arguments.
 # Local imports
 from loggerutils.logger import create_logger_description
 from loggerutils.logger import create_logger
+import pathoption
 
 def __create_path_description():
     frmt_header = "{0:20s} {1:50.50s}\n"
@@ -103,7 +104,7 @@ def __parse_arguments():
                                       help=__create_path_description(),
                                       required=True,
                                       type=str,
-                                      choices=[ _PATH_OPTIONS['prefix'][0] ],
+                                      choices=[ _PATH_OPTIONS['prefix'][0], _PATH_OPTIONS['original_charmbase'][0],
                                       metavar="<path key>")
     my_args = my_parser.parse_args()
 
@@ -125,6 +126,12 @@ def __prefix_path(ncp_prefix,machine_name,software_name,software_version,ncp_pe_
     import os
     tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch)
     return tmp_path
+
+def __prefix_original_charmbase():
+    import os
+    ncp_top_level = os.getenv("NCP_TOP_LEVEL")
+    tmp_path = os.path.join(ncp_top_level,sw,sources,charm)
+    return tmp_path
     
 ## @var dict _PATH_OPTIONS
 ## @brief Stores the option  and a function reference
@@ -133,8 +140,8 @@ def __prefix_path(ncp_prefix,machine_name,software_name,software_version,ncp_pe_
 ## ""key" : The key associated for the desired installation path.
 ## _PATH_OPTIONS["key"][0] : A --path option value. 
 ## _PATH_OPTIONS["key"][1] : A reference to a function that will print the corresponding  path installation.
-_PATH_OPTIONS = {"prefix" : [ "prefix", __prefix_path] }
-
+_PATH_OPTIONS = {"prefix" : [ "prefix", __prefix_path],
+                 "original_charmbase" : ["original_charmbase", __prefix_original_charmbase] }
 ## @fn main ()
 ## @brief The main function.
 def main():

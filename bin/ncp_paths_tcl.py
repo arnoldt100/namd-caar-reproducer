@@ -27,6 +27,7 @@ import argparse # Needed for parsing command line arguments.
 # Local imports
 from loggerutils.logger import create_logger_description
 from loggerutils.logger import create_logger
+import pathoption
 
 def __create_path_description():
     frmt_header = "{0:20s} {1:50.50s}\n"

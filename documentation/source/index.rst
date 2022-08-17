@@ -12,7 +12,7 @@ Welcome to NAMD-Benchmark-Harness's documentation!
 
     usage
 
-    modules/ncp_paths_tcl.py
+    Modules <modules.rst>
 
 Indices and tables
 ==================

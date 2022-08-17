@@ -5,7 +5,7 @@ help(
 This module loads tcl 8.5.9 and defines installation paths.  
 ]])
 
-local function create_path(machine_name)
+local function compute_path(machine_name)
     local software_name = "TCL"
     local tcl_version = "8.5.9"
     local ncp_pe_key = os.getenv("NCP_PE_KEY")
@@ -35,8 +35,8 @@ local machine_name = os.getenv("NCP_MACHINE_NAME")
 local machine_core_module = machine_name .. "/" .. machine_name .. "_core_runtime_environment"
 prereq(machine_core_module)
 
--- In this section we 
-local tcl_installation_directory = create_path(machine_name)
+-- In this section we compute the new installation directory.
+local tcl_installation_directory = compute_path(machine_name)
 
 -- No modifcations needed below this line
 

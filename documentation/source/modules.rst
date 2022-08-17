@@ -8,4 +8,5 @@ Welcome to NAMD HARNESS Benchamark Modules Documentation
 
     modules/ncp_paths_tcl.py.rst
     modules/ncp_paths_charm.py.rst
+    modules/pathoption.py.rst
 
