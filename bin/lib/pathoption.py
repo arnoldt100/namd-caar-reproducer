@@ -5,29 +5,26 @@ The function create_pathoption returns an PathOption object.
 The function  register_pathoption registers a new path option permmited value and the
 corresponding function reference.
 
-The function  unregister_pathoption registers removes a path option and the corresponding
-function reference.
 """
 
-def get_pathoption_path(pathoption,key):
+import errors_pathoption
+
+def register_pathoption(pathoption,key,ref_to_function,description="No description"):
+    try:
+        pathoption.add_option(key,ref_to_function,description)
+    except errors_pathoption.ErrorDuplicatePathOptionKey as error:
+        print("Key " + key + " already registered.")
     return
 
-def register_pathoption(pathoption,key,ref_to_function):
-    # Check if key is in self._pathOptionData. If so then raise a error.
+def get_pathoption_keys(pathoption):
+    return pathoption.keys()
 
-    if key in self._pathOptionData:
-        pass
-
-    self._pathOptionData[key] = ref_to_function
-
-    return
-
-def unregister_pathoption(pathoption,key):
-    return
+def get_pathoption_path(pathoption,key,*args):
+    return pathoption.path(key,*args)
 
 def create_pathoption ():
     """Returns a PathOption object"""
-    return PathOption
+    return PathOption()
 
 class PathOption:
     """A class that stores the option --path allowed option values and corresponding reference function.
@@ -41,12 +38,22 @@ class PathOption:
     reference.
     """
     def __init__(self):
-        self._pathOptionData = {}
+        self._functionReference = {}
+        self._description = {}
 
-    def add_option (self, key, ref_to_function):
-        self._pathOptionData[key] = ref_to_function
+    def add_option (self, key, ref_to_function, description):
+        if key in self._functionReference:
+             raise errors_pathoption.ErrorDuplicatePathOptionKey
+        self._functionReference[key] = ref_to_function
+        self._description[key] = description
         return
 
-    def get_path(self,key):
-        return self._pathOptionData[key]
+    def keys(self):
+        return list(self._functionReference)
+
+    def description(self,key):
+        return self._description[key]
+
+    def path(self,key,*args):
+        return self._functionReference[key](*args)
 
