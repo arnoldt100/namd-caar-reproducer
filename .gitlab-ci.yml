@@ -51,3 +51,11 @@ deploy-job:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
+
+deploy-documentation : # This job runs in the deploy stage and deploys the documentation.
+  stage : deploy
+  tags :
+    - RuyLopez
+  script :
+    - echo "Building documentation ..."
+    - echo "Documentation sucessfully deployed."
