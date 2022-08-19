@@ -85,6 +85,7 @@ deploy-documentation : # This job runs in the deploy stage and deploys the docum
   tags :
     - RuyLopez
   script :
+    - source anansi_python_env/bin/activate
     - echo "Building documentation ..."
     - sphinx-build --version
     - tree -L 2
