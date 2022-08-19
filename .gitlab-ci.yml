@@ -35,6 +35,10 @@ build-python-virtual-environment: # This job builds a python virtual environment
     - python3 -m venv .anansi-python-venv
     - tree -L 2 .anansi-python-venv
     - echo "Python virtual successfully created."
+  artifacts:
+    paths:
+      - .anansi-python-venv
+    expire_in: 1 week
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
