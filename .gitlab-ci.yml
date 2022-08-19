@@ -40,7 +40,7 @@ build-python-virtual-environment: # This job builds a python virtual environment
     - echo "Python virtual successfully created."
   artifacts: 
     paths:
-      - "$python_venv_dir"
+      - $python_venv_dir
 
 build-sphinx: # This job installs sphinx in the .anansi-pyhton-venv
   stage: prequisites
