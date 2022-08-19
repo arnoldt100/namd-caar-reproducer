@@ -59,4 +59,5 @@ deploy-documentation : # This job runs in the deploy stage and deploys the docum
   script :
     - echo "Building documentation ..."
     - tree -L 2
+    - hostname -f
     - echo "Documentation sucessfully deployed."
