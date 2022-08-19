@@ -36,11 +36,11 @@ build-python-virtual-environment: # This job builds a python virtual environment
     - RuyLopez
   script:
     - python3 -m venv .anansi-python-venv
-    - tree -L 2 .anansi-python-venv
+    - tree -L 2 anansi_python_env
     - echo "Python virtual successfully created."
   artifacts: 
     paths:
-      - anansi_python_env
+      - anansi_python_env/
 
 build-sphinx: # This job installs sphinx in the .anansi-pyhton-venv
   stage: prequisites
