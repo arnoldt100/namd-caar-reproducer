@@ -35,10 +35,15 @@ build-python-virtual-environment: # This job builds a python virtual environment
     - python3 -m venv .anansi-python-venv
     - tree -L 2 .anansi-python-venv
     - echo "Python virtual successfully created."
-  artifacts:
-    paths:
-      - .anansi-python-venv
-    expire_in: 1 week
+
+build-sphinx: # This job installs sphinx in the .anansi-pyhton-venv
+  stage: prequisites
+  tags:
+    - RuyLopez
+  script:
+    - source .anansi-python-env/bin/activate
+    - pip3 install -U sphinx
+  needs:  [ "build-python-virtual-environment" ]
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
@@ -72,6 +77,7 @@ deploy-documentation : # This job runs in the deploy stage and deploys the docum
     - RuyLopez
   script :
     - echo "Building documentation ..."
+    - sphinx-build --version
     - tree -L 2
     - hostname -f
     - echo "Documentation sucessfully deployed."
