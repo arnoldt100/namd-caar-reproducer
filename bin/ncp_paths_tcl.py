@@ -15,9 +15,12 @@ where
 * *ncppekey* is the corresponding key for the runtime programming environment
 * *pathkey* is the key corresponding to the path to printed to stdout.
 
-For a list of the available path keys run the help option
+For a list of the available pathkey values run the help option
 
     ncp_paths_tcl.py --help
+
+Invoking this script will print, for a given *pathkey*, the fully qualified
+installation path to stdout.
 """
 
 # System imports
@@ -29,16 +32,46 @@ from loggerutils.logger import create_logger_description
 from loggerutils.logger import create_logger
 import pathoption
 
-def __create_path_description():
-    frmt_header = "{0:20s} {1:50.50s}\n"
-    frmt_items = frmt_header
-    header1 =  frmt_header.format("Option Values", "Path Returned" )  
-    header1_len = len(header1)
-    log_option_desc = "The permitted options values and returned paths are the following:\n\n"
-    log_option_desc += header1
-    log_option_desc += "-"*header1_len  + "\n"
-    log_option_desc += frmt_items.format("prefix", "The top-level installation directory for TCL.\n")  
-    return log_option_desc
+def main():
+    
+    # Instantiate a tcl pathoption object.
+    tcl_pathoption = pathoption.create_pathoption()
+
+    # Register all path functions with object tcl_pathoption. Each
+    # valid option value, <pathkey>, for the option --path <pathkey>
+    # need the following:
+    #   <pathkey>
+    #   A function reference that when invoked will return the installation path for <pathkey>
+    #   A description of <pathkey>
+    
+    # Registering path function for --path prefix
+    pathkey = "prefix"
+    function_reference = __prefix_path
+    pathkey_description = "The top-level installation directory for TCL."  
+    pathoption.register_pathoption(tcl_pathoption,pathkey,function_reference,pathkey_description)
+
+    # Parse the command line arugments of this script.
+    args = __parse_arguments(tcl_pathoption)
+
+    # Instantiate a logging object.
+    logger = create_logger(log_id='Default',
+                           log_level=args.log_level)
+
+    logger.info("Start of main program")
+
+    # Print the installation path. The arguments to the function reference 
+    # is collected in values. Note the aruguments in values must match the
+    # parameters of the function reference.
+    values = (args.ncp_prefix,
+              args.machine_name,
+              args.software_name,
+              args.software_version,
+              args.ncp_pe_key)
+    pathoption.print_path(tcl_pathoption,
+                          args.path,
+                          *values)
+
+    logger.info("End of main program")
 
 def __parse_arguments(tcl_pathoption):
 
@@ -94,7 +127,7 @@ def __parse_arguments(tcl_pathoption):
                            metavar='<ncp pe key>')
                            
     mandatory_args_group.add_argument("--path",
-                                      help=__create_path_description(),
+                                      help=pathoption.create_path_description(tcl_pathoption),
                                       required=True,
                                       type=str,
                                       choices=pathoption.get_pathoption_keys(tcl_pathoption),
@@ -103,54 +136,10 @@ def __parse_arguments(tcl_pathoption):
 
     return my_args 
 
-def __print_path(tcl_pathoption,
-                 path_option_value,
-                 *args):
-    import sys
-    tmp_path = pathoption.get_pathoption_path(tcl_pathoption,path_option_value,*args)
-    sys.stdout.write(tmp_path)
-
 def __prefix_path(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key):
     import os
     tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key)
     return tmp_path
     
-## @var dict _PATH_OPTIONS
-## @brief Stores the option  and a function reference
-##
-## @details Each installation path is associated with key, and for a given "key" : 
-## ""key" : The key associated for the desired installation path.
-## _PATH_OPTIONS["key"][0] : A --path option value. 
-## _PATH_OPTIONS["key"][1] : A reference to a function that will print the corresponding  path installation.
-
-
-## @fn main ()
-## @brief The main function.
-def main():
-    # Register all path functions.
-    tcl_pathoption = pathoption.create_pathoption()
-    description = "The top-level installation directory for TCL."  
-    pathoption.register_pathoption(tcl_pathoption,"prefix",__prefix_path,description)
-
-    args = __parse_arguments(tcl_pathoption)
-
-    logger = create_logger(log_id='Default',
-                           log_level=args.log_level)
-
-    logger.info("Start of main program")
-
-
-    values = (args.ncp_prefix,
-              args.machine_name,
-              args.software_name,
-              args.software_version,
-              args.ncp_pe_key)
-
-    __print_path(tcl_pathoption,
-                 args.path,
-                 *values)
-
-    logger.info("End of main program")
-
 if __name__ == "__main__":
     main()
