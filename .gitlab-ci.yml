@@ -35,7 +35,7 @@ build-python-virtual-environment: # This job builds a python virtual environment
   tags:
     - RuyLopez
   script:
-    - python3 -m venv .anansi-python-venv
+    - python3 -m venv anansi_python_env
     - tree -L 2 anansi_python_env
     - echo "Python virtual successfully created."
   artifacts: 
