@@ -50,6 +50,9 @@ build-sphinx: # This job installs sphinx in the .anansi-pyhton-venv
     - source "$python_venv_dir"/bin/activate
     - pip3 install -U sphinx
   needs:  [ "build-python-virtual-environment" ]
+  dependencies:
+    - build-python-virtual-environment
+
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
