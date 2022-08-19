@@ -58,4 +58,5 @@ deploy-documentation : # This job runs in the deploy stage and deploys the docum
     - RuyLopez
   script :
     - echo "Building documentation ..."
+    - tree -L 2
     - echo "Documentation sucessfully deployed."
