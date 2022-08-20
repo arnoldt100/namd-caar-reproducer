@@ -91,7 +91,7 @@ deploy-documentation : # This job runs in the deploy stage and deploys the docum
   script :
     - find . -name "sphinx-build"
     - echo 'source anansi_python_env/bin/activate'
-    - echo 'Building documentation ...''
+    - echo 'Building documentation ...'
     - echo "sphinx-build --version"
     - tree -L 2
     - echo "Documentation sucessfully deployed."
