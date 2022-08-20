@@ -40,8 +40,10 @@ install-sphinx: # This job installs sphinx in the .anansi-pyhton-venv
   tags:
     - RuyLopez
   script:
-    - source anansi_python_env/bin/activate
-    - pip3 install -U sphinx
+    - tree -L 2 anansi_python_env
+    - echo 'source anansi_python_env/bin/activate...'
+    - echo 'pip3 install -U sphinx ...'
+    - sleep 10
   needs:  [ "install-python-virtual-environment" ]
   dependencies:
     - install-python-virtual-environment
