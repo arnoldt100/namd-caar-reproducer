@@ -41,9 +41,9 @@ install-sphinx: # This job installs sphinx in the .anansi-pyhton-venv
     - RuyLopez
   script:
     - tree -L 2 anansi_python_env
-    - echo 'source anansi_python_env/bin/activate...'
-    - echo 'pip3 install -U sphinx ...'
-    - sleep 10
+    - source anansi_python_env/bin/activate
+    - pip3 install -U sphinx
+    - tree -L 2 anansi_python_env
   needs:  [ "install-python-virtual-environment" ]
   dependencies:
     - install-python-virtual-environment
@@ -89,9 +89,9 @@ deploy-documentation : # This job runs in the deploy stage and deploys the docum
   tags :
     - RuyLopez
   script :
-    - source anansi_python_env/bin/activate
-    - echo "Building documentation ..."
-    - sphinx-build --version
+    - find . -name "sphinx-build"
+    - echo 'source anansi_python_env/bin/activate'
+    - echo 'Building documentation ...''
+    - echo "sphinx-build --version"
     - tree -L 2
-    - hostname -f
     - echo "Documentation sucessfully deployed."
