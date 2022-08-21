@@ -54,6 +54,7 @@ install-python-virtual-environment:
     - RuyLopez
   script:
     - echo 'This jobs builds the python virtual environment.'
+    - docker run hello-world
     - python3 -m venv anansi_python_env
     - source anansi_python_env/bin/activate
     - pip3 install -U sphinx
@@ -125,8 +126,6 @@ deploy-documentation :
     - RuyLopez
   script :
     - find . -name "sphinx-build"
-    - echo 'source anansi_python_env/bin/activate'
-    - echo 'Building documentation ...'
-    - echo "sphinx-build --version"
+    - find . -name "pip"
     - tree -L 2
     - echo "Documentation sucessfully deployed."
