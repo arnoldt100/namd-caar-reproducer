@@ -55,6 +55,7 @@ install-python-virtual-environment:
   script:
     - echo 'This jobs builds the python virtual environment.'
     - python3 -m venv anansi_python_env
+    - source anansi_python_env/bin/activate
     - pip3 install -U sphinx
     - echo 'Python virtual environment successfully created.'
   
