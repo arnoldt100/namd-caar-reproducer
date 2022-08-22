@@ -21,11 +21,11 @@ variables:
 # This section caches the Python virtual environment.
 # 
 # ----------------------------------------------------
-cache:
-    key: pve_cache
-    paths:
-      - .cache/pip
-      - anansi_python_env/
+# cache:
+#     key: pve_cache
+#     paths:
+#       - .cache/pip
+#       - anansi_python_env/
                                      
 # ----------------------------------------------------
 # This section defines stages of the pipeline:
@@ -118,7 +118,7 @@ deploy-job:
     - echo "Application successfully deployed."
 
 # This deploys the documentation.
-deploy-documentation : 
+.deploy-documentation : 
   cache: 
     key: pve_cache
   stage : deploy
