@@ -15,7 +15,7 @@ variables:
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 # ----------------------------------------------------
 # This section caches the Python virtual environment.
