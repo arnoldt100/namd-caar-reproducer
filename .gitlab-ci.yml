@@ -48,7 +48,7 @@ stages:
 # 'Prerequisites' stage jobs.
 # ----------------------------------------------------
 
-# This job installs a python virtual environment.
+# This job installs a Python virtual environment.
 install-python-virtual-environment:
   stage: prequisites
   tags:
