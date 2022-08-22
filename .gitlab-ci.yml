@@ -3,7 +3,7 @@
 # 
 # Variable name         Definition
 # ----------------------------------------------------
-# anansi_python_env     Stores stores the path to the 
+# anansi_python_env     Stores the path to the 
 #                       directory that contains the Python 
 #                       virtual environment.
 #
