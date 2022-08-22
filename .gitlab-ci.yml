@@ -54,7 +54,7 @@ install-python-virtual-environment:
   tags:
     - RuyLopez
   script:
-    - echo 'This jobs builds the python virtual environment.'
+    - echo 'This jobs builds the Python virtual environment.'
     - python3 -m venv anansi_python_env
     - source anansi_python_env/bin/activate
     - pip3 install -U sphinx
