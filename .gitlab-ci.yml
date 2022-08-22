@@ -10,7 +10,8 @@
 # PIP_CACHE_DIR         pip cache directory
 # ----------------------------------------------------
 variables:
-  python_venv_dir: "anansi_python_env" 
+    python_venv_dir: "anansi_python_env"
+    NCP_TOP_LEVEL: "$CI_PROJECT_DIR" 
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -54,7 +55,6 @@ install-python-virtual-environment:
     - RuyLopez
   script:
     - echo 'This jobs builds the python virtual environment.'
-    - docker run hello-world
     - python3 -m venv anansi_python_env
     - source anansi_python_env/bin/activate
     - pip3 install -U sphinx
@@ -125,7 +125,6 @@ deploy-documentation :
   tags :
     - RuyLopez
   script :
-    - find . -name "sphinx-build"
-    - find . -name "pip"
-    - tree -L 2
+    - echo "Deploying documentation..."
+    - $NCP_TOP_LEVEL/bin/build_documentation.sh
     - echo "Documentation sucessfully deployed."
