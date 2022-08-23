@@ -24,9 +24,9 @@ variables:
 #
 # ----------------------------------------------------
 
-# This section enables the Python virtual environment 
-# and modifies PYTHONPATH.
-.enable-python-virtual-environment:
+# This hidden template enables the Python virtual environment and modifies
+# PYTHONPATH.
+.enable-python-virtual-environment: &enable-python-virtual-environment
     - source anansi_python_env/bin/activate
     - export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
 
