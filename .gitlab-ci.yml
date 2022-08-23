@@ -20,12 +20,15 @@ variables:
 # ----------------------------------------------------
 # This section caches the Python virtual environment.
 # 
+# This is a global cache configuration, and each job
+# should inherit and extend.
 # ----------------------------------------------------
-# cache:
-#     key: pve_cache
-#     paths:
-#       - .cache/pip
-#       - anansi_python_env/
+cache: &global_cache
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - .cache/pip
+      - anansi_python_env/
+    policy: pull-push
                                      
 # ----------------------------------------------------
 # This section defines stages of the pipeline:
@@ -39,10 +42,10 @@ variables:
 # and sphinx-doc.
 # ----------------------------------------------------
 stages:
-  - prequisites
-  - build
-  - test
-  - deploy
+    - prequisites
+    - build
+    - test
+    - deploy
 
 # ----------------------------------------------------
 # 'Prerequisites' stage jobs.
@@ -50,64 +53,68 @@ stages:
 
 # This job installs a Python virtual environment.
 install-python-virtual-environment:
-  stage: prequisites
-  tags:
-    - RuyLopez
-  script:
-    - echo 'This jobs builds the Python virtual environment.'
-    - python3 -m venv anansi_python_env
-    - source anansi_python_env/bin/activate
-    - pip3 install -U sphinx
-    - echo 'Python virtual environment successfully created.'
-  
+    stage: prequisites
+    tags:
+        - RuyLopez
+    cache:
+        # inherit all global cache settings
+        <<: *global_cache
+    
+    script:
+        - echo 'This jobs builds the Python virtual environment.'
+        - python3 -m venv anansi_python_env
+        - source anansi_python_env/bin/activate
+        - pip3 install -U sphinx
+        - echo 'Python virtual environment successfully created.'
+    
 
 # ---------------------------------
 # Jobs for the build stage.
 # ---------------------------------
 
 build-job: # This job runs in the build stage, which runs first.
-  stage: build
-  tags:
-    - RuyLopez
-  script:
-    - echo "Compiling the code..."
-    - find . -name "sphinx-build"
-    - find . -name "pip"
-    - echo "Compile complete."
-  dependencies:
-    - install-python-virtual-environment
+    stage: build
+    tags:
+        - RuyLopez
+    script:
+        - echo "Compiling the code..."
+        - find . -name "sphinx-build"
+        - find . -name "pip"
+        - echo "Compile complete."
+    dependencies:
+        - install-python-virtual-environment
 
 # ----------------------------------------------------
 # Jobs for the test stage.
 # ----------------------------------------------------
 unit-test-job:   
-  stage: test
-  tags: 
-    - RuyLopez
-  script:
-    - echo "Running unit tests..."
-    - find . -name "sphinx-build"
-    - find . -name "pip"
-    - sleep 10
-    - echo "Code coverage is 90%"
+    stage: test
+    tags: 
+        - RuyLopez
+    script:
+        - echo "Running unit tests..."
+        - find . -name "sphinx-build"
+        - find . -name "pip"
+        - sleep 10
+        - echo "Code coverage is 90%"
 
 lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
-  tags:
-    - RuyLopez
-  script:
-    - echo "Linting code... This will take about 10 seconds."
-    - find . -name "sphinx-build"
-    - find . -name "pip"
-    - sleep 10
-    - echo "No lint issues found."
+    stage: test    # It can run at the same time as unit-test-job (in parallel).
+    tags:
+        - RuyLopez
+    script:
+        - echo "Linting code... This will take about 10 seconds."
+        - find . -name "sphinx-build"
+        - find . -name "pip"
+        - sleep 10
+        - echo "No lint issues found."
 
 # ----------------------------------------------------
 # Jobs for the deploy stage.
 # ----------------------------------------------------
 
 # This job deploys the project binaries.
-deploy-job:
+.deploy-job:
   cache: 
     key: pve_cache
   stage: deploy
