@@ -42,7 +42,7 @@ variables:
 # and sphinx-doc.
 # ----------------------------------------------------
 stages:
-    - prequisites
+    - prerequisites
     - build
     - test
     - deploy
@@ -67,7 +67,7 @@ cache_job:
 
 # This job installs a Python virtual environment.
 install-python-virtual-environment:
-    stage: prequisites
+    stage: prerequisites
     tags:
         - RuyLopez
     
