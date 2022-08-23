@@ -81,6 +81,7 @@ build-job: # This job runs in the build stage, which runs first.
         - find . -name "sphinx-build"
         - find . -name "pip"
         - echo "Compile complete."
+        - sleep 10
     dependencies:
         - install-python-virtual-environment
 
@@ -115,8 +116,6 @@ lint-test-job:   # This job also runs in the test stage.
 
 # This job deploys the project binaries.
 .deploy-job:
-  cache: 
-    key: pve_cache
   stage: deploy
   tags:
     - RuyLopez
@@ -127,13 +126,11 @@ lint-test-job:   # This job also runs in the test stage.
     - echo "Application successfully deployed."
 
 # This deploys the documentation.
-.deploy-documentation : 
-  cache: 
-    key: pve_cache
-  stage : deploy
-  tags :
-    - RuyLopez
-  script :
-    - echo "Deploying documentation ..."
-    - $NCP_TOP_LEVEL/bin/build_documentation.sh
-    - echo "Documentation sucessfully deployed."
+deploy-documentation : 
+    stage : deploy
+    tags :
+        - RuyLopez
+    script :
+        - echo "Deploying documentation ..."
+        - $NCP_TOP_LEVEL/bin/build_documentation.sh
+        - echo "Documentation sucessfully deployed."
