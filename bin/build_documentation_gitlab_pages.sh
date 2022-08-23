@@ -1,7 +1,14 @@
 #! /usr/bin/env bash
 
+# ----------------------------------------------------
+# This script builds documentation for gitlab-pages.
+#
+# ----------------------------------------------------
+
 cd ${NCP_TOP_LEVEL}/documentation
-make clean && make html
+
+make -f Makefile-gitlab-pages clean && make html
+
 if [[ $? != 0 ]]; then
     echo "Failed to create documentation."
     exit 1
