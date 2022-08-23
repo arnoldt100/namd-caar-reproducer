@@ -17,8 +17,6 @@ variables:
 # only cache local items.
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
-
-
 # ----------------------------------------------------
 # This section defines reusable configurations.
 #
