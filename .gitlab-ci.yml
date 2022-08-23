@@ -23,7 +23,7 @@ variables:
 # This is a global cache configuration, and each job
 # should inherit and extend.
 # ----------------------------------------------------
-cache: &global_cache
+cache: global_cache
     key: $CI_COMMIT_REF_SLUG
     paths:
         - .cache/pip
