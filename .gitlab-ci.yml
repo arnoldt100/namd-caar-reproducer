@@ -17,19 +17,19 @@ variables:
 # only cache local items.
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
+
+
 # ----------------------------------------------------
-# This section caches the Python virtual environment.
-# 
-# This is a global cache configuration, and each job
-# should inherit and extend.
+# This section defines reusable configurations.
+#
 # ----------------------------------------------------
-.cache:
-    key: $CI_COMMIT_REF_SLUG
-    paths:
-        - .cache/pip
-        - anansi_python_env/
-    policy: pull-push
-                                     
+
+# This section enables the Python virtual environment 
+# and modifies PYTHONPATH.
+.enable-python-virtual-environment:
+    - source anansi_python_env/bin/activate
+    - export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
+
 # ----------------------------------------------------
 # This section defines stages of the pipeline:
 #
@@ -51,8 +51,9 @@ stages:
 # 'Prerequisites' stage jobs.
 # ----------------------------------------------------
 
-# This is a global cache job.
-cache_job:
+# This is a global cache job. We need to cache pip's package cache and the
+# Python virtual environment.
+global-cache-job:
     stage : prerequisites
     tags :
         - RuyLopez
@@ -77,7 +78,7 @@ install-python-virtual-environment:
         - source anansi_python_env/bin/activate
         - pip3 install -U sphinx
         - echo 'Python virtual environment successfully created.'
-    needs: ["cache_job"]
+    needs: ["global-cache-job"]
     
 
 # ---------------------------------
@@ -138,14 +139,15 @@ lint-test-job:   # This job also runs in the test stage.
 
 # This deploys the documentation.
 deploy-documentation : 
-    extends: cache_job
+    extends: global-cache-job
     cache:
         policy: pull
     stage : deploy
     tags :
         - RuyLopez
+    before_script:
+        - *enable-python-virtual-environment
     script :
         - echo "Deploying documentation ..."
-        - source anansi_python_env/bin/activate
         - $NCP_TOP_LEVEL/bin/build_documentation.sh
         - echo "Documentation sucessfully deployed."
