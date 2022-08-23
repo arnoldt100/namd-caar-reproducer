@@ -23,13 +23,12 @@ variables:
 # This is a global cache configuration, and each job
 # should inherit and extend.
 # ----------------------------------------------------
-global_cache:
-    cache:
-        key: $CI_COMMIT_REF_SLUG
-        paths:
-            - .cache/pip
-            - anansi_python_env/
-        policy: pull-push
+cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+        - .cache/pip
+        - anansi_python_env/
+    policy: pull-push
                                      
 # ----------------------------------------------------
 # This section defines stages of the pipeline:
@@ -54,7 +53,6 @@ stages:
 
 # This job installs a Python virtual environment.
 install-python-virtual-environment:
-    extends: global_cache
     stage: prequisites
     tags:
         - RuyLopez
