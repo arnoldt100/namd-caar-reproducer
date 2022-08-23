@@ -53,12 +53,10 @@ stages:
 
 # This job installs a Python virtual environment.
 install-python-virtual-environment:
+    extends: cache
     stage: prequisites
     tags:
         - RuyLopez
-    cache:
-        # inherit all global cache settings
-        <<: *global_cache
     
     script:
         - echo 'This jobs builds the Python virtual environment.'
