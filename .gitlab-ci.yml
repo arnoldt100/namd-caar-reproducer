@@ -132,5 +132,6 @@ deploy-documentation :
         - RuyLopez
     script :
         - echo "Deploying documentation ..."
+        - source anansi_python_env/bin/activate
         - $NCP_TOP_LEVEL/bin/build_documentation.sh
         - echo "Documentation sucessfully deployed."
