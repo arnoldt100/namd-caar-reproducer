@@ -23,7 +23,7 @@ variables:
 # This is a global cache configuration, and each job
 # should inherit and extend.
 # ----------------------------------------------------
-cache: &global_cache
+cache: global_cache
     key: $CI_COMMIT_REF_SLUG
     paths:
       - .cache/pip
@@ -56,9 +56,9 @@ install-python-virtual-environment:
     stage: prequisites
     tags:
         - RuyLopez
-    cache:
-        # inherit all global cache settings
-        <<: *global_cache
+    # cache:
+    #    # inherit all global cache settings
+    #    <<: *global_cache
     
     script:
         - echo 'This jobs builds the Python virtual environment.'
@@ -96,7 +96,7 @@ unit-test-job:
         - echo "Running unit tests..."
         - find . -name "sphinx-build"
         - find . -name "pip"
-        - sleep 10
+        - sleep 5
         - echo "Code coverage is 90%"
 
 lint-test-job:   # This job also runs in the test stage.
@@ -107,7 +107,7 @@ lint-test-job:   # This job also runs in the test stage.
         - echo "Linting code... This will take about 10 seconds."
         - find . -name "sphinx-build"
         - find . -name "pip"
-        - sleep 10
+        - sleep 5
         - echo "No lint issues found."
 
 # ----------------------------------------------------
