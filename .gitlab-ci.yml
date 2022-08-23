@@ -23,11 +23,11 @@ variables:
 # This is a global cache configuration, and each job
 # should inherit and extend.
 # ----------------------------------------------------
-cache: global_cache
+cache: &global_cache
     key: $CI_COMMIT_REF_SLUG
     paths:
-      - .cache/pip
-      - anansi_python_env/
+        - .cache/pip
+        - anansi_python_env/
     policy: pull-push
                                      
 # ----------------------------------------------------
@@ -56,9 +56,9 @@ install-python-virtual-environment:
     stage: prequisites
     tags:
         - RuyLopez
-    # cache:
-    #    # inherit all global cache settings
-    #    <<: *global_cache
+    cache:
+        # inherit all global cache settings
+        <<: *global_cache
     
     script:
         - echo 'This jobs builds the Python virtual environment.'
