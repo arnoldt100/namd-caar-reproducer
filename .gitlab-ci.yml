@@ -127,6 +127,6 @@ deploy-job:
   tags :
     - RuyLopez
   script :
-    - echo "Deploying documentation..."
+    - echo "Deploying documentation ..."
     - $NCP_TOP_LEVEL/bin/build_documentation.sh
     - echo "Documentation sucessfully deployed."
