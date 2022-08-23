@@ -23,7 +23,7 @@ variables:
 # This is a global cache configuration, and each job
 # should inherit and extend.
 # ----------------------------------------------------
-cache:
+.cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
         - .cache/pip
@@ -51,6 +51,20 @@ stages:
 # 'Prerequisites' stage jobs.
 # ----------------------------------------------------
 
+# This is a global cache job.
+cache_job:
+    stage : prerequisites
+    tags :
+        - RuyLopez
+    cache:
+        key: $CI_COMMIT_REF_SLUG
+        paths:
+            - .cache/pip
+            - anansi_python_env/
+        policy: pull-push
+    script:
+        - echo "Global cache job..."
+
 # This job installs a Python virtual environment.
 install-python-virtual-environment:
     stage: prequisites
@@ -63,6 +77,7 @@ install-python-virtual-environment:
         - source anansi_python_env/bin/activate
         - pip3 install -U sphinx
         - echo 'Python virtual environment successfully created.'
+    needs: ["cache_job"]
     
 
 # ---------------------------------
@@ -79,8 +94,7 @@ build-job: # This job runs in the build stage, which runs first.
         - find . -name "pip"
         - echo "Compile complete."
         - sleep 10
-    dependencies:
-        - install-python-virtual-environment
+    needs:["install-python-virtual-environment"]
 
 # ----------------------------------------------------
 # Jobs for the test stage.
@@ -124,8 +138,6 @@ lint-test-job:   # This job also runs in the test stage.
 
 # This deploys the documentation.
 deploy-documentation : 
-    extends: cache
-    policy: pull
     stage : deploy
     tags :
         - RuyLopez
