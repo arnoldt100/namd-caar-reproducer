@@ -94,7 +94,7 @@ build-job: # This job runs in the build stage, which runs first.
         - find . -name "pip"
         - echo "Compile complete."
         - sleep 10
-    needs:["install-python-virtual-environment"]
+    needs: ["install-python-virtual-environment"]
 
 # ----------------------------------------------------
 # Jobs for the test stage.
