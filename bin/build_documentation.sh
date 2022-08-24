@@ -33,7 +33,6 @@ PROGNAME=$(basename ${0})
 function declare_global_variables {
     declare -g publish_mode
     declare -g doc_top_level
-    
 }
 
 #-----------------------------------------------------
@@ -64,7 +63,7 @@ function usage () {
     help_frmt1='%-72s %-72s\n'
     frmtmodes='%-72s \t%-72s\n'
     printf "Usage:\n"
-    printf "\tbuild_documentation.sh [ -h | --help ] --publish-dir <PUBLISHDIR> --doc-top-level <DOCTOPLEVEL>\n\n"
+    printf "\tbuild_documentation.sh [ -h | --help ] --publish-mode <PUBLISHMODE> --doc-top-level <DOCTOPLEVEL>\n\n"
     printf "${help_frmt1}" "option" "description"
     for ip in {1..145};do
         printf "%s" "-"
@@ -103,6 +102,7 @@ function parse_command_line {
 
             --doc-top-level)
                 doc_top_level=${2}
+                doc_top_level=$(realpath ${doc_top_level})
                 shift 2;;
 
             -- ) 
@@ -128,15 +128,17 @@ function parse_command_line {
 #
 # Positional parameters:
 #   ${1} The location of the documentation top level. 
-#   ${2} The location to publish the documentation.
+#   ${2} The publish mode
 # ----------------------------------------------------
 function publish_documentation {
     echo "Executing function publish_documentation"
  
     local -r my_doc_top_level=${1}
-    local -r my_publish_dir=${2}  
+    local -r my_publish_mode=${2}  
     local -r my_start_dir=$(pwd)
     cd ${doc_top_level}
+    echo "doc_top_level = ${my_doc_top_level}"
+    echo "my_publish_mode = ${my_publish_mode}"
     # PUBLISHDIR=${my_publish_dir} make clean && PUBLISHDIR=${my_publish_dir} make html 
     cd ${my_start_dir}
 
@@ -164,7 +166,7 @@ function main () {
     fi
 
     # We now publish the documentation.
-    publish_documentation "${doc_top_level}" "${publish_dir}"
+    publish_documentation "${doc_top_level}" "${publish_mode}"
 }
 # ----------------------------------------------------
 #
