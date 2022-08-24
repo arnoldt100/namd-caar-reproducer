@@ -125,7 +125,7 @@ lint-test-job:   # This job also runs in the test stage.
 # ----------------------------------------------------
 
 # This job deploys the project binaries.
-.deploy-job:
+deploy-job:
   stage: deploy
   tags:
     - RuyLopez
@@ -140,8 +140,6 @@ deploy-documentation :
     stage : deploy
     tags :
         - RuyLopez
-    cache: 
-        key: $CI_COMMIT_REF_SLUG
     before_script:
         - *enable-python-virtual-environment
     script :
