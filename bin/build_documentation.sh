@@ -11,14 +11,14 @@
 
 PROGNAME=$(basename ${0})
 
-#-----------------------------------------------------
-#                                                    -
-# Program notes.                                     -
-#                                                    -
-# This program builds the documentation for          -
-# namd-caar-reproducer.                              -
-#                                                    -
-#-----------------------------------------------------
+# ----------------------------------------------------
+#
+# Program notes.
+#
+# This program builds the documentation for
+# namd-caar-reproducer.
+#
+# ----------------------------------------------------
 
 #-----------------------------------------------------
 # Function:                                          -
