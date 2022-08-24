@@ -35,7 +35,7 @@ function declare_global_variables {
     declare -g doc_top_level
 }
 
-#-----------------------------------------------------
+# ----------------------------------------------------
 # Function:                                          -
 #    error_exit                                      -
 #                                                    -
@@ -46,7 +46,7 @@ function declare_global_variables {
 #   ${1} A string containing descriptive error       -
 #        message                                     -
 #                                                    -
-#-----------------------------------------------------
+# ----------------------------------------------------
 function error_exit {
     echo "${PROGNAME}: ${1:-"Unknown Error"}" 1>&2
     exit 1
