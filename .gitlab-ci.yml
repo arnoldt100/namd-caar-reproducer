@@ -131,7 +131,7 @@ deploy-job:
     - echo "Application successfully deployed."
 
 # This deploys the documentation.
-deploy-documentation : 
+pages : 
     stage : deploy
     tags :
         - RuyLopez
@@ -139,6 +139,9 @@ deploy-documentation :
         # Inherit global cache settings and override the policy.
         <<: *global_cache
         policy: pull
+    artifacts:
+        paths:
+            - public
     before_script:
         - *enable-python-virtual-environment
     script :
