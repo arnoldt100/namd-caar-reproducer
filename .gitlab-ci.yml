@@ -147,5 +147,5 @@ deploy-documentation :
         - *enable-python-virtual-environment
     script :
         - echo "Deploying documentation ..."
-        - $NCP_TOP_LEVEL/bin/build_documentation.sh
+        - $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode gitlab-pages --doc-top-level ${NCP_TOP_LEVEL}/documentation 
         - echo "Documentation sucessfully deployed."
