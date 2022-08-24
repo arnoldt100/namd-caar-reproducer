@@ -51,18 +51,25 @@ stages:
 
 # This is a global cache job. We need to cache pip's package cache and the
 # Python virtual environment.
-global-cache-job:
-    stage : prerequisites
-    tags :
-        - RuyLopez
-    cache:
-        key: $CI_COMMIT_REF_SLUG
-        paths:
-            - .cache/pip
-            - anansi_python_env/
-        policy: pull-push
-    script:
-        - echo "Global cache job..."
+# global-cache-job:
+#     stage : prerequisites
+#     tags :
+#         - RuyLopez
+#     cache:
+#         key: $CI_COMMIT_REF_SLUG
+#         paths:
+#             - .cache/pip
+#             - anansi_python_env/
+#         policy: pull-push
+#     script:
+#         - echo "Global cache job..."
+#
+cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+        - .cache/pip
+        - anansi_python_env/
+    policy: pull-push
 
 # This job installs a Python virtual environment.
 install-python-virtual-environment:
