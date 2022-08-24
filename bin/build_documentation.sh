@@ -20,16 +20,16 @@ PROGNAME=$(basename ${0})
 #
 # ----------------------------------------------------
 
-#-----------------------------------------------------
-# Function:                                          -
-#    declare_global_variables                        -
-#                                                    -
-# Synopsis:                                          -
-#   Prints the usage of this bash function.          -
-#                                                    -
-# Positional parameters:                             -
-#                                                    -
-#-----------------------------------------------------
+# ----------------------------------------------------
+# Function:
+#    declare_global_variables
+#
+# Synopsis:
+#   Prints the usage of this bash function.
+#
+# Positional parameters:
+#
+# ----------------------------------------------------
 function declare_global_variables {
     declare -g publish_mode
     declare -g doc_top_level
