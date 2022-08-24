@@ -136,10 +136,29 @@ function publish_documentation {
     local -r my_doc_top_level=${1}
     local -r my_publish_mode=${2}  
     local -r my_start_dir=$(pwd)
+
     cd ${doc_top_level}
-    echo "doc_top_level = ${my_doc_top_level}"
-    echo "my_publish_mode = ${my_publish_mode}"
-    # PUBLISHDIR=${my_publish_dir} make clean && PUBLISHDIR=${my_publish_dir} make html 
+
+    while true;do
+        case ${my_publish_mode} in
+
+            standard )
+                echo "Publishing in standard mode"
+                my_publish_dir=${NCP_TOP_LEVEL}/documentation/build
+                PUBLISHDIR=${my_publish_dir} make clean && PUBLISHDIR=${my_publish_dir} make html 
+                break;;
+
+            gitlab-pages)
+                echo "Publishes in gitlab-pages mode"
+                break;;
+
+            * ) 
+                echo "Internal parsing error publishing mode. This publishing mode is not implemented."
+                usage
+                exit 1;;
+        esac
+    done
+
     cd ${my_start_dir}
 
 
