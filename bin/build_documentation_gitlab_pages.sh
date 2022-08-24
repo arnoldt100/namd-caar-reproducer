@@ -7,7 +7,7 @@
 
 cd ${NCP_TOP_LEVEL}/documentation
 
-make -f Makefile-gitlab-pages clean && make html
+make -f Makefile-gitlab-pages clean && make -f Makefile-gitlab-pages html
 
 if [[ $? != 0 ]]; then
     echo "Failed to create documentation."
