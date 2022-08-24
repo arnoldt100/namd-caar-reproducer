@@ -31,7 +31,7 @@ PROGNAME=$(basename ${0})
 #                                                    -
 #-----------------------------------------------------
 function declare_global_variables {
-    declare -g publish_dir
+    declare -g publish_mode
     declare -g doc_top_level
     
 }
@@ -62,6 +62,7 @@ function error_exit {
 #-----------------------------------------------------
 function usage () {
     help_frmt1='%-72s %-72s\n'
+    frmtmodes='%-72s \t%-72s\n'
     printf "Usage:\n"
     printf "\tbuild_documentation.sh [ -h | --help ] --publish-dir <PUBLISHDIR> --doc-top-level <DOCTOPLEVEL>\n\n"
     printf "${help_frmt1}" "option" "description"
@@ -71,7 +72,10 @@ function usage () {
     printf "\n"
     printf "${help_frmt1}" "-h | --help" "Prints the help message"
     printf "\n"
-    printf "${help_frmt1}" "--publish-dir <PUBLISHDIR>"  "The directory PUBLISHDIR is where the sphinx-doc documentation will be installed."
+    printf "${help_frmt1}" "--publish-mode <PUBLISHMODE>"  "The mode of publishing the documentation."
+    printf "${help_frmt1}" ""  "The following modes are available:"
+    printf "${frmtmodes}" ""  "standard : Publishes documentation to ${NCP_TOP_LEVEL}/documentation/build/html."
+    printf "${frmtmodes}" ""  "gitlab-pages : Publishes documentation for gitlab-page in ${NCP_TOP_LEVEL}/public/html"
     printf "\n"
     printf "${help_frmt1}" "--doc-top-level <DOCTOPLEVEL>"  "The directory DOCTOPLEVEL is where the top-level directory of the package"
     printf "${help_frmt1}" "" "docuementaion. This directory contains the file Makefile and the"
@@ -93,8 +97,8 @@ function parse_command_line {
                 shift
                 exit 0;;
 
-            --publish-dir )
-                  publish_dir=${2}
+            --publish-mode )
+                  publish_mode=${2}
                   shift 2;;
 
             --doc-top-level)
@@ -133,7 +137,7 @@ function publish_documentation {
     local -r my_publish_dir=${2}  
     local -r my_start_dir=$(pwd)
     cd ${doc_top_level}
-    PUBLISHDIR=${my_publish_dir} make clean && PUBLISHDIR=${my_publish_dir} make html 
+    # PUBLISHDIR=${my_publish_dir} make clean && PUBLISHDIR=${my_publish_dir} make html 
     cd ${my_start_dir}
 
 
@@ -151,7 +155,7 @@ function main () {
     declare_global_variables
 
     # We now parse the program command line options.
-    long_options='help,publish-dir:,doc-top-level:'
+    long_options='help,publish-mode:,doc-top-level:'
     short_options=h
     OPTS=$(getopt --options ${short_options} --long ${long_options} --name "${PROGNAME}" -- "$@")
     parse_command_line ${OPTS}
