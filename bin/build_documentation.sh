@@ -137,19 +137,23 @@ function publish_documentation {
     local -r my_publish_mode=${2}  
     local -r my_start_dir=$(pwd)
 
-    cd ${doc_top_level}
+    cd "${doc_top_level}"
 
+    local my_publish_dir
+    local -r my_source_dir="${my_doc_top_level}/source"
     while true;do
         case ${my_publish_mode} in
 
             standard )
                 echo "Publishing in standard mode"
-                my_publish_dir=${NCP_TOP_LEVEL}/documentation/build
-                PUBLISHDIR=${my_publish_dir} make clean && PUBLISHDIR=${my_publish_dir} make html 
+                my_publish_dir="${NCP_TOP_LEVEL}/documentation/build"
+                SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make clean && SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make html 
                 break;;
 
             gitlab-pages)
                 echo "Publishes in gitlab-pages mode"
+                my_publish_dir="${NCP_TOP_LEVEL}/public"
+                SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make clean && SOURCEDIR=""${my_source_dir}"" PUBLISHDIR="${my_publish_dir}" make html 
                 break;;
 
             * ) 
@@ -159,7 +163,7 @@ function publish_documentation {
         esac
     done
 
-    cd ${my_start_dir}
+    cd "${my_start_dir}"
 
 
 }
