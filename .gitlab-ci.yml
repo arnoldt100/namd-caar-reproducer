@@ -49,22 +49,9 @@ stages:
 # 'Prerequisites' stage jobs.
 # ----------------------------------------------------
 
-# This is a global cache job. We need to cache pip's package cache and the
+# This is a global cache. We need to cache pip's package cache and the
 # Python virtual environment.
-# global-cache-job:
-#     stage : prerequisites
-#     tags :
-#         - RuyLopez
-#     cache:
-#         key: $CI_COMMIT_REF_SLUG
-#         paths:
-#             - .cache/pip
-#             - anansi_python_env/
-#         policy: pull-push
-#     script:
-#         - echo "Global cache job..."
-#
-cache:
+cache: &global_cache
     key: $CI_COMMIT_REF_SLUG
     paths:
         - .cache/pip
@@ -82,6 +69,8 @@ install-python-virtual-environment:
         - python3 -m venv anansi_python_env
         - source anansi_python_env/bin/activate
         - pip3 install -U sphinx
+        - find . -name "sphinx-build"
+        - find . -name "pip"
         - echo 'Python virtual environment successfully created.'
     
 
@@ -146,6 +135,10 @@ deploy-documentation :
     stage : deploy
     tags :
         - RuyLopez
+    cache:
+        # Inherit global cache settings and override the policy.
+        <<: *global_cache
+        policy: pull
     before_script:
         - *enable-python-virtual-environment
     script :
