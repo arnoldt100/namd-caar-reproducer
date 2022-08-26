@@ -61,7 +61,7 @@ This will download the tarball *tcl8.5.9-src.tar.gz* and unpack in directory
 *${NCP_TOP_LEVEL}/sw/sources*. One may have to run the script several
 times to successfully download TCL.<br>
 
-### Downloading charm++
+### Downloading Charm++
 
 To download charm++ run the command<br>
 
