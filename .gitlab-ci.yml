@@ -1,4 +1,4 @@
-# ---------------------------------------------------
+# ----------------------------------------------------
 # This section defines custom variables. 
 # 
 # Variable name         Definition
@@ -7,7 +7,7 @@
 #                       directory that contains the Python 
 #                       virtual environment.
 #
-# PIP_CACHE_DIR         pip cache directory
+# PIP_CACHE_DIR         pip's cache directory
 # ----------------------------------------------------
 variables:
     python_venv_dir: "anansi_python_env"
