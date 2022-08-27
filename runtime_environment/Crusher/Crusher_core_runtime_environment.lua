@@ -5,9 +5,6 @@ This module sets critical environmental and path variables needed for building
 and running NAMD on Crusher.
 ]])
 
-local dummy_path = subprocess("ncp_paths.sh")
-LmodMessage(dummy_path)
-
 -- -------------------------------------------------
 -- Set the set of modules to load by defining the variable
 -- key.

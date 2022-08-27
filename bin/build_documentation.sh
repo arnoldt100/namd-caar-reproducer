@@ -1,22 +1,11 @@
 #! /usr/bin/env bash
-
-#cd ${NCP_TOP_LEVEL}/documentation
-#make clean && make html
-#if [[ $? != 0 ]]; then
-#    echo "Failed to create documentation."
-#    exit 1
-#else
-#    echo "Created documentation."
-#fi
-
 PROGNAME=$(basename ${0})
 
 # ----------------------------------------------------
 #
 # Program notes.
 #
-# This program builds the documentation for
-# namd-caar-reproducer.
+# This program builds the documentation for namd-caar-reproducer.
 #
 # ----------------------------------------------------
 
@@ -25,7 +14,8 @@ PROGNAME=$(basename ${0})
 #    declare_global_variables
 #
 # Synopsis:
-#   Prints the usage of this bash function.
+#   Declares global variables used in this script. Typically we declare the
+#   global variables to store the command line argument values.
 #
 # Positional parameters:
 #
@@ -73,12 +63,13 @@ function usage () {
     printf "\n"
     printf "${help_frmt1}" "--publish-mode <PUBLISHMODE>"  "The mode of publishing the documentation."
     printf "${help_frmt1}" ""  "The following modes are available:"
-    printf "${frmtmodes}" ""  "standard : Publishes documentation to ${NCP_TOP_LEVEL}/documentation/build/html."
-    printf "${frmtmodes}" ""  "gitlab-pages : Publishes documentation for gitlab-page in ${NCP_TOP_LEVEL}/public/html"
+    printf "${frmtmodes}" ""  "standard : Publishes documentation to \${NCP_TOP_LEVEL}/documentation/build/html."
+    printf "${frmtmodes}" ""  "gitlab-pages : Publishes documentation for gitlab-page in \${NCP_TOP_LEVEL}/public/html"
     printf "\n"
     printf "${help_frmt1}" "--doc-top-level <DOCTOPLEVEL>"  "The directory DOCTOPLEVEL is where the top-level directory of the package"
-    printf "${help_frmt1}" "" "docuementaion. This directory contains the file Makefile and the"
-    printf "${help_frmt1}" "" "source sphinx directory."
+    printf "${help_frmt1}" "" "documentation. This directory contains the files Makefile, make.bat and the"
+    printf "${help_frmt1}" "" "sphinx directory 'source'. The standard location of <DOCTOPLEVEL> is "
+    printf "${help_frmt1}" "" "\${NCP_TOP_LEVEL}/documentation/"
     printf "\n"
 }
 
@@ -133,31 +124,33 @@ function parse_command_line {
 function publish_documentation {
     echo "Executing function publish_documentation"
  
-    local -r my_doc_top_level=${1}
-    local -r my_publish_mode=${2}  
     local -r my_start_dir=$(pwd)
+    local -r my_publish_mode=${2}  
+    local -r my_doc_top_level=${1}
+    local -r my_source_dir="${my_doc_top_level}/source"
+    local -r my_publish_dir="${NCP_TOP_LEVEL}/documentation/build"
 
     cd "${doc_top_level}"
 
-    local my_publish_dir
-    local -r my_source_dir="${my_doc_top_level}/source"
     while true;do
         case ${my_publish_mode} in
 
             standard )
                 echo "Publishing in standard mode"
-                my_publish_dir="${NCP_TOP_LEVEL}/documentation/build"
                 SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make clean && SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make html 
                 break;;
 
             gitlab-pages)
-                echo "Publishes in gitlab-pages mode"
-                my_publish_dir="${NCP_TOP_LEVEL}/public"
+                echo "Publishing in gitlab-pages mode"
+                local -r my_gitlab_publish_dir="${NCP_TOP_LEVEL}/public"
                 SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make clean && SOURCEDIR=""${my_source_dir}"" PUBLISHDIR="${my_publish_dir}" make html 
+                mkdir --parents "${my_gitlab_publish_dir}"
+                rm -rf  "${my_gitlab_publish_dir}"
+                mv --force "${NCP_TOP_LEVEL}/documentation/build/html" "${my_gitlab_publish_dir}"
                 break;;
 
             * ) 
-                echo "Internal parsing error publishing mode. This publishing mode is not implemented."
+                echo "Internal parsing error for publishing mode. The publishing mode, ${my_publish_mode}, is not implemented."
                 usage
                 exit 1;;
         esac
