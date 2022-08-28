@@ -30,12 +30,6 @@ export PATH="${NCP_TOP_LEVEL}/bin:${PATH}"
 export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
 
 #-----------------------------------------------------
-# Modify the environmental variable LUA_PATH         -
-#                                                    -
-#-----------------------------------------------------
-export LUA_PATH="${NCP_TOP_LEVEL}/bin/lua;${LUA_PATH};;"
-
-#-----------------------------------------------------
 # We need to make available the modules needed       -
 # to build and run NAMD.                             -
 #                                                    -

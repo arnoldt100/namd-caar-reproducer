@@ -30,24 +30,50 @@ from loggerutils.logger import create_logger_description
 from loggerutils.logger import create_logger
 import pathoption
 
-def __create_path_description():
-    frmt_header = "{0:20s} {1:50.50s}\n"
-    frmt_items = frmt_header
-    header1 =  frmt_header.format("Option Values", "Path Returned" )  
-    header1_len = len(header1)
-    log_option_desc = "The permitted options values and returned paths are the following:\n\n"
-    log_option_desc += header1
-    log_option_desc += "-"*header1_len  + "\n"
-    log_option_desc += frmt_items.format("prefix", "The top-level installation directory for charm++.\n")  
-    return log_option_desc
+def main():
 
-def __parse_arguments():
+    # Instantiate a Charm++ pathoption object.
+    charm_pathoption = pathoption.create_pathoption()
+
+    # Register all path functions with object charm_pathoption. Each
+    # valid option value, <pathkey>, for the option --path <pathkey>
+    # need the following:
+    #   <pathkey>
+    #   A function reference that when invoked will return the installation path for <pathkey>
+    #   A description of <pathkey>
+    
+    # Registering path function for --path prefix
+    pathkey = "prefix"
+    function_reference = __prefix_path
+    pathkey_description = "The top-level installation directory for Charm++."  
+    pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
+
+    # Parse the command line arugments of this script.
+    args = __parse_arguments(charm_pathoption)
+
+    logger.info("Start of main program")
+
+    # Print the installation path. The arguments to the function reference 
+    # is collected in values. Note the aruguments in values must match the
+    # parameters of the function reference.
+    values = (args.ncp_prefix,
+              args.machine_name,
+              args.software_name,
+              args.software_version,
+              args.ncp_pe_key)
+    pathoption.print_path(charm_pathoption,
+                          args.path,
+                          *values)
+
+    logger.info("End of main program")
+
+def __parse_arguments(charm_pathoption):
 
     import logging
 
     # Create a string of the description of the 
     # program
-    program_description = "Returns installation paths for charm++ software."
+    program_description = "Returns installation paths for Charm++ software."
 
     # Create an argument parser.
     my_parser = argparse.ArgumentParser(
@@ -82,12 +108,6 @@ def __parse_arguments():
         type=str,
         metavar='<software version>')
 
-    mandatory_args_group.add_argument("--charmarch",
-        help="The target architecture of the charm++ build.",
-        required=True,
-        type=str,
-        metavar='<charm arch>')
-
     mandatory_args_group.add_argument("--ncp-prefix",
                            help="The top-level directory where all NAMD dependent software is installed under.",
                            required=True,
@@ -101,65 +121,19 @@ def __parse_arguments():
                            metavar='<ncp pe key>')
                            
     mandatory_args_group.add_argument("--path",
-                                      help=__create_path_description(),
+                                      help=pathoption.create_path_description(charm_pathoption),
                                       required=True,
                                       type=str,
-                                      choices=[ _PATH_OPTIONS['prefix'][0], _PATH_OPTIONS['original_charmbase'][0],
+                                      choices=pathoption.get_pathoption_keys(charm_pathoption),
                                       metavar="<path key>")
     my_args = my_parser.parse_args()
 
     return my_args 
 
-def __print_path(path_option_value,
-                 ncp_prefix,
-                 machine_name,
-                 software_name,
-                 software_version,
-                 ncp_pe_key,
-                 charmarch):
-    import sys
-    fp = _PATH_OPTIONS[path_option_value]
-    tmp_path = fp[1](ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch)
-    sys.stdout.write(tmp_path)
-
 def __prefix_path(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
     import os
     tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch)
     return tmp_path
-
-def __prefix_original_charmbase():
-    import os
-    ncp_top_level = os.getenv("NCP_TOP_LEVEL")
-    tmp_path = os.path.join(ncp_top_level,sw,sources,charm)
-    return tmp_path
-    
-## @var dict _PATH_OPTIONS
-## @brief Stores the option  and a function reference
-##
-## @details Each installation path is associated with key, and for a given "key" : 
-## ""key" : The key associated for the desired installation path.
-## _PATH_OPTIONS["key"][0] : A --path option value. 
-## _PATH_OPTIONS["key"][1] : A reference to a function that will print the corresponding  path installation.
-_PATH_OPTIONS = {"prefix" : [ "prefix", __prefix_path],
-                 "original_charmbase" : ["original_charmbase", __prefix_original_charmbase] }
-## @fn main ()
-## @brief The main function.
-def main():
-    args = __parse_arguments()
-    logger = create_logger(log_id='Default',
-                           log_level=args.log_level)
-
-    logger.info("Start of main program")
-
-    __print_path(args.path,
-                 args.ncp_prefix,
-                 args.machine_name,
-                 args.software_name,
-                 args.software_version,
-                 args.ncp_pe_key,
-                 args.charmarch)
-
-    logger.info("End of main program")
 
 if __name__ == "__main__":
     main()
