@@ -19,11 +19,15 @@ where
 For a list of the available path keys run the help option
 
     ncp_paths_charm.py --help
+
+Invoking this script will print, for a given *pathkey*, the fully qualified
+installation path to stdout.
 """
 
 # System imports
 import string
 import argparse # Needed for parsing command line arguments.
+import os
 
 # Local imports
 from loggerutils.logger import create_logger_description
@@ -42,15 +46,37 @@ def main():
     #   A function reference that when invoked will return the installation path for <pathkey>
     #   A description of <pathkey>
     
-    # Registering path function for --path prefix
     pathkey = "prefix"
     function_reference = __prefix_path
     pathkey_description = "The top-level installation directory for Charm++."  
     pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
 
+    pathkey = "charmbasedir"
+    function_reference = __prefix_path
+    pathkey_description = "The CHARMBASEDIR for Charm++."  
+    pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
+
+    pathkey = "bindir"
+    function_reference = __prefix_bindir
+    pathkey_description = "The Charm++ bin directory."  
+    pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
+
+    pathkey = "libdir"
+    function_reference = __prefix_libdir
+    pathkey_description = "The Charm++ lib directory."  
+    pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
+
+    pathkey = "incdir"
+    function_reference = __prefix_incdir
+    pathkey_description = "The Charm++ lib directory."  
+    pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
+
     # Parse the command line arugments of this script.
     args = __parse_arguments(charm_pathoption)
 
+    # Instantiate a logging object.
+    logger = create_logger(log_id='Default',
+                           log_level=args.log_level)
     logger.info("Start of main program")
 
     # Print the installation path. The arguments to the function reference 
@@ -60,7 +86,8 @@ def main():
               args.machine_name,
               args.software_name,
               args.software_version,
-              args.ncp_pe_key)
+              args.ncp_pe_key,
+              args.charmarch)
     pathoption.print_path(charm_pathoption,
                           args.path,
                           *values)
@@ -120,6 +147,12 @@ def __parse_arguments(charm_pathoption):
                            type=str,
                            metavar='<ncp pe key>')
                            
+    mandatory_args_group.add_argument("--charmarch",
+                           help="The Charm++ architecture.",
+                           required=True,
+                           type=str,
+                           metavar='<ncp charm arch>')
+                           
     mandatory_args_group.add_argument("--path",
                                       help=pathoption.create_path_description(charm_pathoption),
                                       required=True,
@@ -131,8 +164,19 @@ def __parse_arguments(charm_pathoption):
     return my_args 
 
 def __prefix_path(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
-    import os
     tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch)
+    return tmp_path
+
+def __prefix_bindir(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
+    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch,"bin")
+    return tmp_path
+
+def __prefix_libdir(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
+    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch,"lib")
+    return tmp_path
+
+def __prefix_incdir(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
+    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch,"include")
     return tmp_path
 
 if __name__ == "__main__":
