@@ -23,10 +23,9 @@ def register_pathoption(path_option,key,ref_to_function,description="No descript
 def get_pathoption_keys(path_option):
     return path_option.keys()
 
-def get_pathoption_path(path_option,key,*args):
+def get_pathoption_path(path_option,key,*args,**kargs):
     import os
-    tmp_path = path_option.path(key,*args)
-    tmp_path = os.path.abspath(tmp_path)
+    tmp_path = path_option.path(key,*args,**kargs)
     return tmp_path
 
 def create_path_description(path_option):
@@ -44,9 +43,10 @@ def create_path_description(path_option):
 
 def print_path(path_option,
                path_option_value,
-               *args):
+               *args,
+               **kargs):
     import sys
-    tmp_path = get_pathoption_path(path_option,path_option_value,*args)
+    tmp_path = get_pathoption_path(path_option,path_option_value,*args,**kargs)
     sys.stdout.write(tmp_path)
 
 class PathOption:
@@ -77,8 +77,8 @@ class PathOption:
     def description(self,key):
         return self._description[key]
 
-    def path(self,key,*args):
-        return self._functionReference[key](*args)
+    def path(self,key,*args,**kargs):
+        return self._functionReference[key](*args,**kargs)
 
 def _get_pathoption_description(path_option,key):
     return path_option.description(key)

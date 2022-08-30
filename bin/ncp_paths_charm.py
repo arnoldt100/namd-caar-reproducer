@@ -47,32 +47,32 @@ def main():
     #   A description of <pathkey>
     
     pathkey = "prefix"
-    function_reference = __prefix_path
+    function_reference = _path_prefix
     pathkey_description = "The top-level installation directory for Charm++."  
     pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
 
     pathkey = "charmbasedir"
-    function_reference = __prefix_path
+    function_reference = _path_prefix
     pathkey_description = "The CHARMBASEDIR for Charm++."  
     pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
 
     pathkey = "bindir"
-    function_reference = __prefix_bindir
+    function_reference = _path_bindir
     pathkey_description = "The Charm++ bin directory."  
     pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
 
     pathkey = "libdir"
-    function_reference = __prefix_libdir
+    function_reference = _path_libdir
     pathkey_description = "The Charm++ lib directory."  
     pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
 
     pathkey = "incdir"
-    function_reference = __prefix_incdir
+    function_reference = _path_incdir
     pathkey_description = "The Charm++ lib directory."  
     pathoption.register_pathoption(charm_pathoption,pathkey,function_reference,pathkey_description)
 
     # Parse the command line arugments of this script.
-    args = __parse_arguments(charm_pathoption)
+    args = _parse_arguments(charm_pathoption)
 
     # Instantiate a logging object.
     logger = create_logger(log_id='Default',
@@ -82,19 +82,21 @@ def main():
     # Print the installation path. The arguments to the function reference 
     # is collected in values. Note the aruguments in values must match the
     # parameters of the function reference.
-    values = (args.ncp_prefix,
-              args.machine_name,
-              args.software_name,
-              args.software_version,
-              args.ncp_pe_key,
-              args.charmarch)
+
+    kvalues = { 'ncp_prefix' : args.ncp_prefix,
+                'machine_name' : args.machine_name,
+                'software_name' : args.software_name,
+                'software_version' : args.software_version,
+                'ncp_pe_key' : args.ncp_pe_key,
+                'charmarch' : args.charmarch}
+
     pathoption.print_path(charm_pathoption,
                           args.path,
-                          *values)
+                          **kvalues)
 
     logger.info("End of main program")
 
-def __parse_arguments(charm_pathoption):
+def _parse_arguments(charm_pathoption):
 
     import logging
 
@@ -163,21 +165,37 @@ def __parse_arguments(charm_pathoption):
 
     return my_args 
 
-def __prefix_path(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
-    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch)
+
+def _path_prefix(ncp_prefix,
+                 machine_name,
+                 software_name,
+                 software_version,
+                 ncp_pe_key,
+                 charmarch):
+    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key)
     return tmp_path
 
-def __prefix_bindir(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
-    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch,"bin")
-    return tmp_path
+class _get_charmbasedir:
+    def __init__(self,func):
+        self.func = func
 
-def __prefix_libdir(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
-    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch,"lib")
-    return tmp_path
+    def __call__(self,*args,**kargs):
+        path1 = self.func(*args,**kargs)
+        path2 = _path_prefix(*args,**kargs)
+        final_path = os.path.join(path2,path1)
+        return final_path
 
-def __prefix_incdir(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch):
-    tmp_path = os.path.join(ncp_prefix,machine_name,software_name,software_version,ncp_pe_key,charmarch,"include")
-    return tmp_path
+@_get_charmbasedir
+def _path_bindir(*args,**kwargs):
+    return "bin"
+
+@_get_charmbasedir
+def _path_libdir(*args,**kargs):
+    return "lib"
+
+@_get_charmbasedir
+def _path_incdir(*args,**kargs):
+    return "include"
 
 if __name__ == "__main__":
     main()
