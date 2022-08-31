@@ -152,12 +152,6 @@ function declare_global_variables () {
                                [failed_build_command]=3
                                [failed_make_command]=4 )
 
-    # #-----------------------------------------------------
-    # # The charm++ version.
-    # # 
-    # #-----------------------------------------------------
-    # declare -gr CHARM_VERSION="6.10.2"
-
 }
 
 #-----------------------------------------------------
@@ -243,10 +237,6 @@ function check_script_prerequisites () {
     fi
     return
 }
-
-# Import file Frontier_build_multicore_linux_x86_64_gnu to access
-# the function build charm++.
-# source ${NCP_TOP_LEVEL}/bin/charm++/Frontier_build_multicore_linux_x86_64_gnu.sh
 
 # Import file Crusher_build_multicore_linux_x86_64_gnu to access
 # the function build charm++.
