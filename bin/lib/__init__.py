@@ -2,4 +2,5 @@
 
 __all__ = ["lmod_interface",
            "loggerutils",
-           "pathoption"]
+           "pathoption",
+           "namd_machine_registration"]

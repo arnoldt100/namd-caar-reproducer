@@ -2,9 +2,8 @@
 
 The function create_pathoption returns an PathOption object. 
 
-The function  register_pathoption registers a new path option permmited value and the
+The function  register_pathoption registers a new path option permitted value and the
 corresponding function reference.
-
 """
 
 import errors_pathoption

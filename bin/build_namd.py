@@ -22,8 +22,11 @@ import argparse # Needed for parsing command line arguments.
 # Local imports
 from loggerutils.logger import create_logger_description
 from loggerutils.logger import create_logger
+import namd_machine_registrations
 
 def main():
+    mr =  _register_machines_buildtargets()
+
     args = _parse_arguments()
 
     logger = create_logger(log_id='Default',
@@ -53,9 +56,35 @@ def _parse_arguments():
                            default=logging.WARNING,
                            help=create_logger_description() )
 
+    # Adding mandatory argument group.
+    mandatory_args_group = my_parser.add_argument_group(title="Mandatory Arguments")
+
+    mandatory_args_group.add_argument("--machine-name",
+        help="The name of the machine on which the sotware will be installed.",
+        required=True,
+        type=str,
+        metavar='<machine name>')
+
+    mandatory_args_group.add_argument("--target-build",
+        help="The NAMD build target.",
+        required=True,
+        type=str,
+        metavar='<target build>')
+
     my_args = my_parser.parse_args()
 
     return my_args 
+
+def _register_machines_buildtargets():
+    # Register Crusher
+    reg_mach = namd_machine_registrations.NamdBuildRegister()
+    builder1 = lambda x,y : print(f"Building {y} on {x}")  
+    namd_machine_registrations.register_new_machine(reg_mach,'Crusher')
+    namd_machine_registrations.register_new_build(reg_mach,machine_name='Crusher',build_target='Multicore',builder=builder1)
+    namd_machine_registrations.build_software(reg_mach,machine_name='Crusher',build_target="Multicore")
+
+
+    return reg_mach
 
 if __name__ == "__main__":
     main()
