@@ -360,7 +360,7 @@ function build_namd_multicore_linux_x86_64__gnu__cpu {
     local config_options=( "${namd_arch}"
                      "--with-fftw3 --fftw-prefix ${fftw_prefix}"
                      "--tcl-prefix ${TCL_DIR}"
-                     "--charm-base ${charm_base} --charm-arch ${charm_arch}"  )
+                     "--charm-base ${charm_base} --charm-arch ${charm_arch}")
 
     local config_command="./config"
     for opt in ${config_options[@]}; do

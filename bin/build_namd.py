@@ -78,6 +78,7 @@ def _parse_arguments():
 def _register_machines_buildtargets():
     # Register Crusher
     reg_mach = namd_machine_registrations.NamdBuildRegister()
+
     builder1 = lambda x,y : print(f"Building {y} on {x}")  
     namd_machine_registrations.register_new_machine(reg_mach,'Crusher')
     namd_machine_registrations.register_new_build(reg_mach,machine_name='Crusher',build_target='Multicore',builder=builder1)
