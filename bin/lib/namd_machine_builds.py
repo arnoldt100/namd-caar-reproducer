@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-"""Contaisn various functions for building NAMD"""
+"""Contains various functions for building NAMD"""
 
 # System imports
 import string
@@ -10,6 +10,23 @@ import logging  # Needed for logging events.
 # Local imports
 from loggerutils.logger import create_logger_description
 from loggerutils.logger import create_logger
+
+class NAMDBuilder:
+    def __init__(self):
+        pass
+
+    def __call__(self,*args,**kwargs):
+        print("Building NAMD binary via NAMDbUILDER")
+
+# List of all Crusher build_targets and builders
+crusher_build_config = [ {"Multicore" : NAMDBuilder}, ]
+
+# List of all machines.
+all_machines = {"Crusher": crusher_build_config }
+
+def get_builder(machine_name="",build_target=""):
+    """Returns the a callable class that builds NAMD"""
+    return NAMDBuilder()
 
 def main():
     args = _parse_arguments()
