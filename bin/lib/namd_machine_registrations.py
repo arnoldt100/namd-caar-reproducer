@@ -136,5 +136,5 @@ class NamdBuildRegister():
 
     def build(self,machine_name,build_target):
         """ """
-        self._builder[machine_name][build_target](machine_name,build_target)
+        self._builder[machine_name][build_target](machine_name=machine_name,build_target=build_target)
         return

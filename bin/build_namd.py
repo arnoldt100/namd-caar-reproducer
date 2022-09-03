@@ -23,6 +23,7 @@ import argparse # Needed for parsing command line arguments.
 from loggerutils.logger import create_logger_description
 from loggerutils.logger import create_logger
 import namd_machine_registrations
+import namd_machine_builds
 
 def main():
     mr =  _register_machines_buildtargets()
@@ -79,10 +80,11 @@ def _register_machines_buildtargets():
     # Register Crusher
     reg_mach = namd_machine_registrations.NamdBuildRegister()
 
-    builder1 = lambda x,y : print(f"Building {y} on {x}")  
     namd_machine_registrations.register_new_machine(reg_mach,'Crusher')
-    namd_machine_registrations.register_new_build(reg_mach,machine_name='Crusher',build_target='Multicore',builder=builder1)
-    namd_machine_registrations.build_software(reg_mach,machine_name='Crusher',build_target="Multicore")
+    kargs_bt = {"machine_name" : 'Crusher','build_target' : 'Multicore'}
+    builder1 = namd_machine_builds.get_builder(**kargs_bt)
+    namd_machine_registrations.register_new_build(reg_mach,**kargs_bt,builder=builder1)
+    namd_machine_registrations.build_software(reg_mach,**kargs_bt)
 
 
     return reg_mach

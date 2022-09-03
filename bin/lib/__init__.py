@@ -4,4 +4,5 @@ __all__ = ["lmod_interface",
            "loggerutils",
            "pathoption",
            "namd_machine_registration",
-           "namd_machine_builds",]
+           "namd_machine_builds",
+           "namd_builders.py",]

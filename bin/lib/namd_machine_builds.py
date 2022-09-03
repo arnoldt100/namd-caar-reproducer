@@ -1,6 +1,10 @@
-#! /usr/bin/env python3
+"""Contains the builders for all machines
 
-"""Contains various functions for building NAMD"""
+This module contains the callable builder classes for all mcnhines and the their targets.
+All new machine builders should be added in this module. 
+
+
+"""
 
 # System imports
 import string
@@ -10,23 +14,17 @@ import logging  # Needed for logging events.
 # Local imports
 from loggerutils.logger import create_logger_description
 from loggerutils.logger import create_logger
+from namd_builders import GenericNAMDBuilder 
 
-class NAMDBuilder:
-    def __init__(self):
-        pass
+# Make a dictionary of all Crusher build_targets and the corresponding builder.
+_crusher_builders = {"Multicore" : GenericNAMDBuilder }
 
-    def __call__(self,*args,**kwargs):
-        print("Building NAMD binary via NAMDbUILDER")
-
-# List of all Crusher build_targets and builders
-crusher_build_config = [ {"Multicore" : NAMDBuilder}, ]
-
-# List of all machines.
-all_machines = {"Crusher": crusher_build_config }
+# Make a dictionary of  builders for all machines.
+_all_machine_builders = {"Crusher": _crusher_builders }
 
 def get_builder(machine_name="",build_target=""):
     """Returns the a callable class that builds NAMD"""
-    return NAMDBuilder()
+    return GenericNAMDBuilder()
 
 def main():
     args = _parse_arguments()
@@ -59,6 +57,3 @@ def _parse_arguments():
     my_args = my_parser.parse_args()
 
     return my_args 
-
-if __name__ == "__main__":
-    main()
