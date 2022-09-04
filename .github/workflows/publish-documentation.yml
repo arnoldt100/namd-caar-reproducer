@@ -38,8 +38,7 @@ jobs:
             - run: source anansi_python_env/bin/activate
             - run: pip3 install -U sphinx
             - run: python3 --version
-            - run: export NCP_TOP_LEVEL=$(pwd)
-                   echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
+            - run: export NCP_TOP_LEVEL=$(pwd) && echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
             - run: echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
             - run: ls -l $GITHUB_WORKSPACE
 
