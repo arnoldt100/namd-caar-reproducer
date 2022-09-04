@@ -35,7 +35,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
-                python-version: '3.9'
+                python-version: "3.9"
             - run: python3 -m venv anansi_python_env
             - run: source anansi_python_env/bin/activate
             - run: pip3 install -U sphinx
