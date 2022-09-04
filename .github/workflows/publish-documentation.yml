@@ -39,6 +39,7 @@ jobs:
             - run: source anansi_python_env/bin/activate
             - run: pip3 install -U sphinx
             - run: python3 --version
+            - run: echo $NCP_TOP_LEVEL
             - run: $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
             - run: ls -l $GITHUB_WORKSPACE
 
