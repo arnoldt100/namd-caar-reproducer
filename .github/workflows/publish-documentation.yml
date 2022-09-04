@@ -43,6 +43,7 @@ jobs:
 
     # This job deploys the documentation to pages.
     deploy_documentation:
+        needs: install_python
         runs-on: ubuntu-latest
         steps: 
             - uses: actions/checkout@v3
