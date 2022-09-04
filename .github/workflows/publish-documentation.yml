@@ -16,3 +16,5 @@ jobs:
       - run: bats -v
       - run: echo $GITHUB_ACTION_PATH
       - run: ls -l $GITHUB_ACTION_PATH/bin
+      - run: echo $GITHUB_WORKSPACE
+      - run: ls -l $GITHUB_WORKSPACE/bin
