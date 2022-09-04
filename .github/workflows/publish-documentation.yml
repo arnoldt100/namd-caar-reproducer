@@ -34,7 +34,7 @@ jobs:
               uses: actions/setup-python@v4
               with:
                 python-version: '3.9'
-            - run: ls -l $GITHUB_WORKSPACE/bin
+            - run: ls -l $GITHUB_WORKSPACE
             - run: python3 -m venv anansi_python_env
             - run: source anansi_python_env/bin/activate
             - run: pip3 install -U sphinx
@@ -47,7 +47,8 @@ jobs:
         steps: 
             - uses: actions/checkout@v3
             - run: echo "Deploying package documentation."
-            - run: ls -l $GITHUB_WORKSPACE/bin
+            - run: ls -l $GITHUB_WORKSPACE
+            - run: python3 --version
 
 #   check-bats-version:
 #     runs-on: ubuntu-latest
