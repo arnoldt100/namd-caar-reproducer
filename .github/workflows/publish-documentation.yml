@@ -35,16 +35,17 @@ jobs:
               with:
                 python-version: "3.9"
             - run: ls -l 
-            - run:  python3 -m venv anansi_python_env
+            - run: python3 -m venv anansi_python_env
             - run: source anansi_python_env/bin/activate
             - run: pip3 install -U sphinx
             - run: python3 --version
-            - run: export NCP_TOP_LEVEL=$(pwd) && echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
+            - run: |
+                export NCP_TOP_LEVEL=$(pwd) 
+                echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
+                $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
             - run: echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
             - run: echo "PIP_CACHE_DIR=${PIP_CACHE_DIR}"
             - run: ls -l "$GITHUB_WORKSPACE"/
-
-# - run: $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
 #   check-bats-version:
 #     runs-on: ubuntu-latest
 #     steps:
