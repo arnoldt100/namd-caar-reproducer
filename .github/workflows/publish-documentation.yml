@@ -28,15 +28,15 @@ jobs:
     # This job sets up the python environment.
     install_python:
         runs-on: ubuntu-latest
-        name: Sets up Python $python_version
         steps: 
+            - uses: actions/checkout@v3
             - run: echo "Stud: setting up Python"
 
     # This job deploys the documentation to pages.
     deploy_documentation:
         runs-on: ubuntu-latest
-        name: Installs project Sphinx's documentation.
         steps: 
+            - uses: actions/checkout@v3
             - run: echo "Stud: deploying package documentation.
 
 #   check-bats-version:
