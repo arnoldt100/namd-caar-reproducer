@@ -30,7 +30,7 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
             - uses: actions/checkout@v3
-            - run: echo "Stud: setting up Python"
+              # - run: echo "Stud: setting up Python"
             - run: ls -l $GITHUB_WORKSPACE/bin
 
     # This job deploys the documentation to pages.
@@ -38,7 +38,7 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
             - uses: actions/checkout@v3
-            - run: echo "Stud: deploying package documentation."
+              # - run: echo "Stud: deploying package documentation."
             - run: ls -l $GITHUB_WORKSPACE/bin
 
 #   check-bats-version:
