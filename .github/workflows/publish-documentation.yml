@@ -40,9 +40,9 @@ jobs:
             - run: python3 --version
             - run: export NCP_TOP_LEVEL=$(pwd)
             - run: echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
-              # - run: $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
             - run: ls -l $GITHUB_WORKSPACE
 
+# - run: $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
 #   check-bats-version:
 #     runs-on: ubuntu-latest
 #     steps:
