@@ -25,10 +25,12 @@ env:
 
 jobs:
 
-    # This job sets up the python environment.
-    install_python:
+    # This job deploys the documentation to pages.
+    deploy_documentation:
+        needs: install_python
         runs-on: ubuntu-latest
         steps: 
+            - run: echo "Deploying package documentation."
             - uses: actions/checkout@v3
             - name: Set up Python
               uses: actions/setup-python@v4
@@ -38,16 +40,7 @@ jobs:
             - run: source anansi_python_env/bin/activate
             - run: pip3 install -U sphinx
             - run: python3 --version
-            - run: ls -l $GITHUB_WORKSPACE
-            - run: echo 'Python virtual environment successfully created.'
-
-    # This job deploys the documentation to pages.
-    deploy_documentation:
-        needs: install_python
-        runs-on: ubuntu-latest
-        steps: 
-            - run: echo "Deploying package documentation."
-            - run: python3 --version
+            - run: $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
             - run: ls -l $GITHUB_WORKSPACE
 
 #   check-bats-version:
