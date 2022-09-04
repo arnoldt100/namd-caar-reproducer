@@ -31,9 +31,9 @@ jobs:
         steps: 
             - uses: actions/checkout@v3
             - name: Set up Python
-                uses: actions/setup-python@v4
-                with:
-                    python-version: '3.9'
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.9'
             - run: ls -l $GITHUB_WORKSPACE/bin
             - run: python3 -m venv anansi_python_env
             - run: source anansi_python_env/bin/activate
