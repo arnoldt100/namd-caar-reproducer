@@ -30,9 +30,9 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
             - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
-            with:
-                python-version: ${python_version}
+              # - uses: actions/setup-python@v4
+              # with:
+              #   python-version: ${python_version}
             - run: ls -l $GITHUB_WORKSPACE/bin
             - run: echo 'Setting up Python'
             - run: python3 -m venv anansi_python_env
