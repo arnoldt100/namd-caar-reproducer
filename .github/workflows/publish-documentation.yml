@@ -16,7 +16,7 @@ on: [push]
 # ----------------------------------------------------
 env: 
     python_venv_dir: $GITHUB_WORKSPACE/anansi_python_env
-    python_version: "3.9"
+    python_version: '3.9'
     NCP_TOP_LEVEL: $GITHUB_WORKSPACE
 
 # Change pip's cache directory to be inside the project directory since we can
@@ -30,8 +30,16 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
             - uses: actions/checkout@v3
+            - uses: actions/setup-python@v4
+            with:
+                python-version: ${python_version}
             - run: ls -l $GITHUB_WORKSPACE/bin
             - run: echo 'Setting up Python'
+            - run: python3 -m venv anansi_python_env
+            - run: source anansi_python_env/bin/activate
+            - run: pip3 install -U sphinx
+            - run: python3 --version
+            - run: echo 'Python virtual environment successfully created.'
 
     # This job deploys the documentation to pages.
     deploy_documentation:
