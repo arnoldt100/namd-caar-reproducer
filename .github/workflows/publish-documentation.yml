@@ -29,12 +29,12 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
             - run: echo "Deploying package documentation."
-            - run: ls -l 
             - uses: actions/checkout@v3
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
                 python-version: "3.9"
+            - run: ls -l 
             - run:  python3 -m venv anansi_python_env
             - run: source anansi_python_env/bin/activate
             - run: pip3 install -U sphinx
