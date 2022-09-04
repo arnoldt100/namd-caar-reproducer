@@ -30,14 +30,14 @@ jobs:
         runs-on: ubuntu-latest
         name: Sets up Python $python_version
         steps: 
-            - uses: echo "Stud: setting up Python"
+            - run: echo "Stud: setting up Python"
 
     # This job deploys the documentation to pages.
     deploy_documentation:
         runs-on: ubuntu-latest
         name: Installs project Sphinx's documentation.
         steps: 
-            - uses: echo "Stud: deploying package documentation.
+            - run: echo "Stud: deploying package documentation.
 
 #   check-bats-version:
 #     runs-on: ubuntu-latest
