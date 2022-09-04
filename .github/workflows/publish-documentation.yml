@@ -17,7 +17,7 @@ on: [push]
 env: 
     python_venv_dir: $GITHUB_WORKSPACE/anansi_python_env
     python_version: '3.9'
-    NCP_TOP_LEVEL: $GITHUB_WORKSPACE
+    NCP_TOP_LEVEL: "$GITHUB_WORKSPACE"
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
