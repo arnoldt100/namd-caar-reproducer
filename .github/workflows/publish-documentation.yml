@@ -1,20 +1,52 @@
 name: publishes project documentation
 on: [push]
 
+# ----------------------------------------------------
+# This section defines custom variables. 
+# 
+# Variable name         Definition
+# ----------------------------------------------------
+# anansi_python_env     Stores the path to the 
+#                       directory that contains the Python 
+#                       virtual environment.
+#
+# NCP_TOP_LEVEL         The top-level of the package.
+#
+# PIP_CACHE_DIR         pip's cache directory
+# ----------------------------------------------------
 env: 
-    python_venv_dir: "anansi_python_env"
-    NCP_TOP_LEVEL: "$CI_PROJECT_DIR" 
+    python_venv_dir: $GITHUB_WORKSPACE/anansi_python_env
+    python_version: "3.9"
+    NCP_TOP_LEVEL: $GITHUB_WORKSPACE
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+    PIP_CACHE_DIR: $GITHUB_WORKSPACE/.cache/pip
+
 jobs:
-  check-bats-version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
-      - run: echo $GITHUB_ACTION_PATH
-      - run: ls -l $GITHUB_ACTION_PATH/bin
-      - run: echo $GITHUB_WORKSPACE
-      - run: ls -l $GITHUB_WORKSPACE/bin
+
+    # This job sets up the python environment.
+    install_python:
+        runs-on: ubuntu-latest
+        name: Sets up Python $python_version
+        steps: 
+            - uses: echo "Stud: setting up Python"
+
+    # This job deploys the documentation to pages.
+    deploy_documentation:
+        runs-on: ubuntu-latest
+        name: Installs project Sphinx's documentation.
+        steps: 
+            - uses: echo "Stud: deploying package documentation.
+
+#   check-bats-version:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions/setup-node@v3
+#         with:
+#           node-version: '14'
+#       - run: npm install -g bats
+#       - run: bats -v
+#       - run: echo $GITHUB_WORKSPACE
+#       - run: ls -l $GITHUB_WORKSPACE/bin
