@@ -1,5 +1,9 @@
-name: learn-github-actions
+name: publishes project documentation
 on: [push]
+
+env: 
+    python_venv_dir: "anansi_python_env"
+    NCP_TOP_LEVEL: "$CI_PROJECT_DIR" 
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
@@ -10,3 +14,5 @@ jobs:
           node-version: '14'
       - run: npm install -g bats
       - run: bats -v
+      - run: echo $GITHUB_ACTION_PATH
+      - run: ls -l $GITHUB_ACTION_PATH/bin
