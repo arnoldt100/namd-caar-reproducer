@@ -42,7 +42,7 @@ jobs:
             - run: export NCP_TOP_LEVEL=$(pwd) && echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
             - run: echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
             - run: echo "PIP_CACHE_DIR=${PIP_CACHE_DIR}"
-            - run: ls -l $GITHUB_WORKSPACE
+            - run: ls -l "$GITHUB_WORKSPACE"/
 
 # - run: $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
 #   check-bats-version:
