@@ -30,11 +30,11 @@ jobs:
         runs-on: ubuntu-latest
         steps: 
             - uses: actions/checkout@v3
-            - uses: actions/setup-python@v4
-            with:
-            python-version: '3.9'
+            - name: Set up Python
+                uses: actions/setup-python@v4
+                with:
+                    python-version: '3.9'
             - run: ls -l $GITHUB_WORKSPACE/bin
-            - run: echo 'Setting up Python'
             - run: python3 -m venv anansi_python_env
             - run: source anansi_python_env/bin/activate
             - run: pip3 install -U sphinx
