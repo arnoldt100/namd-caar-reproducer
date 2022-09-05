@@ -37,6 +37,10 @@ jobs:
               uses: actions/setup-python@v4
               with:
                 python-version: "3.9"
+            - run: |
+                get fetch --all
+                git branch --all
+                git remote --verbose
             - run: ls -l 
             - run: python3 -m venv anansi_python_env
             - run: source anansi_python_env/bin/activate
@@ -47,8 +51,6 @@ jobs:
                 echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
                 export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
                 $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
-                git branch --all
-                git remote --verbose
             - run: ls -l "$GITHUB_WORKSPACE"/
 #   check-bats-version:
 #     runs-on: ubuntu-latest
