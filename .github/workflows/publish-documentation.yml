@@ -54,7 +54,7 @@ jobs:
             - run: |
                 git checkout --track origin/gh-pages
                 git branch --all
-            - run: ls -l "$GITHUB_WORKSPACE"/docs
+            - run: ls -l "./docs
 #   check-bats-version:
 #     runs-on: ubuntu-latest
 #     steps:
