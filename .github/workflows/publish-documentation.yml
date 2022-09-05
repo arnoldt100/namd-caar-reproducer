@@ -50,7 +50,7 @@ jobs:
                 export NCP_TOP_LEVEL=$(pwd) 
                 echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
                 export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
-                $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
+                $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode github-pages --doc-top-level ${NCP_TOP_LEVEL}/documentation 
             - run: |
                 git checkout --track origin/gh-pages
                 git branch --all
