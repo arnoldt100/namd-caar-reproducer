@@ -51,6 +51,9 @@ jobs:
                 echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
                 export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
                 $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
+            - run: |
+                git checkout --track origin/gh-pages
+                git branch --all
             - run: ls -l "$GITHUB_WORKSPACE"/
 #   check-bats-version:
 #     runs-on: ubuntu-latest
