@@ -53,7 +53,7 @@ jobs:
                 echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
                 export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
                 $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
-              - name: Checkout gh-pages branch.
+            - name: Checkout gh-pages branch.
                 run: |
                     git clone  https://github.com/arnoldt100/namd-caar-reproducer.git --branch gh-pages --single-branch gh-pages
                     git branch --all
