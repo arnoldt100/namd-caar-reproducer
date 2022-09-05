@@ -123,20 +123,20 @@ function parse_command_line {
 #                                                    -
 #                                                    -
 # Positional parameters:                             -
-#   $1 The source directory of the sphinx docs       -
-#   $2 The destination directory of the sphinx docs  -
+#   $1 The destination directory of the sphinx docs  -
 #                                                    -
 #-----------------------------------------------------
 function relocate_sphinx_html_docs {
     echo "Executing function relocate_sphinx_html_docs"
-    local -r src_dir=$1
-    local -r dest_dir=$2
+    local -r src_dir=${NCP_TOP_LEVEL}/documentation/build/html/*
+    local -r dest_dir=$1
     
     if [ -d "${dest_dir}" ]; then
         rm -rf  "${dest_dir}"
     fi
     mkdir --parents "${dest_dir}"
-    mv --force "${src_dir}" "${dest_dir}"
+    echo "mv --force ${src_dir} ${dest_dir}"
+    mv --force $src_dir "${dest_dir}"
 }
 
 
@@ -169,18 +169,21 @@ function publish_documentation {
 
         standard )
             echo "Publishing in standard mode"
+            cd $my_start_dir
             ;;
 
         gitlab-pages)
             echo "Publishing in gitlab-pages mode"
             local -r my_gitlab_publish_dir="${NCP_TOP_LEVEL}/public"
-            relocate_sphinx_html_docs "${NCP_TOP_LEVEL}/documentation/build/html" "${my_gitlab_publish_dir}" 
+            relocate_sphinx_html_docs  "${my_gitlab_publish_dir}" 
+            cd $my_start_dir
             ;;
 
         github-pages)
             echo "Publishing in github-pages mode"
             local -r my_github_publish_dir="${NCP_TOP_LEVEL}/docs"
-            relocate_sphinx_html_docs "${NCP_TOP_LEVEL}/documentation/build/html" "${my_github_publish_dir}" 
+            relocate_sphinx_html_docs  "${my_github_publish_dir}" 
+            cd $my_start_dir
             ;;
 
         * ) 
