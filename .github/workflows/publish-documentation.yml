@@ -38,7 +38,7 @@ jobs:
               with:
                 python-version: "3.9"
             - run: |
-                get fetch --all
+                git fetch --all
                 git branch --all
                 git remote --verbose
             - run: ls -l 
