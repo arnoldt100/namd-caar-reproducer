@@ -20,7 +20,7 @@ release = '0.1'
 
 extensions = []
 extensions.append('sphinx.ext.autodoc')
-
+extensions.append('sphinx.ext.githubpages')
 templates_path = ['_templates']
 exclude_patterns = []
 

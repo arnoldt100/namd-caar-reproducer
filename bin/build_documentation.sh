@@ -65,6 +65,7 @@ function usage () {
     printf "${help_frmt1}" ""  "The following modes are available:"
     printf "${frmtmodes}" ""  "standard : Publishes documentation to \${NCP_TOP_LEVEL}/documentation/build/html."
     printf "${frmtmodes}" ""  "gitlab-pages : Publishes documentation for gitlab-page in \${NCP_TOP_LEVEL}/public/html"
+    printf "${frmtmodes}" ""  "github-pages : Publishes documentation for gitlab-page in \${NCP_TOP_LEVEL}/docs/"
     printf "\n"
     printf "${help_frmt1}" "--doc-top-level <DOCTOPLEVEL>"  "The directory DOCTOPLEVEL is where the top-level directory of the package"
     printf "${help_frmt1}" "" "documentation. This directory contains the files Makefile, make.bat and the"
@@ -109,6 +110,36 @@ function parse_command_line {
 }
 
 
+
+#-----------------------------------------------------
+# Function:                                          -
+#   relocate_sphinx_html_docs                        -
+#                                                    -
+# Synopsis:                                          -
+#   Relocates the sphinx html documentation to a     -
+#   a new directory. If the new directory exists,    -
+#   then it is removed, recreated, and then the      -
+#   documentation is moved to the new directory.     -
+#                                                    -
+#                                                    -
+# Positional parameters:                             -
+#   $1 The source directory of the sphinx docs       -
+#   $2 The destination directory of the sphinx docs  -
+#                                                    -
+#-----------------------------------------------------
+function relocate_sphinx_html_docs {
+    echo "Executing function relocate_sphinx_html_docs"
+    local -r src_dir=$1
+    local -r dest_dir=$2
+    
+    if [ -d "${dest_dir}" ]; then
+        rm -rf  "${dest_dir}"
+    fi
+    mkdir --parents "${dest_dir}"
+    mv --force "${src_dir}" "${dest_dir}"
+}
+
+
 # ----------------------------------------------------
 # Function:
 #    publish_documentation
@@ -132,29 +163,31 @@ function publish_documentation {
 
     cd "${doc_top_level}"
 
-    while true;do
-        case ${my_publish_mode} in
+    SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make clean && SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make html 
 
-            standard )
-                echo "Publishing in standard mode"
-                SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make clean && SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make html 
-                break;;
+    case ${my_publish_mode} in
 
-            gitlab-pages)
-                echo "Publishing in gitlab-pages mode"
-                local -r my_gitlab_publish_dir="${NCP_TOP_LEVEL}/public"
-                SOURCEDIR="${my_source_dir}" PUBLISHDIR="${my_publish_dir}" make clean && SOURCEDIR=""${my_source_dir}"" PUBLISHDIR="${my_publish_dir}" make html 
-                mkdir --parents "${my_gitlab_publish_dir}"
-                rm -rf  "${my_gitlab_publish_dir}"
-                mv --force "${NCP_TOP_LEVEL}/documentation/build/html" "${my_gitlab_publish_dir}"
-                break;;
+        standard )
+            echo "Publishing in standard mode"
+            ;;
 
-            * ) 
-                echo "Internal parsing error for publishing mode. The publishing mode, ${my_publish_mode}, is not implemented."
-                usage
-                exit 1;;
-        esac
-    done
+        gitlab-pages)
+            echo "Publishing in gitlab-pages mode"
+            local -r my_gitlab_publish_dir="${NCP_TOP_LEVEL}/public"
+            relocate_sphinx_html_docs "${NCP_TOP_LEVEL}/documentation/build/html" "${my_gitlab_publish_dir}" 
+            ;;
+
+        github-pages)
+            echo "Publishing in github-pages mode"
+            local -r my_github_publish_dir="${NCP_TOP_LEVEL}/docs"
+            relocate_sphinx_html_docs "${NCP_TOP_LEVEL}/documentation/build/html" "${my_github_publish_dir}" 
+            ;;
+
+        * ) 
+            echo "Internal parsing error for publishing mode. The publishing mode, ${my_publish_mode}, is not implemented."
+            usage
+            exit 1;;
+    esac
 
     cd "${my_start_dir}"
 
