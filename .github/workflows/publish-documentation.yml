@@ -51,8 +51,8 @@ jobs:
                 git checkout --track origin/gh-pages
                 git branch --all
                 ls -l ./docs
-            -name: Build documentation
-             run: |
+            - name: Build documentation
+              run: |
                 export NCP_TOP_LEVEL=$(pwd) 
                 echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
                 export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
