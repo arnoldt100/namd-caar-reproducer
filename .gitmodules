@@ -1,6 +1,0 @@
-[submodule "sw/sources/charm"]
-	path = sw/sources/charm
-	url = https://github.com/UIUC-PPL/charm
-[submodule "sw/sources/namd"]
-	path = sw/sources/namd
-	url = git@gitlab.com:tcbgUIUC/namd.git

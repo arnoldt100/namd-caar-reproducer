@@ -37,7 +37,8 @@ jobs:
               uses: actions/setup-python@v4
               with:
                 python-version: "3.9"
-            - run: |
+            - name: Fetch all branches
+              run: |
                 git fetch --all
                 git branch --all
                 git remote --verbose
