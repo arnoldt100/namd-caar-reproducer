@@ -46,23 +46,25 @@ jobs:
             - run: source anansi_python_env/bin/activate
             - run: pip3 install -U sphinx
             - run: python3 --version
-            - run: |
+            - name: Checkout gh-pages branch.
+              run: |
+                git checkout --track origin/gh-pages
+                git branch --all
+                ls -l ./docs
+            -name: Build documentation
+             run: |
                 export NCP_TOP_LEVEL=$(pwd) 
                 echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
                 export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
                 $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode github-pages --doc-top-level ${NCP_TOP_LEVEL}/documentation 
-            - run: |
-                git checkout --track origin/gh-pages
-                git branch --all
-                ls -l ./docs
-            - name: Commit files
+            - name: Commit new files from docs directory
               run: |
-                    ls -l ./docs
-                    git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-                    git config --local user.name "github-actions[bot]"
-                    git add ./docs/*
-                    git commit -a -m "Add changes"  || true
-            - name: Push chages
+                ls -l ./docs
+                git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                git config --local user.name "github-actions[bot]"
+                git add ./docs/*
+                git commit -a -m "Add changes"  || true
+            - name: Push changes back to gh-pages
               uses: ad-m/github-push-action@master
               with:
                   branch: gh-pages
