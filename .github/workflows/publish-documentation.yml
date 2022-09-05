@@ -55,7 +55,6 @@ jobs:
                 git checkout --track origin/gh-pages
                 git branch --all
                 ls -l ./docs
-                cd ./docs && touch .nojekyll
             - name: Commit files
               run: |
                     ls -l ./docs
