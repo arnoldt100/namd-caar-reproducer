@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to NAMD-Benchmark-Harness's documentation!
-==================================================
+Welcome to NAMD-Benchmark-Reproducer documentation!
+===================================================
 
 .. toctree::
     :maxdepth: 2
