@@ -58,7 +58,7 @@ jobs:
                     git checkout -f gh-pages
                     git branch --all
                     mkdir -p docs
-                    cp -rf ./documentation/build/html/* 
+                    cp -rf ./documentation/build/html/* ./
                     cd docs
                     touch .nojekyll
                     git add .
@@ -76,3 +76,4 @@ jobs:
               with:
                     branch: gh-pages
                     github_token: ${{ secrets.GITHUB_TOKEN }}
+
