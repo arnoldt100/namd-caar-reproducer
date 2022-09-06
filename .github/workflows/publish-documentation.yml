@@ -61,7 +61,8 @@ jobs:
                     cp -rf ./documentation/build/html/* ./
                     cd docs
                     touch .nojekyll
-                    git add '*.html' objects.inv searchindex.js _sources _static .nojekyll
+                    find . -maxdepth 1 -name "*.html" | xargs git add
+                    git add objects.inv searchindex.js _sources _static .nojekyll
                     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                     git config --local user.name "github-actions[bot]"
                     git commit -a -m "Add changes"  || true
