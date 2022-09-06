@@ -21,7 +21,7 @@ release = '0.1'
 extensions = []
 extensions.append('sphinx.ext.autodoc')
 extensions.append('sphinx.ext.githubpages')
-templates_path = ['_templates']
+templates_path = ['templates']
 exclude_patterns = []
 
 
@@ -29,7 +29,7 @@ exclude_patterns = []
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'alabaster'
-html_static_path = ['_static']
+html_static_path = ['static']
 
 # -- Paths to python source files --------------------------------------------
 path1 = os.getenv("NCP_TOP_LEVEL")
