@@ -55,26 +55,27 @@ jobs:
                 $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
             - name: Checkout gh-pages branch
               run: |
-                    git clone git@github.com:arnoldt100/namd-caar-reproducer.git --branch gh-pages --single-branch gh-pages
+                    git checkout --ours gh-pages
                     git branch --all
                     mkdir -p gh-pages/docs
-                    cp -rf ./documentation/build/html/* gh-pages/docs/
-                    cd gh-pages/docs
+                    cp -rf ./documentation/build/html/* docs/
+                    cd docs
                     touch .nojekyll
                     git add .
                     git commit -a -m "Add changes"  || true
-              # - name: Commit new files from docs directory
-              # - run: |
-              # -   ls -l ./docs
-              # -   git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              # -   git config --local user.name "github-actions[bot]"
-              # -   git add ./docs/*
-              # -   git commit -a -m "Add changes"  || true
-              # - name: Push changes back to gh-pages
-              # - uses: ad-m/github-push-action@master
-              # - with:
-              # -     branch: gh-pages
-              # -     github_token: ${{ secrets.GITHUB_TOKEN }}
+                    ls -l 
+#            - name: Commit new files from docs directory
+#              run: |
+#                    ls -l ./docs
+#                    git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#                    git config --local user.name "github-actions[bot]"
+#                    git add ./docs/*
+#                    git commit -a -m "Add changes"  || true
+#            - name: Push changes back to gh-pages
+#              uses: ad-m/github-push-action@master
+#              with:
+#                    branch: gh-pages
+#                    github_token: ${{ secrets.GITHUB_TOKEN }}
 
 #   check-bats-version:
 #     runs-on: ubuntu-latest
