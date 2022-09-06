@@ -57,7 +57,7 @@ jobs:
               run: |
                     git checkout -f gh-pages
                     git branch --all
-                    mkdir -p gh-pages/docs
+                    mkdir -p docs
                     cp -rf ./documentation/build/html/* docs/
                     cd docs
                     touch .nojekyll
