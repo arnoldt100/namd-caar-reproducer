@@ -57,15 +57,19 @@ jobs:
               run: |
                     git checkout -f gh-pages
                     git branch --all
+                    mkdir -p docs
                     cp -rf ./documentation/build/html/* ./
+                    cd docs
                     touch .nojekyll
-                    git add .
+                    git add *.html objects.inv searchindex.js _sources _static .nojekyll
                     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                     git config --local user.name "github-actions[bot]"
                     git commit -a -m "Add changes"  || true
                     ls -la * 
             - name: Commit new files from docs directory
               run: |
+                    ls -l ./docs
+                    git add ./docs/*
                     git commit -a -m "Add changes"  || true
             - name: Push changes back to gh-pages
               uses: ad-m/github-push-action@master
