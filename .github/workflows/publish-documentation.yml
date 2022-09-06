@@ -55,8 +55,13 @@ jobs:
                 $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
             - name: Checkout gh-pages branch
               run: |
+                    export NCP_TOP_LEVEL=$(pwd) 
+                    echo "NCP_TOP_LEVEL=${NCP_TOP_LEVEL}"
+                    export PYTHONPATH="${NCP_TOP_LEVEL}/bin/lib:${PYTHONPATH}"
                     git checkout -f gh-pages
                     git branch --all
+                    git checkout main -- documentation/
+                    $NCP_TOP_LEVEL/bin/build_documentation.sh --publish-mode standard --doc-top-level ${NCP_TOP_LEVEL}/documentation 
                     cp -rf ./documentation/build/html/* ./
                     touch .nojekyll
                     find . -maxdepth 1 -name "*.html" | xargs git add
